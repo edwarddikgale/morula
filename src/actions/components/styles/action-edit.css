@@ -1,0 +1,10 @@
+.explainer {
+  color: gray;
+  font-style: italic;
+}
+
+.task-section {
+  border-radius: 40px;
+  padding: 10px;
+  border: 4px solid rgba(153, 142, 142, 0.2);
+}

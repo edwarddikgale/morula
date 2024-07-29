@@ -1,0 +1,29 @@
+.edit-action {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 30%;
+    height: 100%;
+    background-color: #fff;
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(100%);
+  }
+  
+  .edit-action.open {
+    transform: translateX(0);
+  }
+  
+  .overlay {
+    position: relative;
+  }
+  
+  .overlay .overlay-content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px;
+  }
+  
+  .bottom-actions{
+    margin-bottom: 10px;
+  }

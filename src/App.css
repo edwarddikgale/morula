@@ -1,0 +1,130 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.background-primary {
+  background-color: #739a7e;
+}
+
+.capitalized-text {
+  text-transform: capitalize;
+}
+
+/* common */
+.br-1 {
+  border-radius: 1.5rem !important;
+}
+
+/* bootstrap form customization */
+
+.form-select {
+  border: 1px solid lightgray;
+  border-radius: 3px;
+  box-shadow: none;
+  outline: 0 none;
+  padding: 8px 10px;
+  border-radius: 10px;
+}
+.form-select:focus {
+  border: 1px solid #739a7e;
+  border-radius: 3px;
+  box-shadow: none;
+  outline: 0 none;
+  border-radius: 10px;
+}
+.form-control {
+  border: 1px solid rgb(170, 161, 161);
+  border-radius: 10px;
+  box-shadow: none;
+  outline: 0 none;
+  padding: 10px 6px;
+}
+.form-control:focus {
+  border: 1px solid #739a7e;
+  border-radius: 3px;
+  box-shadow: none;
+  outline: 0 none;
+}
+
+/* text-color */
+.text-muted {
+  color: #998e8e;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* font size across the app */
+/* Set a base font size on the root element */
+:root {
+  font-size: 14px; /* 1rem = 16px */
+}
+
+/* Apply the base font size to the body */
+body {
+  font-size: 1rem;
+  line-height: 1.6;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Override font sizes for specific elements */
+h1 {
+  font-size: 2rem; /* 32px */
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 1.75rem; /* 28px */
+  line-height: 1.3;
+}
+
+h3 {
+  font-size: 1.5rem; /* 24px */
+  line-height: 1.4;
+}
+
+p {
+  font-size: 0.9rem; /* 16px */
+  line-height: 1.6;
+}
+
+/* Ensure other elements inherit the base font size */
+button, input, textarea {
+  font-size: 1rem;
+}

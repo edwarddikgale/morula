@@ -1,0 +1,38 @@
+.sdg-picker-container {
+    border-radius: 0.25rem;
+    background-color: white;
+    padding: 1rem;
+    margin: 0 auto;
+  }
+  
+  .sdg-picker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .sdg-picker-header h5 {
+    margin: 0;
+  }
+  
+  .close-button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  
+  .sdg-picker-body {
+    margin-bottom: 1rem;
+  }
+  
+  .sdg-picker-footer {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .sdg-picker-footer .btn {
+    margin-left: 0.5rem;
+  }
+  

@@ -1,0 +1,67 @@
+.sdg-selection {
+    padding: 20px;
+  }
+  
+  .step {
+    margin-bottom: 20px;
+  }
+
+  .step-description{
+    font-size: 1.1rem;
+    color: #444141;
+  }
+  
+  .rating{
+    position: relative;
+  }
+  .rating, .sdg-item {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    border-radius: 20px;
+  }
+  
+  .rating .rate, .sdg-item {
+    font-size: 20px;
+    margin: 0 5px;
+  }
+  
+  .rating .rate.active {
+    color: gold;
+  }
+  
+  .sdg-item{
+    border-radius: 20px;
+    position: relative;
+  }
+
+  .sdg-item.selected {
+    background-color: #f0f8ff;
+    border-color: #00f;
+  }
+  
+  .btn {
+    margin-top: 10px;
+  }
+  
+  .rating-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  @media (min-width: 768px) {
+    .rating-list {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .sdg-title{
+    letter-spacing: 0.1rem;
+  }
+
+  .sdg-description{
+    color: #444141;
+  }
+  

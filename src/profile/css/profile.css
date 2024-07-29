@@ -1,0 +1,44 @@
+.profile-container {
+  /* Default styles for mobile screens */
+  width: 100%; /* or any other width you want for mobile screens */
+}
+
+/* Media query for laptops and desktops */
+@media (min-width: 768px) {
+  .profile-container {
+    max-width: 55%;
+    margin: 0 auto; /* Center the container */
+  }
+}
+
+.section-title {
+  color: #121212;
+  /* font-size: 32px;*/
+  font-style: normal;
+  font-weight: 500;
+  line-height: 36px;
+  letter-spacing: 0.32px;
+}
+
+.form-field-title {
+  color: #121212;
+  font-size: 1.1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 100% */
+  letter-spacing: 0.1px;
+}
+.icon-field {
+  padding-left: 2.7rem;
+}
+
+.ReactFlagsSelect-module_selectBtn__19wW7 {
+  padding: 6px 10px !important;
+  border: 1px solid lightgray !important;
+  border-radius: 10px !important;
+}
+
+.ReactFlagsSelect-module_filterBox__3m8EU input {
+  border: 1px solid lightgray !important;
+  border-radius: 10px !important;
+}

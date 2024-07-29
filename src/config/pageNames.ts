@@ -1,0 +1,21 @@
+export const pageNames = {
+  HOME: "/",
+  DASHBOARD: "/dashboard",
+  SETTINGS: "/settings",
+  EVENT: "/event",
+  EVENT_REPORT: "/event-report",
+  EVENT_READONLY: "/eventview",
+  EVENT_EDIT: "/eventedit",
+  EVIDENCE: "/evidence",
+  CREATE_EVENT: "/create-event",
+  LOGIN: "/login",
+  LOGOUT: "/logout",
+  PROFILE: "/profile",
+  ACTIONS: "/actions",
+  ACTIONS_INTRO: "/actions-intro",
+  ACTIONS_BOARD: "/actionboard",
+  REGISTER: "/register",
+  RESET_PWD: "/reset-password",
+  SDG_SELECTOR: "/sdgselector",
+  SDG_SELECTED: "/sdgselected"
+};

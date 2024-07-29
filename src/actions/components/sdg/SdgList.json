@@ -1,0 +1,48 @@
+
+[
+    {
+        "sdg": 5,
+        "title": "Sustainable Development Goal 5",
+        "shortTitle":"Gender Equality",
+        "goal": "This goal is to achieve gender equality and empower all women and girls, with a focus on indicators",
+        "indicators": [
+            {
+                "index": "5.1",
+                "title": "End all forms of discrimination, violence, and harmful practices based on gender"
+            },
+            {
+                "index": "5.2",
+                "title": "Eliminate all forms of violence against all women and girls in the public and private spheres, including trafficking and sexual and other types of exploitation."
+            },
+            {
+                "index": "5.3",
+                "title": "Eliminate all harmful practices, such as child, early and forced marriage and female genital mutilation."
+            },
+            {
+                "index": "5.4",
+                "title": "Recognize and value unpaid care and domestic work through the provision of public services, infrastructure and social protection policies and the promotion of shared responsibility within the household and the family as nationally appropriate."
+            },
+            {
+                "index": "5.5",
+                "title": "Ensure full and effective participation and equal opportunities for leadership at all levels of decision-making"
+            }
+        ]
+    }   
+    ,
+    {
+        "sdg": 13,
+        "title": "Sustainable Development Goal 13",
+        "shortTitle":"Climate Action",
+        "goal": "This goal is to take urgent action to combat climate change and its impacts, with a focus on indicators",
+        "indicators": [
+            {
+                "index": "13.1",
+                "title": "Strengthen resilience and adaptive capacity to climate-related hazards and natural disasters in all countries"
+            },
+            {
+                "index": "13.2",
+                "title": "Improve education, awareness-raising and human and institutional capacity on climate change mitigation, adaptation, impact reduction and early warning"
+            }
+        ]
+    }
+]

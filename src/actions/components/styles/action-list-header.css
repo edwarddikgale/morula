@@ -1,0 +1,36 @@
+  .accordion-container{
+    margin: 5px;
+  }
+  
+  .accordion-button {
+    background-color: white !important;
+  }
+  
+  .accordion-button:focus {
+    box-shadow: none;
+  }
+  
+  .accordion-button:not(.collapsed) {
+    color: #212529;
+  }
+
+.card-text{
+  padding: 1px;
+  margin: 5px;
+}
+
+.indicators{
+  padding: 10px;
+  margin-top: 5px;
+}
+
+.benefits {
+  background-color: #e9ecf1;
+  border: 1ps solid #f2f4f8;
+  padding: 5px;
+  border-radius: 15px;
+}
+
+.changeSdg {
+  margin-left: 10px;
+}

@@ -1,0 +1,104 @@
+/* board.css */
+.kanban-board {
+    display: flex;
+    gap: 16px; /* Adjust the space between columns */
+    padding: 16px;
+    justify-content: center; /* Center the kanban board */
+    background-color: #f4f5f7; /* Background color for the board */
+}
+
+.column {
+    margin: 0;
+    border: none; /* Remove border around columns */
+    width: 30%; /* Adjust the width to make columns closer */
+    display: flex;
+    flex-direction: column;
+    min-height: 700px;
+    background-color: #ffffff; /* Background color for columns */
+    border-radius: 8px; /* Rounded corners for columns */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Subtle shadow for columns */
+}
+
+.column h2 {
+    margin: 0;
+    padding: 16px;
+    background-color: #f4f5f7; /* Background color for headers */
+    color: #333333; /* Text color for headers */
+    font-size: 1rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-bottom: 1px solid #e0e0e0; /* Bottom border for headers */
+}
+
+.task-list {
+    padding: 16px;
+    transition: background-color 0.2s ease;
+    background-color: white;
+    flex-grow: 1;
+    min-height: 100px;
+}
+
+.task {
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    transition: background-color 0.2s ease;
+    position: relative;
+}
+
+.task-header {
+    font-weight: bold;
+    margin-bottom: 4px;
+    width: 100%; /* Ensure it takes full width */
+}
+
+.task-content {
+    width: 100%; /* Ensure it takes full width */
+}
+
+.task-parent {
+    position: "relative";
+    margin-top: 10px;
+    padding: 5px;
+    border: 1px solid rgb(240, 237, 237);
+    border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    font-size: 0.85rem;
+    color: gray;
+}
+
+.task:hover {
+    border: 1px solid green;
+}
+
+.task-parent:hover {
+    background-color: #f3f3f3;
+    cursor: pointer;
+}
+
+.parent-icon {
+    color: green;
+    font-weight: bold;
+    margin-top: 4px;
+    position: "absolute";
+}
+
+.action-sdg{
+    padding: 5px;
+    font-size: 0.8rem;
+    border: 1px solid gray;
+    letter-spacing: 0.1rem;
+    color: gray;
+    font-weight: 900;
+    border-radius: 10px;
+    min-width: 70px;
+    margin-left: -15px;
+    margin-bottom: -10px;
+    box-shadow: 0 2px 4px rgba(76, 69, 69, 0.2);
+  }
+

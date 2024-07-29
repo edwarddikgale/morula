@@ -1,0 +1,153 @@
+.event-container {
+  /* Default styles for mobile screens */
+  width: 100%; /* or any other width you want for mobile screens */
+}
+
+/* Media query for laptops and desktops */
+@media (min-width: 768px) {
+  .event-container {
+    max-width: 55%;
+    margin: 0 auto; /* Center the container */
+  }
+}
+
+.fs-14 {
+  font-size: 14px;
+}
+.text-or {
+  color: #c14c24;
+}
+
+.event-form-select {
+  padding: 7px 20px;
+  background-color: #0d6efd;
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  display: block;
+  border-radius: 20px;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.event-form-select:focus {
+  outline: none;
+}
+
+.active-border {
+  border-bottom: 3px solid #0d6efd;
+}
+
+.btn-list {
+  padding-right: 3rem !important;
+  border-radius: 1.5rem;
+  margin-top: 0px;
+}
+
+.create-btn {
+  padding: 10px 20px;
+  background-color: #c14c24;
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  display: block;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease;
+  border-radius: 20px;
+}
+
+.create-btn:hover {
+  background-color: #d36f4d;
+  color: white;
+}
+
+.search-field {
+  padding-left: 2rem;
+  min-width: 200px;
+}
+
+@media (min-width: 768px) {
+  .search-field {
+    min-width: 450px;
+  }
+}
+
+.search-section {
+  align-items: center;
+}
+
+/* event table */
+.event-table {
+  vertical-align: middle;
+}
+.event-table thead tr th {
+  border: none !important;
+  background-color: #f8f7fa;
+  padding: 15px 7px;
+}
+
+.event-Img {
+  max-width: 70px;
+}
+
+.action-drop.dropdown-toggle::after {
+  display: none;
+}
+
+.custom-action {
+  color: lightgray /* Your color code here */;
+  position: absolute;
+  width: 160px;
+  height: 140px;
+  border-radius: 0.75rem; /* You can adjust the value as needed */
+  border: 1px solid /* Your border color here */;
+  gap: 0.5rem; /* You can adjust the value as needed */
+  padding: 1rem; /* You can adjust the value as needed */
+  top: 0.75rem; /* You can adjust the value as needed */
+  right: 0.5rem; /* You can adjust the value as needed */
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff; /* Your background color here */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Adjust the values as needed */
+}
+
+.calender-box {
+  position: relative;
+}
+.calender {
+  position: absolute;
+  top: 5rem; /* You can adjust the value as needed */
+  z-index: 50;
+}
+.btn-calender {
+  border: 1px solid lightgray;
+}
+.custom-action a {
+  color: rgb(104, 100, 100);
+  text-decoration: none;
+}
+.custom-action a:hover {
+  color: #d36f4d;
+}
+
+@media only screen and (max-width: 767px) {
+  .search-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .search-section div {
+    width: 100%;
+  }
+  .search-section .bt-grp {
+    justify-content: space-between;
+  }
+}
+
+.filter-label{
+  font-size: 1.2rem;
+  color: gray;
+  letter-spacing: 0.1rem;
+}

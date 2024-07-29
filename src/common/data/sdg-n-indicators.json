@@ -1,0 +1,459 @@
+
+[
+    {
+        "sdg": 1,
+        "title": "Sustainable Development Goal 1",
+        "shortTitle": "No Poverty",
+        "goal": "End poverty in all its forms everywhere.",
+        "indicators": [
+            {
+                "index": "1.1",
+                "title": "Eradicate extreme poverty for all people everywhere"
+            },
+            {
+                "index": "1.2",
+                "title": "Reduce at least by half the proportion of people living in poverty"
+            },
+            {
+                "index": "1.3",
+                "title": "Implement nationally appropriate social protection systems"
+            },
+            {
+                "index": "1.4",
+                "title": "Ensure that all men and women have equal rights to economic resources"
+            },
+            {
+                "index": "1.5",
+                "title": "Build the resilience of the poor and those in vulnerable situations"
+            }
+        ]
+    },
+    {
+        "sdg": 2,
+        "title": "Sustainable Development Goal 2",
+        "shortTitle": "Zero Hunger",
+        "goal": "End hunger, achieve food security and improved nutrition, and promote sustainable agriculture.",
+        "indicators": [
+            {
+                "index": "2.1",
+                "title": "End hunger and ensure access to safe, nutritious, and sufficient food"
+            },
+            {
+                "index": "2.2",
+                "title": "End all forms of malnutrition"
+            },
+            {
+                "index": "2.3",
+                "title": "Double the agricultural productivity and incomes of small-scale food producers"
+            },
+            {
+                "index": "2.4",
+                "title": "Ensure sustainable food production systems"
+            },
+            {
+                "index": "2.5",
+                "title": "Maintain the genetic diversity of seeds, cultivated plants, and farmed and domesticated animals"
+            }
+        ]
+    },
+    {
+        "sdg": 3,
+        "title": "Sustainable Development Goal 3",
+        "shortTitle": "Good Health and Well-being",
+        "goal": "Ensure healthy lives and promote well-being for all at all ages.",
+        "indicators": [
+            {
+                "index": "3.1",
+                "title": "Reduce the global maternal mortality ratio"
+            },
+            {
+                "index": "3.2",
+                "title": "End preventable deaths of newborns and children under 5 years of age"
+            },
+            {
+                "index": "3.3",
+                "title": "End the epidemics of AIDS, tuberculosis, malaria, and neglected tropical diseases"
+            },
+            {
+                "index": "3.4",
+                "title": "Reduce by one third premature mortality from non-communicable diseases"
+            },
+            {
+                "index": "3.5",
+                "title": "Strengthen the prevention and treatment of substance abuse"
+            }
+        ]
+    },
+    {
+        "sdg": 4,
+        "title": "Sustainable Development Goal 4",
+        "shortTitle": "Quality Education",
+        "goal": "Ensure inclusive and equitable quality education and promote lifelong learning opportunities for all.",
+        "indicators": [
+            {
+                "index": "4.1",
+                "title": "Ensure that all girls and boys complete free, equitable, and quality primary and secondary education"
+            },
+            {
+                "index": "4.2",
+                "title": "Ensure that all girls and boys have access to quality early childhood development"
+            },
+            {
+                "index": "4.3",
+                "title": "Ensure equal access for all women and men to affordable and quality technical, vocational, and tertiary education"
+            },
+            {
+                "index": "4.4",
+                "title": "Increase the number of youth and adults who have relevant skills for employment"
+            },
+            {
+                "index": "4.5",
+                "title": "Eliminate gender disparities in education"
+            }
+        ]
+    },
+    {
+        "sdg": 5,
+        "title": "Sustainable Development Goal 5",
+        "shortTitle": "Gender Equality",
+        "goal": "Achieve gender equality and empower all women and girls.",
+        "indicators": [
+            {
+                "index": "5.1",
+                "title": "End all forms of discrimination against all women and girls everywhere"
+            },
+            {
+                "index": "5.2",
+                "title": "Eliminate all forms of violence against all women and girls"
+            },
+            {
+                "index": "5.3",
+                "title": "Eliminate all harmful practices, such as child, early and forced marriage and female genital mutilation"
+            },
+            {
+                "index": "5.4",
+                "title": "Recognize and value unpaid care and domestic work"
+            },
+            {
+                "index": "5.5",
+                "title": "Ensure women's full and effective participation and equal opportunities for leadership"
+            }
+        ]
+    },    
+    {
+        "sdg": 6,
+        "title": "Sustainable Development Goal 6",
+        "shortTitle": "Clean Water and Sanitation",
+        "goal": "Ensure availability and sustainable management of water and sanitation for all",
+        "indicators": [
+            {
+                "index": "6.1",
+                "title": "Achieve universal and equitable access to safe and affordable drinking water for all"
+            },
+            {
+                "index": "6.2",
+                "title": "Achieve access to adequate and equitable sanitation and hygiene for all and end open defecation"
+            },
+            {
+                "index": "6.3",
+                "title": "Improve water quality by reducing pollution, eliminating dumping, and minimizing release of hazardous chemicals and materials"
+            },
+            {
+                "index": "6.4",
+                "title": "Substantially increase water-use efficiency across all sectors and ensure sustainable withdrawals and supply of freshwater"
+            },
+            {
+                "index": "6.5",
+                "title": "Implement integrated water resources management at all levels"
+            }
+        ]
+    },
+    {
+        "sdg": 7,
+        "title": "Sustainable Development Goal 7",
+        "shortTitle": "Affordable and Clean Energy",
+        "goal": "Ensure access to affordable, reliable, sustainable, and modern energy for all",
+        "indicators": [
+            {
+                "index": "7.1",
+                "title": "Ensure universal access to affordable, reliable, and modern energy services"
+            },
+            {
+                "index": "7.2",
+                "title": "Increase substantially the share of renewable energy in the global energy mix"
+            },
+            {
+                "index": "7.3",
+                "title": "Double the global rate of improvement in energy efficiency"
+            },
+            {
+                "index": "7.a",
+                "title": "Enhance international cooperation to facilitate access to clean energy research and technology"
+            },
+            {
+                "index": "7.b",
+                "title": "Expand infrastructure and upgrade technology for supplying modern and sustainable energy services"
+            }
+        ]
+    },
+    {
+        "sdg": 8,
+        "title": "Sustainable Development Goal 8",
+        "shortTitle": "Decent Work and Economic Growth",
+        "goal": "Promote sustained, inclusive, and sustainable economic growth, full and productive employment, and decent work for all",
+        "indicators": [
+            {
+                "index": "8.1",
+                "title": "Sustain per capita economic growth in accordance with national circumstances"
+            },
+            {
+                "index": "8.2",
+                "title": "Achieve higher levels of economic productivity through diversification, technological upgrading, and innovation"
+            },
+            {
+                "index": "8.3",
+                "title": "Promote development-oriented policies that support productive activities, decent job creation, and entrepreneurship"
+            },
+            {
+                "index": "8.4",
+                "title": "Improve global resource efficiency in consumption and production"
+            },
+            {
+                "index": "8.5",
+                "title": "Achieve full and productive employment and decent work for all women and men"
+            }
+        ]
+    },
+    {
+        "sdg": 9,
+        "title": "Sustainable Development Goal 9",
+        "shortTitle": "Industry, Innovation, and Infrastructure",
+        "goal": "Build resilient infrastructure, promote inclusive and sustainable industrialization, and foster innovation",
+        "indicators": [
+            {
+                "index": "9.1",
+                "title": "Develop quality, reliable, sustainable, and resilient infrastructure"
+            },
+            {
+                "index": "9.2",
+                "title": "Promote inclusive and sustainable industrialization"
+            },
+            {
+                "index": "9.3",
+                "title": "Increase the access of small-scale industrial and other enterprises to financial services"
+            },
+            {
+                "index": "9.4",
+                "title": "Upgrade infrastructure and retrofit industries to make them sustainable"
+            },
+            {
+                "index": "9.5",
+                "title": "Enhance scientific research, upgrade the technological capabilities of industrial sectors"
+            }
+        ]
+    },
+    {
+        "sdg": 10,
+        "title": "Sustainable Development Goal 10",
+        "shortTitle": "Reduced Inequality",
+        "goal": "Reduce inequality within and among countries",
+        "indicators": [
+            {
+                "index": "10.1",
+                "title": "Achieve and sustain income growth of the bottom 40% of the population at a rate higher than the national average"
+            },
+            {
+                "index": "10.2",
+                "title": "Empower and promote the social, economic, and political inclusion of all"
+            },
+            {
+                "index": "10.3",
+                "title": "Ensure equal opportunity and reduce inequalities of outcome"
+            },
+            {
+                "index": "10.4",
+                "title": "Adopt policies, especially fiscal, wage, and social protection policies"
+            },
+            {
+                "index": "10.5",
+                "title": "Improve the regulation and monitoring of global financial markets and institutions"
+            }
+        ]
+    },
+    {
+        "sdg": 11,
+        "title": "Sustainable Development Goal 11",
+        "shortTitle": "Sustainable Cities and Communities",
+        "goal": "Make cities and human settlements inclusive, safe, resilient, and sustainable.",
+        "indicators": [
+            {
+                "index": "11.1",
+                "title": "Ensure access for all to adequate, safe and affordable housing and basic services and upgrade slums."
+            },
+            {
+                "index": "11.2",
+                "title": "Provide access to safe, affordable, accessible and sustainable transport systems for all, improving road safety, notably by expanding public transport."
+            },
+            {
+                "index": "11.3",
+                "title": "Enhance inclusive and sustainable urbanization and capacity for participatory, integrated and sustainable human settlement planning and management."
+            },
+            {
+                "index": "11.4",
+                "title": "Strengthen efforts to protect and safeguard the world's cultural and natural heritage."
+            },
+            {
+                "index": "11.5",
+                "title": "Significantly reduce the number of deaths and the number of people affected and substantially decrease the direct economic losses relative to global gross domestic product caused by disasters."
+            }
+        ]
+    },
+    {
+        "sdg": 12,
+        "title": "Sustainable Development Goal 12",
+        "shortTitle": "Responsible Consumption and Production",
+        "goal": "Ensure sustainable consumption and production patterns.",
+        "indicators": [
+            {
+                "index": "12.1",
+                "title": "Implement the 10-year framework of programmes on sustainable consumption and production."
+            },
+            {
+                "index": "12.2",
+                "title": "Achieve the sustainable management and efficient use of natural resources."
+            },
+            {
+                "index": "12.3",
+                "title": "Halve per capita global food waste at the retail and consumer levels and reduce food losses along production and supply chains."
+            },
+            {
+                "index": "12.4",
+                "title": "Achieve the environmentally sound management and disposal of chemicals and all wastes throughout their life cycle."
+            },
+            {
+                "index": "12.5",
+                "title": "Substantially reduce waste generation through prevention, reduction, recycling, and reuse."
+            }
+        ]
+    },
+    {
+        "sdg": 13,
+        "title": "Sustainable Development Goal 13",
+        "shortTitle": "Climate Action",
+        "goal": "Take urgent action to combat climate change and its impacts.",
+        "indicators": [
+            {
+                "index": "13.1",
+                "title": "Strengthen resilience and adaptive capacity to climate-related hazards and natural disasters in all countries."
+            },
+            {
+                "index": "13.2",
+                "title": "Integrate climate change measures into national policies, strategies, and planning."
+            },
+            {
+                "index": "13.3",
+                "title": "Improve education, awareness-raising, and human and institutional capacity on climate change mitigation, adaptation, impact reduction, and early warning."
+            }
+        ]
+    },
+    {
+        "sdg": 14,
+        "title": "Sustainable Development Goal 14",
+        "shortTitle": "Life Below Water",
+        "goal": "Conserve and sustainably use the oceans, seas, and marine resources for sustainable development.",
+        "indicators": [
+            {
+                "index": "14.1",
+                "title": "By 2025, prevent and significantly reduce marine pollution of all kinds, particularly from land-based activities, including marine debris and nutrient pollution."
+            },
+            {
+                "index": "14.2",
+                "title": "Sustainably manage and protect marine and coastal ecosystems to avoid significant adverse impacts, including by strengthening their resilience, and take action for their restoration."
+            },
+            {
+                "index": "14.3",
+                "title": "Minimize and address the impacts of ocean acidification, including through enhanced scientific cooperation at all levels."
+            },
+            {
+                "index": "14.4",
+                "title": "Effectively regulate harvesting and end overfishing, illegal, unreported, and unregulated fishing and destructive fishing practices."
+            }
+        ]
+    },
+    {
+        "sdg": 15,
+        "title": "Sustainable Development Goal 15",
+        "shortTitle": "Life on Land",
+        "goal": "Protect, restore, and promote sustainable use of terrestrial ecosystems, sustainably manage forests, combat desertification, and halt and reverse land degradation and halt biodiversity loss.",
+        "indicators": [
+            {
+                "index": "15.1",
+                "title": "Ensure the conservation, restoration, and sustainable use of terrestrial and inland freshwater ecosystems and their services."
+            },
+            {
+                "index": "15.2",
+                "title": "Promote the implementation of sustainable management of all types of forests, halt deforestation, restore degraded forests and increase afforestation and reforestation globally."
+            },
+            {
+                "index": "15.3",
+                "title": "Combat desertification, restore degraded land and soil, including land affected by desertification, drought, and floods."
+            },
+            {
+                "index": "15.4",
+                "title": "Ensure the conservation of mountain ecosystems, including their biodiversity, to enhance their capacity to provide benefits that are essential for sustainable development."
+            }
+        ]
+    },
+    {
+        "sdg": 16,
+        "title": "Sustainable Development Goal 16",
+        "shortTitle": "Peace, Justice, and Strong Institutions",
+        "goal": "Promote peaceful and inclusive societies for sustainable development, provide access to justice for all and build effective, accountable, and inclusive institutions at all levels.",
+        "indicators": [
+            {
+                "index": "16.1",
+                "title": "Significantly reduce all forms of violence and related death rates everywhere."
+            },
+            {
+                "index": "16.2",
+                "title": "End abuse, exploitation, trafficking, and all forms of violence against and torture of children."
+            },
+            {
+                "index": "16.3",
+                "title": "Promote the rule of law at the national and international levels and ensure equal access to justice for all."
+            },
+            {
+                "index": "16.4",
+                "title": "By 2030, significantly reduce illicit financial and arms flows, strengthen the recovery and return of stolen assets and combat all forms of organized crime."
+            }
+        ]
+    },
+    {
+        "sdg": 17,
+        "title": "Sustainable Development Goal 17",
+        "shortTitle": "Partnerships for the Goals",
+        "goal": "Strengthen the means of implementation and revitalize the Global Partnership for Sustainable Development.",
+        "indicators": [
+            {
+                "index": "17.1",
+                "title": "Strengthen domestic resource mobilization, including through international support to developing countries, to improve domestic capacity for tax and other revenue collection."
+            },
+            {
+                "index": "17.2",
+                "title": "Developed countries to implement fully their official development assistance commitments."
+            },
+            {
+                "index": "17.3",
+                "title": "Mobilize additional financial resources for developing countries from multiple sources."
+            },
+            {
+                "index": "17.4",
+                "title": "Assist developing countries in attaining long-term debt sustainability through coordinated policies aimed at fostering debt financing, debt relief, and debt restructuring."
+            },
+            {
+                "index": "17.5",
+                "title": "Adopt and implement investment promotion regimes for least developed countries."
+            }
+        ]
+    }
+]

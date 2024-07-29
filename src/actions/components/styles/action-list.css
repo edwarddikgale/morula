@@ -1,0 +1,128 @@
+.list-group-item-bordered {
+    border-radius: 10px;
+}
+
+.list-group {
+    position: relative;
+}
+
+.bold-heading {
+    font-weight: bold;
+}
+
+.small-text {
+    font-size: 0.8em;
+}
+
+.tiny-text{
+    color: gray;
+    font-size: 0.65em;
+}
+
+.raise-text {
+  position: relative;
+  bottom: 2px; /* Adjust the value as needed to raise the text */
+}
+
+/* tooltip.css */
+.tooltip {
+    position: absolute;
+  }
+  
+  .tooltip:before {
+    content: attr(data-tip);
+    position: relative;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #000;
+    color: #fff;
+    padding: 8px;
+    font-size: 14px;
+    white-space: nowrap;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 9999; /* Adjust the z-index value */
+  }
+  
+  .tooltip:after {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #000 transparent;
+  }
+  
+  .tooltip:hover:before {
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  @media (min-width: 1400px) {
+    .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+
+    }
+  }
+  
+  .custom-list-group-item {
+    border: none; /* Remove all borders */
+    border-bottom: 2px solid gray; /* Add bottom border */
+  }
+  
+  .custom-list-group-item:first-child {
+    border-top: none; /* Remove bottom border for the last item */
+  }
+
+  .custom-button {
+    border: none;
+    display: flex;
+    align-items: center;
+    background-color: transparent; /* Ensures the button has no background color */
+    color: #007bff; /* Primary color */
+    cursor: pointer; /* Makes the div look like a button */
+    padding: 10px; /* Add some padding to make it look more like a button */
+  }
+  
+  .custom-button:hover {
+    background-color: #f0f0f0; /* Light background on hover */
+    border-radius: 15px;
+  }
+  
+  .custom-button-icon {
+    margin-right: 8px;
+  }
+  
+  .custom-spinner {
+    margin-left: 8px;
+  }
+  
+  .custom-button-disabled {
+    border: none;
+    display: flex;
+    align-items: center;
+    background-color: transparent; /* Ensures the button has no background color */
+    color: #6c757d; /* Disabled color */
+    padding: 10px; /* Add some padding to make it look more like a button */
+    cursor: not-allowed; /* Shows disabled cursor */
+  }
+  
+  .custom-button-disabled .custom-button-icon {
+    margin-right: 8px;
+  }
+
+  .action-sdg{
+    padding: 5px;
+    border: 1px solid gray;
+    letter-spacing: 0.1rem;
+    color: gray;
+    font-weight: 900;
+    border-radius: 10px;
+    min-width: 70px;
+    margin-left: -10px;
+    box-shadow: 0 2px 4px rgba(76, 69, 69, 0.2);
+  }
+  

@@ -1,0 +1,19 @@
+[
+    { "value": "music", "label": "Music" },
+    { "value": "community", "label": "Community" },
+    { "value": "workshop", "label": "Workshop" },
+    { "value": "sports", "label": "Sports" },
+    { "value": "conference", "label": "Conference" },
+    { "value": "festival", "label": "Festival" },
+    { "value": "networking", "label": "Networking" },
+    { "value": "theater", "label": "Theater" },
+    { "value": "art", "label": "Art" },
+    { "value": "food", "label": "Food" },
+    { "value": "technology", "label": "Technology" },
+    { "value": "charity", "label": "Charity" },
+    { "value": "education", "label": "Education" },
+    { "value": "business", "label": "Business" },
+    { "value": "health", "label": "Health" },
+    { "value": "other", "label": "Other" }
+  ]
+  

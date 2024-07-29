@@ -1,0 +1,75 @@
+  .left-menu-container {
+    margin-top: 20px;
+  }
+
+  /* Apply margin-top on desktop screens */
+  @media (min-width: 768px) {
+    .left-menu-container {
+      margin-top: 80px; /* Adjust this value as needed */
+    }
+  }
+
+  .sidebar {
+    width: 350px;
+    background-color: #f8f9fa;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: -350px;
+    transition: left 0.3s ease-in-out;
+    padding-top: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* Ensures the sidebar is above other content */
+  }
+  
+  .sidebar.open {
+    left: 0;
+  }
+  
+  .menu-toggle {
+    background: none;
+    border: none;
+    font-size: 24px;
+    position: absolute;
+    top: 5px;
+    right: -42px;
+    background-color: #f8f9fa;
+    border-radius: 50%;
+    width: 36px; /* Equal width and height to make it round */
+    height: 36px; /* Equal width and height to make it round */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    z-index: 1001;
+    display: flex; /* Center the icon */
+    justify-content: center; /* Center the icon */
+    align-items: center; /* Center the icon */
+  }
+    
+  .menu-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .menu-list li {
+    margin: 10px 0;
+  }
+  
+  .menu-list li a {
+    text-decoration: none;
+    color: #000;
+    display: block;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    font-size: 1.05em;
+    font-weight: normal;
+  }
+  
+  .menu-list li a:hover {
+    font-weight: bolder;
+  }
+
+  .icon-margin {
+    margin-right: 8px; /* Adjust the value as needed */
+  }
+  

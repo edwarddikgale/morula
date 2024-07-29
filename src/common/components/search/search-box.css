@@ -1,0 +1,16 @@
+@media only screen and (max-width: 767px) {
+    .search-section {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .search-section div {
+      width: 100%;
+    }
+    .search-section .bt-grp {
+      justify-content: space-between;
+    }
+  }
+ 
+.search-field{
+    margin-left: 3px;
+}
