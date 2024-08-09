@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import sdgs from '../data/sdgs.json'; // Import SDGs data
-import SDGItem from './SdgItem';
+import SDGItem from './PrincipleItem';
 import Step from './Step';
 import { IRating } from '../types/Rating';
-import { SDG } from 'sdgselection/types/SDG';
+import { SDG } from 'principles/types/SDG';
 import Rating from './Rating';
 import '../styles/sdg-selection.css'; // Import the CSS file
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -75,12 +75,12 @@ const SDGSelection = () => {
   const saveSdgs = async (sdgs: number[]) =>{
     try{
         await userSdgApi.CreateUserSdg({userId, sdgs: sdgs});
-        confirmSuccess({actionTitle: "Creating user sdgs"});
+        confirmSuccess({actionTitle: "Creating priority agile principles"});
         setIsLoading(false);
         navigate(pageNames.SDG_SELECTED);
     }
     catch(e){
-        confirmError({actionTitle: "Create user sdgs"});
+        confirmError({actionTitle: "Create priority agile principles"});
         setIsLoading(false);
     };
   };
@@ -90,7 +90,7 @@ const SDGSelection = () => {
       {step === 1 && (
         <Step 
           title="Step 1: Assess Importance" 
-          description="Rate the importance of each SDG below to your organization."
+          description="Rate the importance of each Principle to your organization below."
         >
           <div className="rating-list">
             {sdgList.map((sdg: SDG, index) => (
@@ -108,7 +108,7 @@ const SDGSelection = () => {
       {step === 2 && (
         <Step 
           title="Step 2: Assess Control" 
-          description="Rate the level of control or influence you have over each important SDG."
+          description="Rate the level of control or influence you have over each important Principle."
         >
           <div className="rating-list">
             {sdgList.filter((sdg) => importanceRatings[sdg.id]).map((sdg: SDG, index: number) => (
@@ -129,7 +129,7 @@ const SDGSelection = () => {
       {step === 3 && (
         <Step 
           title="Step 3: Select Top 3 SDGs" 
-          description="We have ordered the SDG list important to you and in your control based on your ratings limited to 5 SDG's below. Complete the exercise by selecting the top 3 SDGs that you will work with."
+          description="We have ordered the Principles list important to you and in your control based on your ratings limited to 5 Principles below. Complete the exercise by selecting the top 3 Principles that you will work with."
         >
           {sdgList.filter(sdg => selectedSDGs.includes(sdg.id)).map((sdg: SDG, index: number) => (
             <SDGItem 

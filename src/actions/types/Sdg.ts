@@ -5,9 +5,9 @@ export interface Sdg{
 }
 
 export interface SdgHeader{
+   id: number,
    title: string,
    shortTitle: string,
-   sdg: number;
    goal: string;
    indicators: Indicator[];
 }

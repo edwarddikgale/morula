@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import sdgs from '../data/sdgs.json'; // Import SDGs data
-import SDGItem from './SdgItem';
+import SDGItem from './PrincipleItem';
 import Step from './Step';
-import { SDG, UserSDG } from 'sdgselection/types/SDG';
-import '../styles/sdg-selection.css'; // Import the CSS file
+import { SDG, UserSDG } from 'principles/types/SDG';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSubtract, faTrash } from '@fortawesome/free-solid-svg-icons';
 import useAuthUserId from 'auth/hooks/useAuthUser';
@@ -13,7 +12,9 @@ import { Link } from 'react-router-dom';
 import { pageNames } from 'config/pageNames';
 import {confirmError, confirmSuccess} from 'common/components/confirmation/confirm';
 import DeleteConfirmation from 'common/components/ui/DeleteConfirmation';
-import NoSdgs from './NoSdgs';
+import NoSdgs from './NoPrinciples';
+
+import '../styles/sdg-selection.css'; // Import the CSS file
 
 const sdgList: SDG[] = sdgs as unknown as SDG[];
 
@@ -30,7 +31,6 @@ const SDGSelected = () => {
     const id = userSdg._id;
     try{
         const response = await userSdgApi.DeleteUserSdg(id);
-        console.log(JSON.stringify(response));
         if(response){
             setSelectedSDGs([]);
             setUserSdg(null);
@@ -46,7 +46,6 @@ const SDGSelected = () => {
     setIsLoading(true);
     try{
         const response = await userSdgApi.getSdgsByUser(userId) as any;
-        console.log(JSON.stringify(response));
         if(response){
             setSelectedSDGs(response.userSdg.sdgs);
             setUserSdg(response.userSdg);

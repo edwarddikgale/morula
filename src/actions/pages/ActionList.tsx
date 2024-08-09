@@ -13,7 +13,6 @@ import ActionListHeader from "../components/ActionListHeader";
 import FeedbackSurveyModal from "../../common/components/feedback/FeedbackSurveyModal";
 import EventDetails from "event/components/EventDetails";
 import RightOverlay from "../../common/components/overlay/RightOverlay";
-import { getSdgByIndex } from "actions/utils/getSdg";
 import openAiActions from "../utils/openAiActions";
 import SdgPickerContainer from "actions/components/sdg/SdgPickerContainer";
 import ActionPageInfo from "actions/components/ActionPageInfo";
@@ -22,7 +21,7 @@ import useEvent from "event/hooks/useEvent";
 import useQueryParameter from "common/url/useQueryParameter";
 import SearchBox from "common/components/search/SearchBox";
 import ActionButtons from "actions/components/ActionButtons";
-import useUserSDG from "sdgselection/hooks/userSDGs";
+import useUserSDG from "principles/hooks/userSDGs";
 import { sdgListGetter } from "common/data/sdgListGetter";
 import { SdgHeader } from "actions/types/Sdg";
 

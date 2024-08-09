@@ -28,9 +28,9 @@ interface SdgPickerProps {
         <div className='p-3'>
             <form>
                 <p className='mb-4'>
-                    The SDG (Sustainability development goal) you select below is the one that will be used to generate
-                    recommended actions for your event including tasks from both our curated positive impact database and
-                    AI model
+                    The Agile Principle you select below is the one that will be used to generate
+                    recommended actions for your event including tasks from both our curated database and
+                    our AI model
                 </p>
                 <div className="form-floating mb-3">
                     <select
@@ -43,16 +43,16 @@ interface SdgPickerProps {
                     >
                         <option value="">Select ...{data.Sdg}</option>
                         {sdgHeaders?.map((sdgHeader, index) => (
-                            <option 
+                            <option     
                                 key={index} 
-                                value={sdgHeader.sdg}
-                                selected={data.Sdg === sdgHeader.sdg}
+                                value={sdgHeader.id}
+                                selected={data.Sdg === sdgHeader.id}
                                 >
                                 {sdgHeader.title}
                             </option>
                         ))}
                     </select>
-                    <label htmlFor="selectedSDG">Select AN SDG</label>
+                    <label htmlFor="selectedSDG">Select An Agile Principle</label>
                 </div>
             </form>       
         </div>

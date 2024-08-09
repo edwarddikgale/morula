@@ -1,0 +1,87 @@
+[
+  {
+    "id": 1,
+    "title": "Customer Satisfaction",
+    "description": "Our highest priority is to satisfy the customer through early and continuous delivery of valuable software."
+  },
+  {
+    "id": 2,
+    "title": "Welcome Changing Requirements",
+    "description": "Welcome changing requirements, even late in development. Agile processes harness change for the customer’s competitive advantage."
+  },
+  {
+    "id": 3,
+    "title": "Frequent Delivery",
+    "description": "Deliver working software frequently, from a couple of weeks to a couple of months, with a preference to the shorter timescale."
+  },
+  {
+    "id": 4,
+    "title": "Collaboration",
+    "description": "Business people and developers must work together daily throughout the project."
+  },
+  {
+    "id": 5,
+    "title": "Motivated Individuals",
+    "description": "Build projects around motivated individuals. Give them the environment and support they need, and trust them to get the job done."
+  },
+  {
+    "id": 6,
+    "title": "Face-to-Face Communication",
+    "description": "The most efficient and effective method of conveying information to and within a development team is face-to-face conversation."
+  },
+  {
+    "id": 7,
+    "title": "Working Software",
+    "description": "Working software is the primary measure of progress."
+  },
+  {
+    "id": 8,
+    "title": "Sustainable Development",
+    "description": "Agile processes promote sustainable development. The sponsors, developers, and users should be able to maintain a constant pace indefinitely."
+  },
+  {
+    "id": 9,
+    "title": "Technical Excellence",
+    "description": "Continuous attention to technical excellence and good design enhances agility."
+  },
+  {
+    "id": 10,
+    "title": "Simplicity",
+    "description": "Simplicity—the art of maximizing the amount of work not done—is essential."
+  },
+  {
+    "id": 11,
+    "title": "Self-Organizing Teams",
+    "description": "The best architectures, requirements, and designs emerge from self-organizing teams."
+  },
+  {
+    "id": 12,
+    "title": "Reflection and Adjustment",
+    "description": "At regular intervals, the team reflects on how to become more effective, then tunes and adjusts its behavior accordingly."
+  },
+  {
+    "id": 13,
+    "title": "Continuous Improvement",
+    "description": "Teams should continuously refine and improve their processes for delivering high-quality software."
+  },
+  {
+    "id": 14,
+    "title": "Embrace Uncertainty",
+    "description": "Embrace uncertainty and manage it with continuous learning and experimentation."
+  },
+  {
+    "id": 15,
+    "title": "Deliver Value",
+    "description": "Deliver value to customers frequently, improving their experience and satisfaction."
+  },
+  {
+    "id": 16,
+    "title": "Focus on Outcomes",
+    "description": "Focus on outcomes rather than outputs to ensure that the product meets customer needs."
+  },
+  {
+    "id": 17,
+    "title": "Respect and Trust",
+    "description": "Create an environment of respect and trust to foster a collaborative and innovative team culture."
+  }
+]

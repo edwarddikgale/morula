@@ -20,9 +20,7 @@ const openAiTasks = {
         - Action: ${actionAsJson}
         - Existing Tasks: ${taskListAsJson}
         
-        Suggest a new and creative task that can help progress the given action in a sustainable way. The task should be different from the existing tasks and should complement the action. Please format the response as JSON with fields {title, status}, where status should always be "new".`;
-        
-        console.log(`AI Prompt: ${aiPrompt}`);
+        Suggest a new and creative task that can help progress the given action for a scrum team either by scrum master or the team. The task should be different from the existing tasks and should complement the action. Please format the response as JSON with fields {title, status}, where status should always be "new".`;
     
         const openai = new OpenAI({
             apiKey: API_KEY,

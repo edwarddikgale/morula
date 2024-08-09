@@ -1,17 +1,18 @@
 import React, { useEffect, useState, useRef } from "react";
 import { CustomIcon, SearchIcon } from "../../utils/CustomIcon";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendar, faList, faTasks, faEye, faEdit, faPlus } from "@fortawesome/free-solid-svg-icons";
-import "./styles/event.css";
+import { faCalendar, faList, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { ProgressBar, Table } from "react-bootstrap";
 import tImg from "../assets/t1.jpg";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
 import { eventsAPI } from "../utils/API";
 import { extractMonthAndDate, formatDateFull } from "./utils/utils";
 import useAuthUserId from "auth/hooks/useAuthUser";
 import ContextMenu from "./ContextMenu";
+
+import "react-calendar/dist/Calendar.css";
+import "./styles/event.css";
 
 type ValuePiece = Date | null;
 
@@ -108,7 +109,7 @@ const EventTable = () => {
       }
       setIsLoading(false);
     } catch (error) {
-      setErrorMessage(`Failed to get events for this user`);
+      setErrorMessage(`Failed to get events for this user. ${error}`);
       setIsLoading(false);
     }
   };

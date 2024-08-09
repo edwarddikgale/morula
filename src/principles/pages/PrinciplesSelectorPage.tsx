@@ -1,6 +1,6 @@
 // App.jsx
 import React from 'react';
-import SDGSelection from '../components/SdgSelection';
+import SDGSelection from '../components/PrincipleSelection';
 import '../styles/sdg-selection.css';
 
 const SdgSelectorPage = () => {

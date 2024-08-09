@@ -9,7 +9,7 @@ import useOrgSettings from "settings/hooks/useIsoSettings";
 import { evalOrgSettingsProgress } from "dashboard/utils/evalOrgSettingProgress";
 import useEventCount from "event/hooks/useEventCount";
 import { evalEventProgress } from "dashboard/utils/evalEventProgress";
-import useUserSDG from "sdgselection/hooks/userSDGs";
+import useUserSDG from "principles/hooks/userSDGs";
 import { evalISOProgress } from "dashboard/utils/evalISOProgress";
 
 const Pages = () => {
@@ -84,7 +84,7 @@ const Pages = () => {
               <ProgressAlert 
                 data={eventCount} 
                 emptyText={"Please create at least one event"} 
-                completedText={`You have ${eventCount.eventCount} events so far!`}
+                completedText={`You have ${eventCount.eventCount} ${(eventCount.eventCount && eventCount.eventCount > 1)? 'events': 'event'} so far!`}
                 completionRateEval={evalEventProgress}
                />
             </div>
@@ -97,15 +97,15 @@ const Pages = () => {
               <span>
                 <InstructionsIcon />
               </span>
-              <h3 className='ms-4 title'>Materiality Exercise</h3>
+              <h3 className='ms-4 title'>Agile Principles Prioritisation</h3>
             </div>
             <p className='text-muted mt-3'>
-              A materiality assessment is designed to help you identify and understand the relative importance of specific ESG and sustainability topics to your organization.
+              An agile principles assessment is designed to help you identify and understand the relative importance of specific agile principles to your organization at the present moment.
             </p>
             <div>
               <ProgressAlert 
                 data={userSDG} 
-                emptyText={"Complete your materiality to get the most from this app"} 
+                emptyText={"Complete your prioritisation to get the most from this app"} 
                 completionRateEval={evalISOProgress}
                />
             </div>

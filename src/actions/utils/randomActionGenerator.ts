@@ -6,9 +6,9 @@ class RandomActionGenerator {
     private usedIndices: Set<number> = new Set();
     private refreshList: boolean = false;
     private sdg: number;
+    private API_URL = process.env.REACT_APP_API_BASE_URL;
   
     constructor(sdg: number, refresh: boolean = false) {
-      console.log(`SDG initiated to: ${sdg}`);
       this.sdg = sdg;
       this.refreshList = refresh;
       this.fetchActions(this.sdg);
@@ -21,7 +21,7 @@ class RandomActionGenerator {
         return;
       }
 
-      await fetch(`https://susact-dev.herokuapp.com/api/actionglobals/bysdg/${sdg}`)
+      await fetch(`${this.API_URL}/actionglobals/bysdg/${sdg}`)
           .then((response) => response.json())
           .then(data => {
               if(data && data.records){

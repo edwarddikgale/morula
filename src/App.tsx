@@ -26,8 +26,8 @@ import SettingsPage from "./settings/page/SettingsPage";
 import EvidencePage from "./evidence/page/EvidencePage";
 import EditEventPage from "event/pages/EditEventPage";
 import ActionBoardPage from "./board/pages/ActionBoardPage";
-import SdgSelectorPage from "./sdgselection/pages/SdgSelectorPage";
-import SdgSelectedPage from "sdgselection/pages/SdgSelectedPage";
+import PrinciplesSelectorPage from "principles/pages/PrinciplesSelectorPage";
+import PrinciplesSelectedPage from "principles/pages/PrinciplesSelectedPage";
 import EventReport from "event/pages/EventReport";
 
 function App() {
@@ -49,8 +49,8 @@ function App() {
               <Route path='/eventview/:id' element={<ViewEventPage />} />
               <Route path='/create-event' element={<CreateEventPage />} />
               <Route path='/actionboard' element={<ActionBoardPage />} />
-              <Route path='/sdgselector' element={<SdgSelectorPage />} />
-              <Route path='/sdgselected' element={<SdgSelectedPage />} />
+              <Route path='/principlesselector' element={<PrinciplesSelectorPage />} />
+              <Route path='/principlesselected' element={<PrinciplesSelectedPage />} />
             </Route>
             <Route path='/' element={<HomePage />} />
             <Route path='/evidence' element={<EvidencePage />} />

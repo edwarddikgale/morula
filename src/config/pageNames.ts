@@ -16,6 +16,6 @@ export const pageNames = {
   ACTIONS_BOARD: "/actionboard",
   REGISTER: "/register",
   RESET_PWD: "/reset-password",
-  SDG_SELECTOR: "/sdgselector",
-  SDG_SELECTED: "/sdgselected"
+  SDG_SELECTOR: "/principlesselector",
+  SDG_SELECTED: "/principlesselected"
 };

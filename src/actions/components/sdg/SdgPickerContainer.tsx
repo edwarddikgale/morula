@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import SdgPicker from './SdgPicker';
 import './sdg-picker-container.css';
-import useUserSDG from 'sdgselection/hooks/userSDGs';
+import useUserSDG from 'principles/hooks/userSDGs';
 import { SdgHeader } from 'actions/types/Sdg';
 import { sdgListGetter } from 'common/data/sdgListGetter';
 import { SdgSelection } from './SdgSelection';

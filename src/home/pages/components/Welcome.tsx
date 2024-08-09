@@ -8,14 +8,7 @@ const Welcome: React.FC = () => {
     <div>
       <div className="hero-section">
         <div className="welcome-message">
-          <h3>Welcome to YOUR opportunity to co-create a platform which will help you to:</h3>
-          <ul>
-            <li>Create a list of credible actions so you can demonstrate action in advancing The Paris Agreement 
-              <p className='sub-point'>(This list will also help you demonstrate evidence of implementing Race to Zero criteria, ISO 20121, B Corp and many more)</p>
-              </li>
-            <li>Tailor your list to YOUR unique event (or event product or service if you are in the event supply chain)</li>
-            <li>Access credible resources that will support you to turn your list into action!</li>
-          </ul>
+          <h3><i>Welcome to MORULA</i></h3>
         </div>
         <div className="account-actions">
           <h2>Get Started</h2>
@@ -28,19 +21,12 @@ const Welcome: React.FC = () => {
               Register
             </Link>
           </div>
-          <p className="friendly-warning">Please be aware you are about to join a community co-creating a platform this means what you will see next: May not look perfect, Could have glitches, But it is the perfect place for you to get involved!</p>
+          <p className="friendly-warning">
+            
+          </p>
         </div>
       </div>
       <div className="row brand-images">
-        <div className="col-md-4">
-          <img src={images.rtzLogo} className="img-fluid" alt="RTZ Logo" />
-        </div>
-        <div className="col-md-4">
-          <img src={images.piLogo} className="img-fluid" alt="PI Logo" />
-        </div>
-        <div className="col-md-4">
-          <img src={images.rtzAcceleratorLogo} className="img-fluid" alt="RTZ Accelerator Logo" />
-        </div>
       </div>
       </div>
   );

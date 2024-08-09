@@ -2,6 +2,7 @@ import OpenAI from "openai";
 import {OpenAIResponse} from "../../common/ai/openai/models";
 import { SdgHeader } from "actions/types/Sdg";
 import { Action } from "actions/types/Action";
+import { getAgilePrincipleById } from "./getSdg";
 
 const API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
 
@@ -9,8 +10,9 @@ const openAiActions = {
 
     getActionBySdg : async (sdgNum: number) => {
 
-        //const indicatorPrompt = sdgHeader?.indicators.map((ind) => `.${ind.index}`).join(" & ");
-        const aiPrompt = `Give me recommended actions for a supplier in the event industry to operate sustainably under UN SDG ${sdgNum} and its indicators? Please format the response as JSON of pairs {title, description}. make the description min 1 sentence`;
+        const agilePrinciple = getAgilePrincipleById(sdgNum);
+        //const principleAsJson = JSON.stringify(agilePrinciple);
+        const aiPrompt = `Give me recommended actions for a scrum team to improve agile principle ${agilePrinciple.goal} and its relevant scrum values & scrum pillars? Please format the response as JSON of pairs {title, description}. make the description min 1 sentence`;
         console.log(`ai prompt: ${aiPrompt}`);
         
         const openai = new OpenAI({

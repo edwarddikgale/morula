@@ -22,7 +22,7 @@ export const Layout = ({ children }: LayoutProps) => {
       </div>     
       <div className="d-flex flex-column min-vh-100 flex-grow-1">
         <header className="background-primary text-white p-2 d-flex justify-content-between align-items-center">
-          <div>{/* SUSACTT */}</div>
+          <div className='app-name'> MORULA </div>
           <div>
             <div className="row align-items-center">
               <div className="col-auto mt-n4 mr-2">

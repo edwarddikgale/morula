@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import useAuthUserId from '../../auth/hooks/useAuthUser';
 import { userSdgAPI } from '../utils/API';
-import { UserSDG } from 'sdgselection/types/SDG';
+import { UserSDG } from 'principles/types/SDG';
 
 const useUserSDG = () => {
   const [userSDG, setUserSDG] = useState<UserSDG | null>(null);
