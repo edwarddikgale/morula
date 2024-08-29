@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { EmailIcon, LocationIcon, OrganizationIcon, PersonIcon, PhoneIcon } from "../../utils/CustomIcon";
 import { formatToDateString } from "../../event/components/utils/utils";
 import { UserProfile } from "../types/profile";
@@ -20,10 +20,7 @@ interface IProps {
 const ProfileUpdateForm = ({ userData }: IProps) => {
 
   const dispatch = useDispatch<AppDispatch>();  
-  const {data, processingDone, loading, error} = useSelector((state: RootState) => state.profile);
-  
-  console.log(`processing done? : ${processingDone}`);
-  console.log(`error? : ${error}`);
+  const {processingDone, isProcessing, error} = useSelector((state: RootState) => state.profile);
 
   const [fullName, setFullName] = useState<string>(userData?.fullName);
   const [phoneNumber, setPhoneNumber] = useState<string>(userData?.mobile);
@@ -35,14 +32,16 @@ const ProfileUpdateForm = ({ userData }: IProps) => {
   const [country, setCountry] = useState<string>(userData?.country);
   const [countryCode, setCountryCode] = useState<string>("");
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  useEffect(() => {
+  const computeCountryCode = useCallback(() => {
     const selectedCountryCode = countryListData.find((country) => country.name === userData.country)?.code;
     if (selectedCountryCode) {
       setCountryCode(selectedCountryCode);
     }
-  }, []);
+  }, [userData.country]);
+
+  useEffect(() => {
+    computeCountryCode();
+  }, [computeCountryCode]);
 
   const handleSelect = (countryCode: string) => {
     setCountryCode(countryCode);
@@ -57,32 +56,22 @@ const ProfileUpdateForm = ({ userData }: IProps) => {
     setGender(gender);
   };
 
-  const handleGenderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setGender(event.target.value);
-  };
-
-  const stopLoading = () =>{
-    setIsLoading(false);
-  }
-
   useEffect(() =>{
     if(processingDone){
       if (error) {
         confirmError({
           actionTitle: `${userData._id? "Updating" : "Creating" } Profile`, 
-          resolveFn: stopLoading
         });
       } 
       else{
         confirmSuccess({
           actionTitle: `Profile ${userData._id? "Updated" : "Created" }`, 
-          resolveFn: stopLoading
         });
       }
-    }  
-  }, [error, processingDone]);
 
-  // API call-----------------------------------
+    }  
+  }, [error, processingDone, userData._id]);
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
@@ -97,11 +86,7 @@ const ProfileUpdateForm = ({ userData }: IProps) => {
       organisation: organizationName,
     };
     const slug = userData?._id;
-    setIsLoading(true);
     try {
-      /*const res = userData._id? 
-        await profileAPI.UpdateUserProfile(profileData, slug ?? ""):
-        await profileAPI.CreateUserProfile(profileData);*/
       if(slug){
         profileData._id = slug;
         dispatch(updateUserProfile(profileData as UserProfile));
@@ -111,7 +96,7 @@ const ProfileUpdateForm = ({ userData }: IProps) => {
       }
     }catch(error: any){}  
   };
-  // API call-----------------------------------
+
   return (
     <div className='py-3'>
       {/*Personal info start  */}
@@ -289,7 +274,7 @@ const ProfileUpdateForm = ({ userData }: IProps) => {
 
         <div className='text-end pb-5'>
           <button type='submit' className='btn btn-primary py-3 px-4'>
-            Update Profile {(isLoading || loading) && <LoaderSm />}
+            Update Profile {(isProcessing) && <LoaderSm />}
           </button>
         </div>
       </form>

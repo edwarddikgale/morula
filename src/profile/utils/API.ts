@@ -2,14 +2,12 @@ import { UserProfile } from "profile/types/profile";
 
 export const API_URL = process.env.REACT_APP_API_BASE_URL;
 
-export interface CreateProfileResponse{
-  userProfile: UserProfile
-}
+export interface CreateProfileResponse extends UserProfile {}
 
 export interface UpdateProfileResponse extends UserProfile {}
 
 export const profileAPI = {
-  async CreateUserProfile(formData: any) {
+  async createUserProfile(formData: any): Promise<CreateProfileResponse>  {
     
     const response = await fetch(`${API_URL}/userprofiles`, {
       method: "POST",

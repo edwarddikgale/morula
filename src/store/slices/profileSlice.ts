@@ -1,8 +1,9 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { UserProfile } from "profile/types/profile";
-import { UpdateProfileResponse, profileAPI } from "profile/utils/API";
+import { CreateProfileResponse, UpdateProfileResponse, profileAPI } from "profile/utils/API";
 
 export const API_URL = process.env.REACT_APP_API_BASE_URL;
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const fetchUserProfile = createAsyncThunk(
     'profile/fetchUserProfile',
@@ -27,6 +28,7 @@ export const updateUserProfile = createAsyncThunk(
     async(profile: UserProfile, {rejectWithValue}) =>{
         try{
             const response = await profileAPI.updateUserProfile(profile, profile._id || "");
+            await delay(1000);
             return response;
         }
         catch(error: any){
@@ -36,16 +38,12 @@ export const updateUserProfile = createAsyncThunk(
 );
 
 export const createUserProfile = createAsyncThunk(
-    'profile/updateUserProfile',
+    'profile/createUserProfile',
     async(profile: UserProfile, {rejectWithValue}) =>{
         try{
-            const response = await profileAPI.CreateUserProfile(profile);
-            if(!response.ok){
-                const errorMsg = `Failed to create user profile with id ${profile._id }`;
-                throw new Error(errorMsg);
-            }
-            const data = response.json();
-            return data;
+            const response = await profileAPI.createUserProfile(profile);
+            await delay(1000);
+            return response;
         }
         catch(error: any){
             return rejectWithValue(error.message);
@@ -57,6 +55,7 @@ export interface UserProfileState {
     data: UserProfile | null;
     loading: boolean;
     processingDone: boolean;
+    isProcessing: boolean;
     error: string | null;
 }
 
@@ -64,6 +63,7 @@ const initialState: UserProfileState = {
     data: null,
     loading: false,
     processingDone: false,
+    isProcessing: false,
     error: null,
 };
 
@@ -71,45 +71,68 @@ const profileSlice = createSlice({
     name: "profile",
     initialState: initialState,
     reducers: {},
-    extraReducers: (builder) =>{
+    extraReducers: (builder) => {
         builder
-        .addCase(fetchUserProfile.pending, (state) =>{
-            state.loading = true;
-            state.error = null;
-            state.processingDone = false;
-        })
-        .addCase(fetchUserProfile.fulfilled, (state, action) =>{
-            state.loading = false;
-            state.error = null;
-            state.data = action.payload.userprofile;
-            state.processingDone = false;
-        })
-        .addCase(fetchUserProfile.rejected, (state, action) =>{
-            state.loading = false;
-            state.data = <UserProfile>{};
-            state.error = action.payload?.toString() || "Sorry, seems like something went wrong";
-            state.processingDone = false;
-        })
-        .addCase(updateUserProfile.pending, (state) => {
-            state.loading = true;
-            state.error = null;
-            state.processingDone = false;
-        })
-        .addCase(updateUserProfile.fulfilled, (state, action: PayloadAction<UpdateProfileResponse>) => {
-            state.loading = false;
-            state.data = action.payload;
-            state.error = null;
-            state.processingDone = true;
-            console.log(`payload: ${JSON.stringify(action.payload)}`);
-            console.log(`updateUserProfile.fulfilled`);
-        })
-        .addCase(updateUserProfile.rejected, (state, action: PayloadAction<string | unknown>) => {
-            state.loading = false;
-            state.error = typeof action.payload === 'string' ? action.payload : 'Failed to update profile';
-            state.processingDone = true;
-            console.log(`updateUserProfile.rejected`);
-        });
-    }
+            // Handle fetchUserProfile cases
+            .addCase(fetchUserProfile.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+                state.processingDone = false;
+            })
+            .addCase(fetchUserProfile.fulfilled, (state, action) => {
+                state.loading = false;
+                state.error = null;
+                state.data = action.payload.userprofile;
+                state.processingDone = false;
+            })
+            .addCase(fetchUserProfile.rejected, (state, action) => {
+                state.loading = false;
+                state.data = <UserProfile>{};
+                state.error = action.payload?.toString() || "Sorry, seems like something went wrong";
+                state.processingDone = false;
+            })
+            // Handle createUserProfile cases
+            .addCase(createUserProfile.pending, (state) => {
+                state.loading = false;
+                state.isProcessing = true;
+                state.error = null;
+                state.processingDone = false;
+            })
+            .addCase(createUserProfile.fulfilled, (state, action: PayloadAction<CreateProfileResponse>) => {
+                state.loading = false;
+                state.data = action.payload;
+                state.error = null;
+                state.processingDone = true;
+                state.isProcessing = false;
+            })
+            .addCase(createUserProfile.rejected, (state, action: PayloadAction<string | unknown>) => {
+                state.loading = false;
+                state.error = typeof action.payload === 'string' ? action.payload : 'Failed to create profile';
+                state.processingDone = true;
+                state.isProcessing = false;
+            })
+            // Handle updateUserProfile cases
+            .addCase(updateUserProfile.pending, (state) => {
+                state.loading = false;
+                state.isProcessing = true;
+                state.error = null;
+                state.processingDone = false;
+            })
+            .addCase(updateUserProfile.fulfilled, (state, action: PayloadAction<UpdateProfileResponse>) => {
+                state.loading = false;
+                state.data = action.payload;
+                state.error = null;
+                state.isProcessing = false;
+                state.processingDone = true;
+            })
+            .addCase(updateUserProfile.rejected, (state, action: PayloadAction<string | unknown>) => {
+                state.loading = false;
+                state.error = typeof action.payload === 'string' ? action.payload : 'Failed to update profile';
+                state.isProcessing = false;
+                state.processingDone = true;
+            });
+    },
 });
+
 
 export const profileReducer = profileSlice.reducer;

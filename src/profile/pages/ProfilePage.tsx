@@ -11,7 +11,7 @@ const ProfilePage = () => {
   const userId = useAuthUserId();
   const dispatch = useDispatch<AppDispatch>();
 
-  const {data, loading, error} = useSelector((state: RootState) => state.profile);
+  const {data, loading, isProcessing} = useSelector((state: RootState) => state.profile);
 
   const [errorMessage, setErrorMessage] = useState<string>("");
 
@@ -23,7 +23,7 @@ const ProfilePage = () => {
 
   return (
     <div className='profile-container my-5'>
-      {loading && <LoaderPrimary />}
+      {loading && (!isProcessing) &&  <LoaderPrimary />}
       {!loading && data?._id && <ProfileUpdateForm userData={data} />}
       {!loading && !data?._id && userId && <ProfileForm userId={userId} />}
     </div>

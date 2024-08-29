@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../css/profile.css";
 import { EmailIcon, LocationIcon, OrganizationIcon, PersonIcon, PhoneIcon } from "../../utils/CustomIcon";
 import { formatToDateString } from "../../event/components/utils/utils";
 import { UserProfile } from "../types/profile";
 import ReactFlagsSelect from "react-flags-select";
 import { countryListData } from "../data/countryData";
-import { profileAPI } from "../utils/API";
-import Swal from "sweetalert2";
 import { LoaderSm } from "../../common/components/Loader/Loader";
 import { useNavigate } from "react-router-dom";
 import { pageNames } from "../../config/pageNames";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "store/store";
+import { createUserProfile } from "store/slices/profileSlice";
+import { confirmError, confirmSuccess } from "common/components/confirmation/confirm";
 
 interface IProps{
   userId: string
@@ -17,6 +19,8 @@ interface IProps{
 const ProfileForm = ({userId}: IProps) => {
 
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();  
+  const {processingDone, isProcessing, error} = useSelector((state: RootState) => state.profile);
 
   const [fullName, setFullName] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
@@ -27,8 +31,6 @@ const ProfileForm = ({userId}: IProps) => {
   const [city, setCity] = useState<string>("");
   const [country, setCountry] = useState<string>("");
   const [countryCode, setCountryCode] = useState<string>("");
-
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleSelect = (countryCode: string) => {
     setCountryCode(countryCode);
@@ -42,9 +44,6 @@ const ProfileForm = ({userId}: IProps) => {
   const updateGenderTo = (gender: string) =>{
     setGender(gender);
   };
-  const handleGenderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setGender(event.target.value);
-  };
 
   function resetForm() {
     setFullName("");
@@ -57,7 +56,6 @@ const ProfileForm = ({userId}: IProps) => {
     setCountry("");
   }
 
-  // API call-----------------------------------
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const profileData: Partial<UserProfile> = {
@@ -72,35 +70,20 @@ const ProfileForm = ({userId}: IProps) => {
       userId: userId,
     };
 
-    setIsLoading(true);
+    dispatch(createUserProfile(profileData as UserProfile));
 
-    try {
-      const res = await profileAPI.CreateUserProfile(profileData);
-      if (res) {
-        Swal.fire({
-          position: "center",
-          icon: "success",
-          title: "Profile Created Successfully",
-          showConfirmButton: false,
-          timer: 1500,
-        }).then(() => {
-          setIsLoading(false);
-          navigate(pageNames.PROFILE);
-        });
-      }
-    } catch (error) {
-      Swal.fire({
-        position: "center",
-        icon: "error",
-        title: "Something went wrong",
-        showConfirmButton: false,
-        timer: 1500,
-      }).then(() => {
-        setIsLoading(false);
-      });
-    }
   };
-  // API call-----------------------------------
+  
+  useEffect(() =>{
+    if(processingDone){
+      if (error) {
+        confirmError({ actionTitle: `Creating Profile`});
+      } 
+      else{
+        confirmSuccess({ actionTitle: `Profile Created`});
+      }
+    }  
+  }, [error, processingDone]);
 
   return (
     <div className='py-3'>
@@ -292,7 +275,7 @@ const ProfileForm = ({userId}: IProps) => {
 
         <div className='text-end pb-5'>
           <button type='submit' className='btn btn-primary py-3 px-4'>
-            Create Profile {isLoading && <LoaderSm />}
+            Create Profile {isProcessing && <LoaderSm />}
           </button>
         </div>
       </form>
