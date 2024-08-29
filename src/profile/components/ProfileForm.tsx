@@ -180,6 +180,7 @@ const ProfileForm = ({userId}: IProps) => {
                     type='email'
                     className='form-control icon-field'
                     id='email'
+                    required={true}
                     placeholder='yourmail@email.com'
                   />
                 </div>

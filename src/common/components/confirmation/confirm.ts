@@ -1,10 +1,11 @@
 import Swal from "sweetalert2";
 
 interface IProps{
-    actionTitle: string
+    actionTitle: string,
+    resolveFn?: () => void
 }
 
-const confirmSuccess = ({actionTitle}: IProps) => {
+const confirmSuccess = ({actionTitle, resolveFn}: IProps) => {
     Swal.fire({
         position: "center",
         icon: "success",
@@ -12,11 +13,11 @@ const confirmSuccess = ({actionTitle}: IProps) => {
         showConfirmButton: false,
         timer: 1500,
       }).then(() => {
-        //setShowConfirmation(false);
+         if(resolveFn) resolveFn();
       });
 }
 
-const confirmError = ({actionTitle}: IProps) => {
+const confirmError = ({actionTitle, resolveFn}: IProps) => {
     Swal.fire({
         position: "center",
         icon: "error",
@@ -24,7 +25,7 @@ const confirmError = ({actionTitle}: IProps) => {
         showConfirmButton: false,
         timer: 1500,
       }).then(() => {
-        //setShowConfirmation(false);
+        if(resolveFn) resolveFn();
       });
 }
 

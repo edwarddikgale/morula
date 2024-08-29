@@ -1,19 +1,30 @@
 import React, { useEffect, useState } from "react";
-import "../css/profile.css";
 import { EmailIcon, LocationIcon, OrganizationIcon, PersonIcon, PhoneIcon } from "../../utils/CustomIcon";
 import { formatToDateString } from "../../event/components/utils/utils";
 import { UserProfile } from "../types/profile";
 import ReactFlagsSelect from "react-flags-select";
 import { countryListData } from "../data/countryData";
 import { profileAPI } from "../utils/API";
-import Swal from "sweetalert2";
 import { LoaderSm } from "../../common/components/Loader/Loader";
+import { confirmError, confirmSuccess } from "common/components/confirmation/confirm";
+
+import "../css/profile.css";
+import { AppDispatch, RootState } from "store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { createUserProfile, updateUserProfile } from "store/slices/profileSlice";
 
 interface IProps {
   userData: UserProfile;
 }
 
 const ProfileUpdateForm = ({ userData }: IProps) => {
+
+  const dispatch = useDispatch<AppDispatch>();  
+  const {data, processingDone, loading, error} = useSelector((state: RootState) => state.profile);
+  
+  console.log(`processing done? : ${processingDone}`);
+  console.log(`error? : ${error}`);
+
   const [fullName, setFullName] = useState<string>(userData?.fullName);
   const [phoneNumber, setPhoneNumber] = useState<string>(userData?.mobile);
   const [email, setEmail] = useState<string>(userData?.email);
@@ -50,6 +61,27 @@ const ProfileUpdateForm = ({ userData }: IProps) => {
     setGender(event.target.value);
   };
 
+  const stopLoading = () =>{
+    setIsLoading(false);
+  }
+
+  useEffect(() =>{
+    if(processingDone){
+      if (error) {
+        confirmError({
+          actionTitle: `${userData._id? "Updating" : "Creating" } Profile`, 
+          resolveFn: stopLoading
+        });
+      } 
+      else{
+        confirmSuccess({
+          actionTitle: `Profile ${userData._id? "Updated" : "Created" }`, 
+          resolveFn: stopLoading
+        });
+      }
+    }  
+  }, [error, processingDone]);
+
   // API call-----------------------------------
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -67,32 +99,17 @@ const ProfileUpdateForm = ({ userData }: IProps) => {
     const slug = userData?._id;
     setIsLoading(true);
     try {
-      const res = userData._id? 
+      /*const res = userData._id? 
         await profileAPI.UpdateUserProfile(profileData, slug ?? ""):
-        await profileAPI.CreateUserProfile(profileData);
-      if (res) {
-        Swal.fire({
-          position: "center",
-          icon: "success",
-          title: `Profile ${userData._id? "Updated" : "Created" } Successfully`,
-          showConfirmButton: false,
-          timer: 1500,
-        }).then(() => {
-          setIsLoading(false);
-        });
+        await profileAPI.CreateUserProfile(profileData);*/
+      if(slug){
+        profileData._id = slug;
+        dispatch(updateUserProfile(profileData as UserProfile));
       }
-    } catch (error) {
-      console.log(error);
-      Swal.fire({
-        position: "center",
-        icon: "error",
-        title: "Something went wrong",
-        showConfirmButton: false,
-        timer: 1500,
-      }).then(() => {
-        setIsLoading(false);
-      });
-    }
+      else{
+        dispatch(createUserProfile(profileData as UserProfile)); 
+      }
+    }catch(error: any){}  
   };
   // API call-----------------------------------
   return (
@@ -173,6 +190,7 @@ const ProfileUpdateForm = ({ userData }: IProps) => {
                     type='email'
                     className='form-control icon-field'
                     id='email'
+                    required={false}
                     placeholder='yourmail@email.com'
                   />
                 </div>
@@ -271,7 +289,7 @@ const ProfileUpdateForm = ({ userData }: IProps) => {
 
         <div className='text-end pb-5'>
           <button type='submit' className='btn btn-primary py-3 px-4'>
-            Update Profile {isLoading && <LoaderSm />}
+            Update Profile {(isLoading || loading) && <LoaderSm />}
           </button>
         </div>
       </form>
