@@ -25,11 +25,16 @@ import { LoaderSm } from "../../common/components/Loader/Loader";
 import { pageNames } from "../../config/pageNames";
 import Select from "react-select";
 import useAuthUserId from "auth/hooks/useAuthUser";
-import eventTags from '../data/eventTags.json';
+
 import TimeZoneSelect from "./TimeZoneSelect";
 import { EventTag } from "./types/EventTag";
+import { EventCategory } from "./types/EventCategory";
+
+import eventTags from '../data/eventTags.json';
+import eventCategories from '../data/eventCategory.json';
 
 const tagOptions: EventTag[] = eventTags;
+const categories: EventCategory[] = eventCategories;
 
 interface IProps {
   event?: EventFormData;
@@ -97,7 +102,7 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
         setEstimatedAttendees(event.attendee_estimate || 0);
         setEventOrganizer(event.organizer || "Event Organizer Inc.");
         setEventType(""); // Assuming event.type does not exist in EventFormData
-        setEventCategory(""); // Assuming event.category does not exist in EventFormData
+        setEventCategory(event.category || ""); // Assuming event.category does not exist in EventFormData
         setEventSearchTag(event.tags || []);
         const eventTags = event.tags || [];
         //setSelectedTags(eventTags);
@@ -156,8 +161,12 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
     // console.log(event.target.value);
   };
   const handleCategorySelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const category = eventCategories.find(cat => cat.value === event.target.value);
     setEventCategory(event.target.value);
-    // console.log(event.target.value);
+
+    if(category && (!eventTitle || eventTitle.length === 0)){
+      setEventTitle(`${category.label} Meeting`);
+    }
   };
 
   const handleTagChange = (selectedOptions: any) => {
@@ -197,6 +206,7 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
       userId: userId,
       title: eventTitle,
       organizer: eventOrganizer,
+      category: eventCategory,
       tags: eventSearchTag,
       locationType: activeEventLocation,
       venue: searchVenueQuery,
@@ -260,6 +270,52 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
         >
           <div>
             {/* basic info field */}
+            <div className='row g-2 mb-3'>
+              <div className='col-12 col-md-4 d-none'>
+                <div className='form-floating'>
+                  <select
+                    className='form-select'
+                    id='type'
+                    aria-label='Floating label select example'
+                    value={eventType}
+                    onChange={handleTypeSelectChange}
+                  >
+                    <option value='0' selected>
+                      Type
+                    </option>
+                    <option value='1'>One</option>
+                    <option value='2'>Two</option>
+                    <option value='3'>Three</option>
+                  </select>
+                  <label htmlFor='type'>Works with selects</label>
+                </div>
+              </div>
+              <div className='col-12 col-md-4'>
+                <div className='form-floating'>
+                  <select
+                    className='form-select'
+                    id='Category'
+                    aria-label='Floating label select example'
+                    value={eventCategory}
+                    onChange={handleCategorySelectChange}
+                  >
+                    <option value={''}>Select Category...</option>
+                    {categories.map((category) =>(
+                      <option key={category.value} value={category.value} selected={eventCategory === category.value}>
+                        {category.label}
+                      </option>
+                    ))}
+                    <option value='0' selected>
+                      Category
+                    </option>
+                    <option value='1'>One</option>
+                    <option value='2'>Two</option>
+                    <option value='3'>Three</option>
+                  </select>
+                  <label htmlFor='floatingSelectGrid'>Category</label>
+                </div>
+              </div>
+            </div>
             <div className='form-floating mb-3'>
               <input
                 maxLength={evenTitleLimit}
@@ -301,47 +357,6 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
                 The profile show a unique organizer and shows all events on one page{" "}
                 <Link to='/'>View Organizer Info</Link>
               </p>
-            </div>
-            {/* Hidden for now  */}    
-            <div className='row g-2 mb-3 d-none'>
-              <div className='col-12 col-md-4'>
-                <div className='form-floating'>
-                  <select
-                    className='form-select'
-                    id='type'
-                    aria-label='Floating label select example'
-                    value={eventType}
-                    onChange={handleTypeSelectChange}
-                  >
-                    <option value='0' selected>
-                      Type
-                    </option>
-                    <option value='1'>One</option>
-                    <option value='2'>Two</option>
-                    <option value='3'>Three</option>
-                  </select>
-                  <label htmlFor='type'>Works with selects</label>
-                </div>
-              </div>
-              <div className='col-12 col-md-4'>
-                <div className='form-floating'>
-                  <select
-                    className='form-select'
-                    id='Category'
-                    aria-label='Floating label select example'
-                    value={eventCategory}
-                    onChange={handleCategorySelectChange}
-                  >
-                    <option value='0' selected>
-                      Category
-                    </option>
-                    <option value='1'>One</option>
-                    <option value='2'>Two</option>
-                    <option value='3'>Three</option>
-                  </select>
-                  <label htmlFor='floatingSelectGrid'>Category</label>
-                </div>
-              </div>
             </div>
 
             <div>

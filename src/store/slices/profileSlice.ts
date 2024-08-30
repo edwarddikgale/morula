@@ -1,63 +1,13 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { UserProfile } from "profile/types/profile";
-import { CreateProfileResponse, UpdateProfileResponse, profileAPI } from "profile/utils/API";
+import { CreateProfileResponse, UpdateProfileResponse } from "profile/utils/API";
+import { fetchUserProfile } from "../actions/profile/fetchUserProfile";
+import { updateUserProfile } from "../actions/profile/updateUserProfile";
+import { createUserProfile } from "../actions/profile/createUserProfile";
+import { UserProfileState } from "../states/UserProfileState";
 
 export const API_URL = process.env.REACT_APP_API_BASE_URL;
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-export const fetchUserProfile = createAsyncThunk(
-    'profile/fetchUserProfile',
-    async(userId: string, {rejectWithValue}) =>{
-        try{
-            const response = await fetch(`${API_URL}/userprofiles/${userId}`);
-            if(!response.ok){
-                const errorMsg = `Failed to fetch user profile with id ${userId}`
-                throw new Error(errorMsg);
-            }
-            const data = response.json();
-            return data;
-        }
-        catch(error: any){
-            return rejectWithValue(error.message);
-        }
-    }
-);
-
-export const updateUserProfile = createAsyncThunk(
-    'profile/updateUserProfile',
-    async(profile: UserProfile, {rejectWithValue}) =>{
-        try{
-            const response = await profileAPI.updateUserProfile(profile, profile._id || "");
-            await delay(1000);
-            return response;
-        }
-        catch(error: any){
-            return rejectWithValue(error.message);
-        }
-    }
-);
-
-export const createUserProfile = createAsyncThunk(
-    'profile/createUserProfile',
-    async(profile: UserProfile, {rejectWithValue}) =>{
-        try{
-            const response = await profileAPI.createUserProfile(profile);
-            await delay(1000);
-            return response;
-        }
-        catch(error: any){
-            return rejectWithValue(error.message);
-        }
-    }
-);
-
-export interface UserProfileState {
-    data: UserProfile | null;
-    loading: boolean;
-    processingDone: boolean;
-    isProcessing: boolean;
-    error: string | null;
-}
+export const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const initialState: UserProfileState = {
     data: null,
@@ -136,3 +86,4 @@ const profileSlice = createSlice({
 
 
 export const profileReducer = profileSlice.reducer;
+export {createUserProfile, fetchUserProfile, updateUserProfile};

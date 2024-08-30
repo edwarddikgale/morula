@@ -1,0 +1,21 @@
+[
+    {"value": "coaching_1_to_1", "label": "1-1 coaching"},
+    {"value": "alignment", "label": "Alignment"},
+    {"value": "daily", "label": "Daily Scrum"},
+    {"value": "discovery", "label": "Discovery"},
+    {"value": "impromptu", "label": "Impromptu"},
+    {"value": "networking", "label": "Networking"},
+    {"value": "parking_lot", "label": "Parking Lot"},
+    {"value": "refinement", "label": "Refinement"},
+    {"value": "reporting", "label": "Reporting"},
+    {"value": "research", "label": "Research"},
+    {"value": "retro", "label": "Retrospective"},
+    {"value": "social", "label": "Social"},
+    {"value": "sprint_planning_1", "label": "Sprint Planning (1)"},
+    {"value": "sprint_planning_2", "label": "Sprint Planning (2)"},
+    {"value": "review", "label": "Sprint Review"},
+    {"value": "teaching", "label": "Teaching Session"},
+    {"value": "team_coaching", "label": "Team Coaching Session"},
+    {"value": "workshop", "label": "Workshop"},
+    {"value": "other", "label": "Other"}
+]

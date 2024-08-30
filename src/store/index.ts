@@ -1,3 +1,3 @@
-import { fetchUserProfile } from "./slices/profileSlice";
+import { fetchUserProfile } from "./actions/profile/fetchUserProfile";
 
 export { fetchUserProfile }

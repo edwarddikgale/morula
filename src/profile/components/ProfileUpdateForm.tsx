@@ -11,7 +11,7 @@ import { confirmError, confirmSuccess } from "common/components/confirmation/con
 import "../css/profile.css";
 import { AppDispatch, RootState } from "store/store";
 import { useDispatch, useSelector } from "react-redux";
-import { createUserProfile, updateUserProfile } from "store/slices/profileSlice";
+import { createUserProfile, updateUserProfile } from "store/actions/profile";
 
 interface IProps {
   userData: UserProfile;

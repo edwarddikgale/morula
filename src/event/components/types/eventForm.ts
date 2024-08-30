@@ -1,6 +1,7 @@
 export interface EventFormData {
   userId: string;
   title: string;
+  category?: string;
   organizer?: string;
   tags?: string[];
   locationType?: string;

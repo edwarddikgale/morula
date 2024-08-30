@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { pageNames } from "../../config/pageNames";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "store/store";
-import { createUserProfile } from "store/slices/profileSlice";
+import { createUserProfile } from "store/actions/profile";
 import { confirmError, confirmSuccess } from "common/components/confirmation/confirm";
 
 interface IProps{
