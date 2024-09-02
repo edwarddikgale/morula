@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMap, faCalendarDays, faTengeSign, faTextWidth, faEdit, faListDots, faFileAlt } from "@fortawesome/free-solid-svg-icons";
+import { faMap, faCalendarDays, faTengeSign, faTextWidth, faEdit, faListDots, faFileAlt, faEyeLowVision } from "@fortawesome/free-solid-svg-icons";
 import FormSectionContainer from "./FormSectionContainer";
 import { formatToDateString } from "./utils/utils";
 import { EventFormData } from "./types/eventForm";
 import { Link } from "react-router-dom";
 import { pageNames } from "config/pageNames";
+import { findEventCatByVal } from "event/utils/findEventCategory";
+import ObservationForm from "observation/components/ObservationForm";
+import RightOverlay from "common/components/overlay/RightOverlay";
 
 interface IProps {
     event: EventFormData;
@@ -15,6 +18,7 @@ interface IProps {
 const EventReadOnly: React.FC<IProps> = ({ id, event }) => {
     const {
         title,
+        category,
         tags,
         locationType,
         venue,
@@ -29,6 +33,17 @@ const EventReadOnly: React.FC<IProps> = ({ id, event }) => {
         attendee_estimate
     } = event;
 
+    const eventCategory = findEventCatByVal(category);
+    const [isObservationOpen, setIsObservationOpen] = useState<boolean>(false);
+
+    const handleCloseObservationModal = () =>{
+        setIsObservationOpen(false);
+    }
+
+    const handleOpenObservationModal = () => {
+        setIsObservationOpen(true);
+    }
+
     return (
         <div className="container">
             {/* Basic Info */}
@@ -40,6 +55,12 @@ const EventReadOnly: React.FC<IProps> = ({ id, event }) => {
                 description="Details about the event"
             >
                 <div className="row">
+                    <div className="col-md-3">
+                        <strong>Event Category</strong>
+                    </div>
+                    <div className="col-md-9">
+                        <p>{eventCategory?.label}</p>
+                    </div>
                     <div className="col-md-3">
                         <strong>Event Title</strong>
                     </div>
@@ -144,8 +165,13 @@ const EventReadOnly: React.FC<IProps> = ({ id, event }) => {
             </FormSectionContainer>
 
             <div className='text-end pb-4 my-4'>
+                
+                <button type='button' className='btn btn-outline-secondary py-2 px-4' onClick={handleOpenObservationModal}>
+                    <FontAwesomeIcon icon={faEyeLowVision} /> Observation(s)
+                </button>
+                               
                 <Link to={`${pageNames.EVENT_EDIT}/${id}`}>
-                    <button type='submit' className='btn btn-outline-secondary py-2 px-4'>
+                    <button type='submit' className='btn btn-outline-secondary py-2 px-4 ms-4'>
                         <FontAwesomeIcon icon={faEdit} /> Edit Event
                     </button>
                 </Link>
@@ -160,6 +186,20 @@ const EventReadOnly: React.FC<IProps> = ({ id, event }) => {
                     </button>
                 </Link>
             </div>
+
+            <RightOverlay 
+                onClose={handleCloseObservationModal}
+                isOpen={isObservationOpen}
+                children={
+                <div>
+                    {isObservationOpen && (
+                    <ObservationForm
+                        eventData={event}
+                    />
+                    )}
+                </div>
+                }
+            />
         </div>
     );
 };

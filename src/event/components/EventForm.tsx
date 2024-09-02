@@ -32,6 +32,7 @@ import { EventCategory } from "./types/EventCategory";
 
 import eventTags from '../data/eventTags.json';
 import eventCategories from '../data/eventCategory.json';
+import { findEventCatByVal } from "event/utils/findEventCategory";
 
 const tagOptions: EventTag[] = eventTags;
 const categories: EventCategory[] = eventCategories;
@@ -160,8 +161,9 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
     setEventType(event.target.value);
     // console.log(event.target.value);
   };
+
   const handleCategorySelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const category = eventCategories.find(cat => cat.value === event.target.value);
+    const category = findEventCatByVal(event.target.value);
     setEventCategory(event.target.value);
 
     if(category && (!eventTitle || eventTitle.length === 0)){
