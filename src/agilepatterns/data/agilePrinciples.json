@@ -1,0 +1,75 @@
+[
+    {
+      "id": 1,
+      "principle": "Our highest priority is to satisfy the customer through early and continuous delivery of valuable software.",
+      "key": "satisfy_customer_continuous_delivery",
+      "title": "Customer Satisfaction and Continuous Delivery"
+    },
+    {
+      "id": 2,
+      "principle": "Welcome changing requirements, even late in development. Agile processes harness change for the customer's competitive advantage.",
+      "key": "welcome_changing_requirements",
+      "title": "Embrace Change"
+    },
+    {
+      "id": 3,
+      "principle": "Deliver working software frequently, with a preference to the shorter timescale.",
+      "key": "frequent_software_delivery",
+      "title": "Frequent Software Delivery"
+    },
+    {
+      "id": 4,
+      "principle": "Business people and developers must work together daily throughout the project.",
+      "key": "business_and_developers_collaborate",
+      "title": "Collaboration Between Business and Developers"
+    },
+    {
+      "id": 5,
+      "principle": "Build projects around motivated individuals. Give them the environment and support they need, and trust them to get the job done.",
+      "key": "motivate_and_support_individuals",
+      "title": "Empowered and Supported Individuals"
+    },
+    {
+      "id": 6,
+      "principle": "The most efficient and effective method of conveying information to and within a development team is face-to-face conversation.",
+      "key": "face_to_face_communication",
+      "title": "Face-to-Face Communication"
+    },
+    {
+      "id": 7,
+      "principle": "Working software is the primary measure of progress.",
+      "key": "working_software_primary_measure",
+      "title": "Working Software as a Measure of Progress"
+    },
+    {
+      "id": 8,
+      "principle": "Agile processes promote sustainable development. The sponsors, developers, and users should be able to maintain a constant pace indefinitely.",
+      "key": "sustainable_development",
+      "title": "Sustainable Development"
+    },
+    {
+      "id": 9,
+      "principle": "Continuous attention to technical excellence and good design enhances agility.",
+      "key": "technical_excellence_and_design",
+      "title": "Technical Excellence and Good Design"
+    },
+    {
+      "id": 10,
+      "principle": "Simplicity--the art of maximizing the amount of work not done--is essential.",
+      "key": "simplicity_in_work",
+      "title": "Simplicity and Efficiency"
+    },
+    {
+      "id": 11,
+      "principle": "The best architectures, requirements, and designs emerge from self-organizing teams.",
+      "key": "self_organizing_teams",
+      "title": "Self-Organizing Teams"
+    },
+    {
+      "id": 12,
+      "principle": "At regular intervals, the team reflects on how to become more effective, then tunes and adjusts its behavior accordingly.",
+      "key": "team_reflects_regularly_and_adjusts",
+      "title": "Continuous Reflection and Improvement"
+    }
+  ]
+  

@@ -13,6 +13,7 @@
     {"value": "social", "label": "Social"},
     {"value": "sprint_planning_1", "label": "Sprint Planning (1)"},
     {"value": "sprint_planning_2", "label": "Sprint Planning (2)"},
+    {"value": "sprint", "label": "Sprint"},
     {"value": "review", "label": "Sprint Review"},
     {"value": "teaching", "label": "Teaching Session"},
     {"value": "team_coaching", "label": "Team Coaching Session"},
