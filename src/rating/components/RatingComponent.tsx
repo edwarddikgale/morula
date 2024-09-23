@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { RatingItem } from '../types';
 import { Star } from './Star';
 
+import "../styles/rating.css";
+
 interface RatingComponentProps {
   title: string; // For the header (Scrum or TIA Rating)
   items: RatingItem[]; // Array of items to be rated (scrum values or TIA aspects)
@@ -26,15 +28,20 @@ const RatingComponent: React.FC<RatingComponentProps> = ({ title, items, onSubmi
     <div>
       <h1>{title}</h1>
       {items.map((item) => (
-        <div key={item.key} style={{ marginBottom: '10px' }}>
-          <label style={{ minWidth: '150px', display: 'inline-block' }}>{item.name}: </label>
+        <div key={item.key} className='rating-item'>
+          <label>{item.name}: </label>
           {[1, 2, 3, 4, 5].map((starId) => (
             <Star
               key={starId}
-              filled={starId <= (ratings[item.name] || 0)}
+              filled={starId <= (ratings[item.name] || item.RatingValue)}
               onClick={() => handleRating(item.name, starId)}
             />
           ))}
+          {item.analysis &&
+            <p className='mt-2 mb-2'>
+              {item.analysis}
+            </p>
+          }
         </div>
       ))}
       {onSubmit && 

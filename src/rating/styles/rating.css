@@ -1,0 +1,10 @@
+
+.rating-item{
+    margin-bottom: 10px;
+}
+.rating-item label {   
+    min-width: 150px;
+    display: inline-block;
+    font-weight: bold;
+    text-transform: capitalize;
+}

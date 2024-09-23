@@ -245,7 +245,9 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
                 </button>
               </div>
               <div className='mb-3'>
-                <ScrumValueRating />
+                <ScrumValueRating 
+                  scrumAnalysis={analysis} 
+                />
               </div>
             </div>  
         </FormSectionContainer>        
