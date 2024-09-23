@@ -14,6 +14,7 @@ import noteTags from '../data/noteTags.json';
 import { NoteTag } from 'observation/types/NoteTag';
 import ScrumValueRating from 'rating/ScrumValueRating';
 import DailyAntiPatterns from 'agilepatterns/DailyAntiPatterns';
+import { ScrumAnalysisResponse } from 'observation/types/ScrumAnalysis';
 
 interface IProps{
     eventData: EventFormData
@@ -23,11 +24,48 @@ const tagOptions: NoteTag[] = noteTags;
 
 const ObservationForm: React.FC<IProps> = ({eventData}) => {
   const [notes, setNotes] = useState('');
+  const [error, setError] = useState<string | null>('');
+  const [analysis, setAnalysis] = useState<ScrumAnalysisResponse | null>(null);
   const [noteType, setNoteType] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
   const [observations, setObservations] = useState<Observation[]>([]);
   const [eventSearchTag, setEventSearchTag] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<NoteTag[]>([]);
+
+  const evalNotes = async () =>{
+    await handleAnalyzeScrum();
+  }
+
+
+  const handleAnalyzeScrum = async () => {
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      const response:any = await fetch('http://localhost:3000/api/scrum/analyze-scrum', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({notes: notes}),
+      });
+      
+      if (!response.ok) {
+        setError("Failed to create user profile!");
+      }
+  
+      //return response.json();
+
+      if(response.ok){
+        const data = await response.json() as ScrumAnalysisResponse;
+        setAnalysis(data);
+        console.log(data);
+      }
+
+      setIsLoading(false);
+    } catch (err) {
+      setError('Failed to analyze Scrum values. Please try again.');
+      setIsLoading(false);
+    }
+  };
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -200,6 +238,12 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
         >
             <div className='my-2'>
               <p className='form-field-title d-none'>If a value has not been displayed, mark it as a 5 and decrease only those with lesser scores</p>
+              <div className='text-end pb-4'>
+                <button type='button' className='btn btn-secondary py-2 px-4' onClick={evalNotes}>
+                  Evaluate Notes For Ratings
+                  {isLoading && <LoaderSm />}
+                </button>
+              </div>
               <div className='mb-3'>
                 <ScrumValueRating />
               </div>

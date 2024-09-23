@@ -3,17 +3,22 @@ import scrumValues from './data/scrumValues.json'; // Assume you have this JSON 
 import RatingComponent from './components/RatingComponent';
 import { RatingItem } from './types';
 
-const scrumPillarItems: RatingItem[] = scrumValues as RatingItem[];
+const scrumValueItems: RatingItem[] = scrumValues as RatingItem[];
+
+interface IProps{
+  
+}
+
 const ScrumValueRating = () => {
-  const handleTiaSubmit = (ratings: Record<string, number>) => {
-    console.log('TIA Ratings:', ratings);
+  const handleValueChange = (ratings: Record<string, number>) => {
+    console.log('Value Ratings:', ratings);
   };
 
   return (
     <RatingComponent
       title=""
-      items={scrumPillarItems}
-      onChange={handleTiaSubmit}
+      items={scrumValueItems}
+      onChange={handleValueChange}
     />
   );
 };

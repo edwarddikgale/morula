@@ -1,6 +1,6 @@
 [
-    { "id": 1, "name": "Transparency" },
-    { "id": 2, "name": "Inspection" },
-    { "id": 3, "name": "Adaptation" }
+    { "key": "transparency", "name": "Transparency" },
+    { "key": "inspection", "name": "Inspection" },
+    { "key": "adaptation", "name": "Adaptation" }
   ]
   

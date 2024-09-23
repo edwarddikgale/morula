@@ -26,7 +26,7 @@ const RatingComponent: React.FC<RatingComponentProps> = ({ title, items, onSubmi
     <div>
       <h1>{title}</h1>
       {items.map((item) => (
-        <div key={item.id} style={{ marginBottom: '10px' }}>
+        <div key={item.key} style={{ marginBottom: '10px' }}>
           <label style={{ minWidth: '150px', display: 'inline-block' }}>{item.name}: </label>
           {[1, 2, 3, 4, 5].map((starId) => (
             <Star

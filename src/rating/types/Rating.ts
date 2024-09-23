@@ -3,7 +3,8 @@ export interface Rating {
   }
   
   export interface RatingItem {
-    id: number;
+    key: string;
     name: string;
+    analysis: string;
   }
   
