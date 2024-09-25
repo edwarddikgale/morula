@@ -170,6 +170,7 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
           icon={faTags}
           title='Daily Scrum Anti Patterns'
           description='Find anti patterns observed'
+          isCollapsed={true}
         >
             <div className='my-2'>
               <p className='form-field-title d-none'>Search and select more than 1 anti pattern if needed</p>

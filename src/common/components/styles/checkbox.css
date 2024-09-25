@@ -1,0 +1,9 @@
+.dark-bordered-checkbox .form-check-input {
+    border: 2px solid #000; /* Dark border */
+    background-color: #ced4d9; /* Dark background if needed */
+  }
+  
+  .form-check-input.border-light {
+    border-color: #f8f9fa; /* Light border color */
+  }
+  
