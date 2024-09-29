@@ -18,7 +18,7 @@ const convertScrumAnalysisToRatingItems = (scrumAnalysis: ScrumAnalysisResponse 
     key: key,
     name: key.charAt(0).toUpperCase() + key.slice(1), // Capitalizing the first letter of the key
     analysis: valueAnalysis.analysis,
-    RatingValue: valueAnalysis.rating
+    ratingValue: valueAnalysis.rating
   }));
 
   return ratingItems;

@@ -15,6 +15,7 @@ import { NoteTag } from 'observation/types/NoteTag';
 import ScrumValueRating from 'rating/ScrumValueRating';
 import DailyAntiPatterns from 'agilepatterns/DailyAntiPatterns';
 import { ScrumAnalysisResponse } from 'observation/types/ScrumAnalysis';
+import DailyDesignPatterns from 'agilepatterns/DailyDesignPatterns';
 
 interface IProps{
     eventData: EventFormData
@@ -179,6 +180,23 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
               </div>
             </div>  
         </FormSectionContainer>  
+
+        {/* Daily Scrum Design-Patterns */}
+        <FormSectionContainer
+          isHr={true}
+          className='time-date'
+          icon={faTags}
+          title='Daily Scrum Design Patterns'
+          description='Find design patterns observed'
+          isCollapsed={true}
+        >
+            <div className='my-2'>
+              <p className='form-field-title d-none'>Search and select more than 1 design pattern if needed</p>
+              <div className='mb-3'>
+                <DailyDesignPatterns />
+              </div>
+            </div>  
+        </FormSectionContainer> 
 
         {/* Notes Text Area */}
         <FormSectionContainer

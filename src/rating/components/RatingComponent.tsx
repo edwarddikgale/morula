@@ -33,7 +33,7 @@ const RatingComponent: React.FC<RatingComponentProps> = ({ title, items, onSubmi
           {[1, 2, 3, 4, 5].map((starId) => (
             <Star
               key={starId}
-              filled={starId <= (ratings[item.name] || item.RatingValue)}
+              filled={starId <= (ratings[item.name] || item.ratingValue)}
               onClick={() => handleRating(item.name, starId)}
             />
           ))}

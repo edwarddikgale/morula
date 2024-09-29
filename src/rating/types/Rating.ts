@@ -6,6 +6,6 @@ export interface Rating {
     key: string;
     name: string;
     analysis: string;
-    RatingValue: number;
+    ratingValue: number;
   }
   
