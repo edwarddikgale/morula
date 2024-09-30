@@ -8,15 +8,17 @@ interface ScrumValueAnalysis {
     explanation: string;
   }
   
+  interface ScrumValuesAnalyses{
+    commitment: ScrumValueAnalysis;
+    focus: ScrumValueAnalysis;
+    openness: ScrumValueAnalysis;
+    respect: ScrumValueAnalysis;
+    courage: ScrumValueAnalysis;
+  }
+
   interface ScrumAnalysisResponse {
-    scrum_values_analysis: {
-      commitment: ScrumValueAnalysis;
-      focus: ScrumValueAnalysis;
-      openness: ScrumValueAnalysis;
-      respect: ScrumValueAnalysis;
-      courage: ScrumValueAnalysis;
-    };
+    scrum_values_analysis: ScrumValuesAnalyses;
     hypotheses: Hypothesis[];
   }
   
-  export type { ScrumValueAnalysis, Hypothesis, ScrumAnalysisResponse };
+  export type { ScrumValueAnalysis, ScrumValuesAnalyses, Hypothesis, ScrumAnalysisResponse };

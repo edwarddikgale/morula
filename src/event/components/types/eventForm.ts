@@ -1,4 +1,5 @@
 export interface EventFormData {
+  _id?: string;
   userId: string;
   title: string;
   category?: string;

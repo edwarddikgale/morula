@@ -17,6 +17,8 @@ import DailyAntiPatterns from 'agilepatterns/DailyAntiPatterns';
 import { ScrumAnalysisResponse } from 'observation/types/ScrumAnalysis';
 import DailyDesignPatterns from 'agilepatterns/DailyDesignPatterns';
 import HypothesisList from './HypothesisList';
+import { dailyObservationAPI } from 'observation/utils/API';
+import { AgilePattern } from 'agilepatterns/types';
 
 interface IProps{
     eventData: EventFormData
@@ -33,11 +35,14 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
   const [observations, setObservations] = useState<Observation[]>([]);
   const [eventSearchTag, setEventSearchTag] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<NoteTag[]>([]);
+  const [agilePatterns, setAgilePatterns] = useState<AgilePattern[]>([]);
 
+  const handleAgilePatternsUpdate = (latest: AgilePattern[]) =>{
+    setAgilePatterns(latest);
+  }
   const evalNotes = async () =>{
     await handleAnalyzeScrum();
   }
-
 
   const handleAnalyzeScrum = async () => {
     setIsLoading(true);
@@ -71,23 +76,38 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
+
+    if(!eventData._id) {
+      throw new Error(`Error, no event id provided`);
+      console.error(`Error, no event id provided`);
+    }
+
     setIsLoading(true);
     try {
-      const newObservation = {
+      const newObservation: Observation = {
+        eventId: eventData._id,
+        type: noteType,
+        title: `${eventData.category} ${noteType}`,
         notes,
-        sourceId: eventData.userId,
-        source: eventData.title + ' ' + eventData.category, 
-        title: `${eventData.title} Observation`,
-        startDate: eventData.startDate,
-        endDate: eventData.endDate,
-        tags: selectedTags
+        createdById: eventData.userId,
+        source: eventData.category,
+        sourceId: eventData._id,
+        tags: selectedTags.map(t => t.value),
+        patterns: [],
+        hypotheses: analysis?.hypotheses,
+        scrumValuesAnalyses: analysis?.scrum_values_analysis,
+        createdAt: new Date(),
+        updatedAt: new Date()
       };
-      // Simulate API response delay
+      
+      const response = await dailyObservationAPI.createObservation(newObservation);
+
       setTimeout(() => {
         setObservations([...observations, newObservation]);
         setIsLoading(false);
         setNotes('');
       }, 2000);
+
     } catch (error) {
       console.error('Failed to submit observation:', error);
       setIsLoading(false);
@@ -293,7 +313,7 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
             </div>  
         </FormSectionContainer>   
         }
-        
+
         {/* Submit Button */}
         <div className='text-end pb-4'>
           <button type='submit' className='btn btn-primary py-2 px-4'>

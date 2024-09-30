@@ -1,4 +1,4 @@
-export interface Rating {
+  export interface Rating {
     [key: string]: number;
   }
   
