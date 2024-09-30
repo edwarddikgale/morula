@@ -16,6 +16,7 @@ import ScrumValueRating from 'rating/ScrumValueRating';
 import DailyAntiPatterns from 'agilepatterns/DailyAntiPatterns';
 import { ScrumAnalysisResponse } from 'observation/types/ScrumAnalysis';
 import DailyDesignPatterns from 'agilepatterns/DailyDesignPatterns';
+import HypothesisList from './HypothesisList';
 
 interface IProps{
     eventData: EventFormData
@@ -271,6 +272,28 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
             </div>  
         </FormSectionContainer>        
 
+        {/* Hypotheses */}
+        {analysis &&
+        <FormSectionContainer
+          isHr={true}
+          className='time-date'
+          icon={faTags}
+          title='Hypothesis List'
+          description='A list of hypothesis derived from the notes'
+        >
+            <div className='my-2'>
+              <p className='form-field-title d-none'>...</p>
+              <div className='text-end pb-4'>
+              </div>
+              <div className='mb-3'>
+                <HypothesisList 
+                  hypotheses={analysis?.hypotheses}
+                />
+              </div>
+            </div>  
+        </FormSectionContainer>   
+        }
+        
         {/* Submit Button */}
         <div className='text-end pb-4'>
           <button type='submit' className='btn btn-primary py-2 px-4'>
