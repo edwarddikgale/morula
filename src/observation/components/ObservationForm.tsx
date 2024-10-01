@@ -19,6 +19,7 @@ import DailyDesignPatterns from 'agilepatterns/DailyDesignPatterns';
 import HypothesisList from './HypothesisList';
 import { dailyObservationAPI } from 'observation/utils/API';
 import { AgilePattern } from 'agilepatterns/types';
+import { joinDailyPatterns } from 'observation/utils/joinDailyPatterns';
 
 interface IProps{
     eventData: EventFormData
@@ -36,10 +37,13 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
   const [eventSearchTag, setEventSearchTag] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<NoteTag[]>([]);
   const [agilePatterns, setAgilePatterns] = useState<AgilePattern[]>([]);
+  const [dailyAntiPatterns, setDailyAntiPatterns] = useState<{ id: string; key: string }[]>([]);
+  const [dailyDesignPatterns, setDailyDesignPatterns] = useState<{ id: string; key: string }[]>([]);
 
   const handleAgilePatternsUpdate = (latest: AgilePattern[]) =>{
     setAgilePatterns(latest);
   }
+
   const evalNotes = async () =>{
     await handleAnalyzeScrum();
   }
@@ -49,24 +53,10 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
     setError(null);
     
     try {
-      const response:any = await fetch('http://localhost:3000/api/scrum/analyze-scrum', {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({notes: notes}),
-      });
-      
-      if (!response.ok) {
-        setError("Failed to create user profile!");
-      }
-  
-      //return response.json();
-
-      if(response.ok){
-        const data = await response.json() as ScrumAnalysisResponse;
-        setAnalysis(data);
-        console.log(data);
-      }
-
+      const response = await dailyObservationAPI.analyseScrumNotes(notes);
+      setAnalysis(response);
+      console.log(response);
+     
       setIsLoading(false);
     } catch (err) {
       setError('Failed to analyze Scrum values. Please try again.');
@@ -93,7 +83,7 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
         source: eventData.category,
         sourceId: eventData._id,
         tags: selectedTags.map(t => t.value),
-        patterns: [],
+        patterns: joinDailyPatterns(dailyAntiPatterns, dailyDesignPatterns),
         hypotheses: analysis?.hypotheses,
         scrumValuesAnalyses: analysis?.scrum_values_analysis,
         createdAt: new Date(),
@@ -197,7 +187,7 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
             <div className='my-2'>
               <p className='form-field-title d-none'>Search and select more than 1 anti pattern if needed</p>
               <div className='mb-3'>
-                <DailyAntiPatterns />
+                <DailyAntiPatterns onSelectionChange={(patterns) => setDailyAntiPatterns(patterns)} />
               </div>
             </div>  
         </FormSectionContainer>  
@@ -214,7 +204,7 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
             <div className='my-2'>
               <p className='form-field-title d-none'>Search and select more than 1 design pattern if needed</p>
               <div className='mb-3'>
-                <DailyDesignPatterns />
+                <DailyDesignPatterns onSelectionChange={(patterns) => setDailyDesignPatterns(patterns)} />
               </div>
             </div>  
         </FormSectionContainer> 

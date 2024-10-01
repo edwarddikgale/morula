@@ -6,7 +6,7 @@ export interface AgilePattern {
     description: string;
     type: 'anti-pattern' | 'design-pattern';
     tags: string[];
-    artifact: 'product-backlog' | 'sprint-backlog' | 'increment';
+    artifact: 'product-backlog' | 'sprint-backlog' | 'increment' | 'none';
     eventType: 'daily' | 'refinement' | 'planning' | 'retrospective' | 'research' | 'other';
     agilePrinciples: string[];
     scrumValues: string[];

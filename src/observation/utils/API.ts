@@ -1,3 +1,4 @@
+import { ScrumAnalysisResponse } from "observation/types/ScrumAnalysis";
 import { Observation } from "../types/Observation";
 
 export const API_URL = process.env.REACT_APP_API_BASE_URL;
@@ -8,6 +9,19 @@ export interface UpdateDailyObservationResponse extends Observation {}
 
 export const dailyObservationAPI = {
 
+  async analyseScrumNotes(notes: string): Promise<ScrumAnalysisResponse> {
+    const response = await fetch(`${API_URL}/scrum/analyze-scrum`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({notes: notes}),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to analyse scrum notes!");
+    }
+
+    return response.json();
+  },
   async createObservation(formData: any): Promise<CreateDailyObservationResponse>  {
     
     const response = await fetch(`${API_URL}/scrum/observation`, {
