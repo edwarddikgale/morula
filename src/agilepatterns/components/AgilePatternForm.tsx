@@ -32,7 +32,8 @@ const AgilePatternForm: React.FC<AgilePatternFormProps> = ({ pattern, onSubmit, 
       artifact,
       agilePrinciples: agilePrinciples.split(',').map(principle => principle.trim()),
       scrumValues: scrumValues.split(',').map(value => value.trim()),
-      scrumPillars: scrumPillars.split(',').map(pillar => pillar.trim())
+      scrumPillars: scrumPillars.split(',').map(pillar => pillar.trim()),
+      selected: true
     };
     onSubmit(newPattern);
   };

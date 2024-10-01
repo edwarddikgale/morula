@@ -7,3 +7,6 @@
     border-color: #f8f9fa; /* Light border color */
   }
   
+  .form-check-input.rounded {
+    border-radius: 50%; /* Makes the checkbox rounded */
+  }

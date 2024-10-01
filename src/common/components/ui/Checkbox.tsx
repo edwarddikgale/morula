@@ -6,9 +6,10 @@ interface CheckboxProps {
   checked: boolean;
   onChange: (checked: boolean) => void;
   borderStyle?: 'default' | 'dark-bordered'; // Optional prop for border style
+  isRounded?: boolean
 }
 
-export const Checkbox = ({ label, checked, onChange, borderStyle = 'default' }: CheckboxProps) => {
+export const Checkbox = ({ label, checked, onChange, isRounded, borderStyle = 'default' }: CheckboxProps) => {
   const [isChecked, setIsChecked] = useState(checked);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,7 +21,7 @@ export const Checkbox = ({ label, checked, onChange, borderStyle = 'default' }: 
   return (
     <div className={`form-check ${borderStyle === 'dark-bordered' ? 'dark-bordered-checkbox' : ''}`}>
       <input
-        className={`form-check-input ${borderStyle === 'dark-bordered' ? 'border-light' : ''}`}
+        className={`form-check-input ${borderStyle === 'dark-bordered' ? 'border-light' : ''} ${isRounded ? 'rounded' : ''}`}
         type="checkbox"
         checked={isChecked}
         onChange={handleChange}

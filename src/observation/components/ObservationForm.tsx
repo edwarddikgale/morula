@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faCalendarAlt, faCalendarDay, faCalendarDays, faClock, faNoteSticky, faPencilAlt, faTags, faTeletype } from '@fortawesome/free-solid-svg-icons';
 import '../styles/observation-form.css';
@@ -20,6 +20,8 @@ import HypothesisList from './HypothesisList';
 import { dailyObservationAPI } from 'observation/utils/API';
 import { AgilePattern } from 'agilepatterns/types';
 import { joinDailyPatterns } from 'observation/utils/joinDailyPatterns';
+import { ObservationList } from './ObservationList';
+import { splitDailyPatterns } from 'observation/utils/splitDailyPatterns';
 
 interface IProps{
     eventData: EventFormData
@@ -34,6 +36,7 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
   const [noteType, setNoteType] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
   const [observations, setObservations] = useState<Observation[]>([]);
+  const [observation, setObservation] = useState<Observation | null>(null);
   const [eventSearchTag, setEventSearchTag] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<NoteTag[]>([]);
   const [agilePatterns, setAgilePatterns] = useState<AgilePattern[]>([]);
@@ -43,6 +46,31 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
   const handleAgilePatternsUpdate = (latest: AgilePattern[]) =>{
     setAgilePatterns(latest);
   }
+
+  const handleObservationSelect = (observation: Observation) =>{
+    setObservation(observation);
+    setNotes(observation.notes);
+    setNoteType(observation.type);
+    if(observation.scrumValuesAnalyses){
+      setAnalysis({scrum_values_analysis: observation.scrumValuesAnalyses, hypotheses: observation.hypotheses} as ScrumAnalysisResponse);
+    }
+
+    if(observation.patterns){
+      const patterns = splitDailyPatterns(observation.patterns);
+      setDailyAntiPatterns(patterns.dailyAntiPatterns);
+      setDailyDesignPatterns(patterns.dailyDesignPatterns);
+    }
+  }
+
+  const loadObservations = async (eventId: string) =>{
+    const response = await dailyObservationAPI.getObservationsByEvent(eventId);
+    setObservations(response.observations);
+  }
+
+  useEffect(() =>{
+    if(!eventData._id) return;
+    loadObservations(eventData._id);
+  },[eventData]);
 
   const evalNotes = async () =>{
     await handleAnalyzeScrum();
@@ -204,7 +232,9 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
             <div className='my-2'>
               <p className='form-field-title d-none'>Search and select more than 1 design pattern if needed</p>
               <div className='mb-3'>
-                <DailyDesignPatterns onSelectionChange={(patterns) => setDailyDesignPatterns(patterns)} />
+                <DailyDesignPatterns
+                  selected={dailyDesignPatterns} 
+                  onSelectionChange={(patterns) => setDailyDesignPatterns(patterns)} />
               </div>
             </div>  
         </FormSectionContainer> 
@@ -313,21 +343,12 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
         </div>
       </form>
 
-      <div className='observations-list'>
-        {observations.map((obs, index) => (
-          <div key={index} className='observation-entry'>
-            <p className='observation-notes'>{obs.notes.substring(0, 150)}...</p>
-            <small>{obs.title}</small>
-            <small>
-                <DateRange 
-                        startDate={eventData.startDate} 
-                        startTime={eventData.startTime}
-                        endDate={eventData.endDate}
-                        endTime={eventData.endTime}
-                    />
-            </small>
-          </div>
-        ))}
+      <div>
+        <ObservationList 
+          observations={observations} 
+          eventData={eventData}
+          onSelect={handleObservationSelect}
+          />
       </div>
     </div>
   );

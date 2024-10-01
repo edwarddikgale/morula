@@ -12,7 +12,7 @@ const AgilePatternList: React.FC<AgilePatternListProps> = ({ patterns, onEdit, o
   return (
     <div className="list-group">
       {patterns.map((pattern) => (
-        <div key={pattern.id} className="list-group-item d-flex justify-content-between align-items-center">
+        <div key={pattern.id} className="mb-1 list-group-item d-flex justify-content-between align-items-center">
           <div>
             <h5>{pattern.title}</h5>
             <p>{pattern.description}</p>

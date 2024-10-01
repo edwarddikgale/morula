@@ -56,14 +56,14 @@ export const dailyObservationAPI = {
     return result; // Assuming result is of type UserProfile
   },
 
-  async getObservationByEvent(eventId: string) {
-    const response = await fetch(`${API_URL}/scrum/observation/event/${eventId}`, {
+  async getObservationsByEvent(eventId: string) {
+    const response = await fetch(`${API_URL}/observation/event/${eventId}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });
 
     if (!response.ok) {
-      throw new Error("Failed to scrum event observations!");
+      throw new Error("Failed to get event observations!");
     }
 
     return await response.json();

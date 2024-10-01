@@ -5,11 +5,12 @@ import { Checkbox } from 'common/components/ui';
 interface AgilePatternSelectorProps {
   patterns: AgilePattern[];
   onSelectionChange: (selectedPatterns: { id: string; key: string }[]) => void;
+  selected?: { id: string; key: string }[]
 }
 
-const AgilePatternSelector: React.FC<AgilePatternSelectorProps> = ({ patterns, onSelectionChange }) => {
+const AgilePatternSelector: React.FC<AgilePatternSelectorProps> = ({ patterns, onSelectionChange, selected }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedPatterns, setSelectedPatterns] = useState<{ id: string; key: string }[]>([]);
+  const [selectedPatterns, setSelectedPatterns] = useState<{ id: string; key: string }[]>(selected || []);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value.toLowerCase());
@@ -47,7 +48,7 @@ const AgilePatternSelector: React.FC<AgilePatternSelectorProps> = ({ patterns, o
 
       <div className="list-group">
         {filteredPatterns.map((pattern) => {
-          const isSelected = selectedPatterns.some((p) => p.id === pattern.id);
+          const isSelected = selectedPatterns.some((p) => p.key === pattern.key);
           return (
             <div
               key={pattern.id}
@@ -67,6 +68,7 @@ const AgilePatternSelector: React.FC<AgilePatternSelectorProps> = ({ patterns, o
                   onChange={() => handleToggleSelection(pattern)} 
                   label={''} 
                   borderStyle='dark-bordered'
+                  isRounded={true}
                   />
               </div>
             </div>

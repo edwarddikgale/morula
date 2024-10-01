@@ -16,7 +16,8 @@ export const joinDailyPatterns = (
       eventType: 'daily',
       agilePrinciples: [],  // You can add actual principles if available
       scrumValues: [],  // You can add actual scrum values if available
-      scrumPillars: []  // You can add actual scrum pillars if available
+      scrumPillars: [],  // You can add actual scrum pillars if available,
+      selected: true
     }));
   
     const designPatterns: AgilePattern[] = dailyDesignPatterns.map((pattern) => ({
@@ -30,7 +31,8 @@ export const joinDailyPatterns = (
       eventType: 'daily',
       agilePrinciples: [],  // You can add actual principles if available
       scrumValues: [],  // You can add actual scrum values if available
-      scrumPillars: []  // You can add actual scrum pillars if available
+      scrumPillars: [],  // You can add actual scrum pillars if available,
+      selected: true
     }));
   
     return [...antiPatterns, ...designPatterns];

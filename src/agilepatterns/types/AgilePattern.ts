@@ -11,5 +11,6 @@ export interface AgilePattern {
     agilePrinciples: string[];
     scrumValues: string[];
     scrumPillars: string[];
+    selected: boolean;
   }
   
