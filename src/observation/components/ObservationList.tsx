@@ -4,7 +4,6 @@ import DateRange from './DateRange';
 import { EventFormData } from 'event/components/types/eventForm';
 import RoundNumber from 'common/components/ui/RoundNumber';
 import DeleteConfirmation from "../../common/components/alert/DeleteConfirmation";
-import { dailyObservationAPI } from 'observation/utils/API';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
@@ -52,7 +51,7 @@ const ObservationList: React.FC<IProps> = ({observations, eventData, onSelect, o
                         <div className='ms-2'>
                             <FontAwesomeIcon
                                 icon={faTrash}
-                                style={{ position: 'absolute', top: '10px', right: '10px', cursor: 'pointer', color: '#dc3545' }}
+                                style={{ position: 'absolute', bottom: '10px', right: '10px', cursor: 'pointer', color: '#dc3545' }}
                                 onClick={() => handleDeleteClick(obs)} />
                         </div>        
                 </div>
