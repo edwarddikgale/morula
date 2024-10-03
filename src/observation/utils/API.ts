@@ -7,6 +7,8 @@ export interface CreateDailyObservationResponse extends Observation {}
 
 export interface UpdateDailyObservationResponse extends Observation {}
 
+export interface DeleteObservationResponse {success: boolean}
+
 export const dailyObservationAPI = {
 
   async analyseScrumNotes(notes: string): Promise<ScrumAnalysisResponse> {
@@ -55,7 +57,23 @@ export const dailyObservationAPI = {
 
     return result; // Assuming result is of type UserProfile
   },
+  async deleteObservation(_id: string): Promise<DeleteObservationResponse> {
+    const response = await fetch(`${API_URL}/observation/${_id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+    });
 
+    // Parse the JSON from the response
+    const result = await response.json();
+
+    // Handle non-2xx responses
+    if (!response.ok) {
+        const errorMsg = result.message || "Failed to delete event observation!";
+        throw new Error(errorMsg);
+    }
+
+    return result; // Assuming result is of type UserProfile
+  },
   async getObservationsByEvent(eventId: string) {
     const response = await fetch(`${API_URL}/observation/event/${eventId}`, {
       method: "GET",

@@ -5,7 +5,6 @@ import dailyAntipatterns from './data/dailyDesignpatterns.json';
 
 const patterns: AgilePattern[] = dailyAntipatterns as AgilePattern[];
 interface IPatternSelectorProps {
-  //patterns: AgilePattern[];
   onSelectionChange: (selectedPatterns: { id: string; key: string }[]) => void;
   selected: { id: string; key: string }[]
 }

@@ -92,6 +92,16 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
     }
   };
 
+  const handleObservationDelete = async (observation: Observation) =>{
+    if(!observation?._id) throw Error(`Cannot delete an item with no id`);
+    const response: any = await dailyObservationAPI.deleteObservation(observation?._id);
+
+    if(response.success){
+        const updatedObsList = observations.filter((item) => item._id !== observation?._id);
+        setObservations(updatedObsList);
+    }
+  }
+
   const handleSubmit = async (event: any) => {
     event.preventDefault();
 
@@ -106,7 +116,7 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
         eventId: eventData._id,
         type: noteType,
         title: `${eventData.category} ${noteType}`,
-        notes,
+        notes: notes,
         createdById: eventData.userId,
         source: eventData.category,
         sourceId: eventData._id,
@@ -209,13 +219,15 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
           className='time-date'
           icon={faTags}
           title='Daily Scrum Anti Patterns'
-          description='Find anti patterns observed'
+          description={`Find anti patterns observed (${dailyAntiPatterns.length} selected)`}
           isCollapsed={true}
         >
             <div className='my-2'>
               <p className='form-field-title d-none'>Search and select more than 1 anti pattern if needed</p>
               <div className='mb-3'>
-                <DailyAntiPatterns onSelectionChange={(patterns) => setDailyAntiPatterns(patterns)} />
+                <DailyAntiPatterns 
+                  selected={dailyAntiPatterns}
+                  onSelectionChange={(patterns) => setDailyAntiPatterns(patterns)} />
               </div>
             </div>  
         </FormSectionContainer>  
@@ -226,7 +238,7 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
           className='time-date'
           icon={faTags}
           title='Daily Scrum Design Patterns'
-          description='Find design patterns observed'
+          description={`Find design patterns observed (${dailyDesignPatterns.length} selected)`}
           isCollapsed={true}
         >
             <div className='my-2'>
@@ -337,7 +349,7 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
         {/* Submit Button */}
         <div className='text-end pb-4'>
           <button type='submit' className='btn btn-primary py-2 px-4'>
-            Submit Observation
+            Save Observation
             {isLoading && <LoaderSm />}
           </button>
         </div>
@@ -348,6 +360,7 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
           observations={observations} 
           eventData={eventData}
           onSelect={handleObservationSelect}
+          onDelete={handleObservationDelete}
           />
       </div>
     </div>

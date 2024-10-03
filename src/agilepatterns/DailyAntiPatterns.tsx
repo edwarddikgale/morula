@@ -7,9 +7,10 @@ const patterns: AgilePattern[] = dailyAntipatterns as AgilePattern[];
 interface IPatternSelectorProps {
   //patterns: AgilePattern[];
   onSelectionChange: (selectedPatterns: { id: string; key: string }[]) => void;
+  selected: { id: string; key: string }[]
 }
 
-const DailyAntiPatterns: React.FC<IPatternSelectorProps> = ({onSelectionChange}: IPatternSelectorProps) => {
+const DailyAntiPatterns: React.FC<IPatternSelectorProps> = ({onSelectionChange, selected}: IPatternSelectorProps) => {
   const [selectedPatterns, setSelectedPatterns] = useState<{ id: string; key: string }[]>([]);
 
   const handleSelectionChange = (newSelectedPatterns: { id: string; key: string }[]) => {
@@ -21,7 +22,9 @@ const DailyAntiPatterns: React.FC<IPatternSelectorProps> = ({onSelectionChange}:
     <div>
       <AgilePatternSelector 
         patterns={patterns} 
-        onSelectionChange={handleSelectionChange} />
+        onSelectionChange={handleSelectionChange} 
+        selected={selected}
+        />
       <button
         className="btn btn-primary mt-3 d-none"
         onClick={() => console.log('Selected Anti-Patterns:', selectedPatterns)}

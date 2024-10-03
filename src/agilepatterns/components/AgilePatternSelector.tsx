@@ -10,7 +10,7 @@ interface AgilePatternSelectorProps {
 
 const AgilePatternSelector: React.FC<AgilePatternSelectorProps> = ({ patterns, onSelectionChange, selected }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedPatterns, setSelectedPatterns] = useState<{ id: string; key: string }[]>(selected || []);
+  const [selectedPatterns, setSelectedPatterns] = useState<{ id: string; key: string }[]>(selected || []); 
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value.toLowerCase());
@@ -78,7 +78,7 @@ const AgilePatternSelector: React.FC<AgilePatternSelectorProps> = ({ patterns, o
 
       {selectedPatterns.length > 0 && (
         <div className="mt-3">
-          <h5>Selected Anti-Patterns:</h5>
+          <h5>Selected Patterns:</h5>
           <ul>
             {selectedPatterns.map((pattern) => (
               <li key={pattern.id}>
