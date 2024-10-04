@@ -4,6 +4,8 @@ import { Checkbox } from 'common/components/ui';
 import { LoaderPrimary } from 'common/components/Loader/Loader';
 import SelectableButtonGroup from 'common/components/ui/SelectableButtonGroup';
 
+import '../styles/agilepatternselector.css';
+
 interface AgilePatternSelectorProps {
   patterns: AgilePattern[];
   onSelectionChange: (selectedPatterns: { id: string; key: string }[]) => void;
@@ -14,6 +16,7 @@ const AgilePatternSelector: React.FC<AgilePatternSelectorProps> = ({ patterns, o
   const [searchTerm, setSearchTerm] = useState('');
   const [subjectType, setSubjectType] = useState<string | undefined>();
   const [selectedPatterns, setSelectedPatterns] = useState<{ id: string; key: string }[]>(selected || []); 
+  const [filteredPatterns, setFilteredPatterns] = useState<AgilePattern[]>(patterns);
   const [loading, setLoading] = useState<boolean>(false);
 
   const subjectTypes = [
@@ -39,17 +42,19 @@ const AgilePatternSelector: React.FC<AgilePatternSelectorProps> = ({ patterns, o
     onSelectionChange(newSelectedPatterns);
   };
 
-  useEffect(() =>{
+  useEffect(() => {
     setLoading(patterns === null || patterns.length === 0);
-  }, [patterns])
 
-  const filteredPatterns = patterns.filter(
-    (pattern) =>
-      pattern.title.toLowerCase().includes(searchTerm) ||
-      pattern.description.toLowerCase().includes(searchTerm) ||
-      pattern.tags.some((tag) => tag.toLowerCase().includes(searchTerm)) &&
-      (!subjectType || (subjectType && pattern.subject === subjectType))
-  );
+    const updatedFilteredPatterns = patterns.filter(
+      (pattern) =>
+        (pattern.title.toLowerCase().includes(searchTerm) ||
+        pattern.description.toLowerCase().includes(searchTerm) ||
+        pattern.tags.some((tag) => tag.toLowerCase().includes(searchTerm))) &&
+        (!subjectType || (subjectType && pattern.subject.toLowerCase().includes(subjectType.toLowerCase())))
+    );
+
+    setFilteredPatterns(updatedFilteredPatterns);
+  }, [patterns, searchTerm, subjectType]);
 
   return (
     <div>
@@ -85,7 +90,7 @@ const AgilePatternSelector: React.FC<AgilePatternSelectorProps> = ({ patterns, o
               <div>
                 <h5>{pattern.title}</h5>
                 <p>{pattern.description}</p>
-                <p><i>{pattern.subject}</i></p>
+                <p className='pattern-subject'><i>{pattern.subject}</i></p>
               </div>
               <div>
                 <Checkbox 

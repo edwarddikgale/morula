@@ -1,0 +1,10 @@
+.pattern-subject {
+    padding: 2px;
+    font-size: 0.8rem;
+    border-radius: 12px; /* Adjusted the border-radius to make it more subtle */
+    background-color: rgb(205, 240, 229); /* Background color */
+    border: 1px solid aquamarine; /* Border with same color */
+    display: inline-block; /* Makes the background wrap around the content */
+    text-align: center;
+    min-width: 55px;
+}

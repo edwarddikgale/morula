@@ -59,7 +59,8 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
     setObservation(observation);
     setNotes(observation.notes);
     setNoteType(observation.type);
-    console.log(`Observation type: ${observation.type}`);
+    const tags: NoteTag[] = observation.tags?.map(ot => ({value: ot, label: ot} as NoteTag)) || [];
+    setSelectedTags(tags);
     if(observation.scrumValuesAnalyses){
       setAnalysis({scrum_values_analysis: observation.scrumValuesAnalyses, hypotheses: observation.hypotheses} as ScrumAnalysisResponse);
     }
