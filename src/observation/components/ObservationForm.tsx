@@ -83,7 +83,6 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
     try {
       const response = await dailyObservationAPI.analyseScrumNotes(notes);
       setAnalysis(response);
-      console.log(response);
      
       setIsLoading(false);
     } catch (err) {
@@ -112,7 +111,7 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
 
     setIsLoading(true);
     try {
-      const newObservation: Observation = {
+      const record: Observation = {
         eventId: eventData._id,
         type: noteType,
         title: `${eventData.category} ${noteType}`,
@@ -128,10 +127,13 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
         updatedAt: new Date()
       };
       
-      const response = await dailyObservationAPI.createObservation(newObservation);
+      const response = observation?._id? 
+        await dailyObservationAPI.updateObservation(record, observation._id)
+        : await dailyObservationAPI.createObservation(record);
 
       setTimeout(() => {
-        setObservations([...observations, newObservation]);
+        const unalteredList = observations.filter(obs => obs._id !== observation?._id);
+        setObservations([record, ...unalteredList]);
         setIsLoading(false);
         setNotes('');
       }, 2000);
@@ -349,7 +351,7 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
         {/* Submit Button */}
         <div className='text-end pb-4'>
           <button type='submit' className='btn btn-primary py-2 px-4'>
-            Save Observation
+            {observation?._id? 'Update': 'Create An'} Observation
             {isLoading && <LoaderSm />}
           </button>
         </div>
