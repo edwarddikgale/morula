@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AgilePatternSelector from './components/AgilePatternSelector';
-import { AgilePattern } from './types'; // Make sure this type is defined
-import dailyAntipatterns from './data/dailyAntipatterns.json';
+import { scrumAPI } from './utils/API';
+import { ScrumPattern } from './types/AgilePattern';
 
-const patterns: AgilePattern[] = dailyAntipatterns as AgilePattern[];
 interface IPatternSelectorProps {
   //patterns: AgilePattern[];
   onSelectionChange: (selectedPatterns: { id: string; key: string }[]) => void;
@@ -12,16 +11,27 @@ interface IPatternSelectorProps {
 
 const DailyAntiPatterns: React.FC<IPatternSelectorProps> = ({onSelectionChange, selected}: IPatternSelectorProps) => {
   const [selectedPatterns, setSelectedPatterns] = useState<{ id: string; key: string }[]>([]);
+  const [antiPatterns, setAntiPatterns] = useState<ScrumPattern[]>([]);
 
   const handleSelectionChange = (newSelectedPatterns: { id: string; key: string }[]) => {
     setSelectedPatterns(newSelectedPatterns);
     onSelectionChange(newSelectedPatterns);
   };
 
+  const loadScrumPatterns = async () =>{
+    if(antiPatterns && antiPatterns.length > 0) return;
+    const {records} =  await scrumAPI.getPatterns();
+    setAntiPatterns(records.filter(pattern => pattern.type === 'anti-pattern'));
+  };
+
+  useEffect(() => {
+    loadScrumPatterns();
+  }, []);
+
   return (
     <div>
       <AgilePatternSelector 
-        patterns={patterns} 
+        patterns={antiPatterns} 
         onSelectionChange={handleSelectionChange} 
         selected={selected}
         />

@@ -10,7 +10,8 @@
       "eventType": "daily",
       "agilePrinciples": ["continuous_improvement_through_inspection", "working_software_as_measures_of_progress"],
       "scrumValues": ["focus", "commitment"],
-      "scrumPillars": ["transparency"]
+      "scrumPillars": ["transparency"],
+      "subject":"team"
     },
     {
       "id": "2",
@@ -23,7 +24,8 @@
       "eventType": "daily",
       "agilePrinciples": ["self_organizing_teams", "face_to_face_communication"],
       "scrumValues": ["commitment", "focus"],
-      "scrumPillars": ["transparency"]
+      "scrumPillars": ["transparency"],
+      "subject":"team"
     },
     {
       "id": "3",
@@ -36,7 +38,8 @@
       "eventType": "daily",
       "agilePrinciples": ["continuous_improvement_through_inspection", "self_organizing_teams"],
       "scrumValues": ["commitment", "focus"],
-      "scrumPillars": ["transparency"]
+      "scrumPillars": ["transparency"],
+      "subject":"team"
     },
     {
       "id": "4",
@@ -49,7 +52,8 @@
       "eventType": "daily",
       "agilePrinciples": ["self_organizing_teams", "face_to_face_communication"],
       "scrumValues": ["respect"],
-      "scrumPillars": ["transparency"]
+      "scrumPillars": ["transparency"],
+      "subject":"team"
     },
     {
       "id": "5",
@@ -62,7 +66,8 @@
       "eventType": "daily",
       "agilePrinciples": ["continuous_improvement_through_inspection", "face_to_face_communication"],
       "scrumValues": ["commitment", "respect"],
-      "scrumPillars": ["transparency"]
+      "scrumPillars": ["transparency"],
+      "subject":"team"
     },
     {
       "id": "6",
@@ -75,7 +80,8 @@
       "eventType": "daily",
       "agilePrinciples": ["self_organizing_teams", "continuous_improvement_through_inspection"],
       "scrumValues": ["respect", "courage"],
-      "scrumPillars": ["transparency"]
+      "scrumPillars": ["transparency"],
+      "subject":"team"
     },
     {
       "id": "7",
@@ -88,7 +94,8 @@
       "eventType": "daily",
       "agilePrinciples": ["self_organizing_teams", "face_to_face_communication"],
       "scrumValues": ["focus"],
-      "scrumPillars": ["transparency"]
+      "scrumPillars": ["transparency"],
+      "subject":"team"
     },
     {
       "id": "8",
@@ -101,7 +108,8 @@
       "eventType": "daily",
       "agilePrinciples": ["continuous_improvement_through_inspection", "self_organizing_teams"],
       "scrumValues": ["commitment"],
-      "scrumPillars": ["transparency"]
+      "scrumPillars": ["transparency"],
+      "subject":"team"
     },
     {
       "id": "9",
@@ -114,7 +122,8 @@
       "eventType": "daily",
       "agilePrinciples": ["self_organizing_teams", "continuous_improvement_through_inspection"],
       "scrumValues": ["commitment"],
-      "scrumPillars": ["transparency"]
+      "scrumPillars": ["transparency"],
+      "subject":"team"
     },
     {
       "id": "10",
@@ -127,7 +136,8 @@
       "eventType": "daily",
       "agilePrinciples": ["continuous_improvement_through_inspection", "self_organizing_teams"],
       "scrumValues": ["focus", "commitment"],
-      "scrumPillars": ["transparency"]
+      "scrumPillars": ["transparency"],
+      "subject":"team"
     }
   ]
   

@@ -12,5 +12,10 @@ export interface AgilePattern {
     scrumValues: string[];
     scrumPillars: string[];
     selected: boolean;
-  }
+    subject?: string;
+}
+
+export interface ScrumPattern extends AgilePattern{
+  
+}
   

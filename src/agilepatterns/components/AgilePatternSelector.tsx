@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AgilePattern } from '../types';
 import { Checkbox } from 'common/components/ui';
+import { LoaderPrimary } from 'common/components/Loader/Loader';
+import SelectableButtonGroup from 'common/components/ui/SelectableButtonGroup';
 
 interface AgilePatternSelectorProps {
   patterns: AgilePattern[];
@@ -10,7 +12,17 @@ interface AgilePatternSelectorProps {
 
 const AgilePatternSelector: React.FC<AgilePatternSelectorProps> = ({ patterns, onSelectionChange, selected }) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [subjectType, setSubjectType] = useState<string | undefined>();
   const [selectedPatterns, setSelectedPatterns] = useState<{ id: string; key: string }[]>(selected || []); 
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const subjectTypes = [
+    { value: 'Team', label: 'Team' },
+    { value: 'Developers', label: 'Developer(s)' },
+    { value: 'Scrum-Master', label: 'SM'}, // Hidden button
+    { value: 'Product-Owner', label: 'PO' },
+    { value: 'Stakeholders', label: 'Stakeholder(s)' },
+  ];
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value.toLowerCase());
@@ -27,11 +39,16 @@ const AgilePatternSelector: React.FC<AgilePatternSelectorProps> = ({ patterns, o
     onSelectionChange(newSelectedPatterns);
   };
 
+  useEffect(() =>{
+    setLoading(patterns === null || patterns.length === 0);
+  }, [patterns])
+
   const filteredPatterns = patterns.filter(
     (pattern) =>
       pattern.title.toLowerCase().includes(searchTerm) ||
       pattern.description.toLowerCase().includes(searchTerm) ||
-      pattern.tags.some((tag) => tag.toLowerCase().includes(searchTerm))
+      pattern.tags.some((tag) => tag.toLowerCase().includes(searchTerm)) &&
+      (!subjectType || (subjectType && pattern.subject === subjectType))
   );
 
   return (
@@ -40,11 +57,18 @@ const AgilePatternSelector: React.FC<AgilePatternSelectorProps> = ({ patterns, o
         <input
           type="text"
           className="form-control"
-          placeholder="Search anti-patterns..."
+          placeholder="Search patterns..."
           value={searchTerm}
           onChange={handleSearch}
         />
       </div>
+
+      {loading &&  <LoaderPrimary />}
+
+      <SelectableButtonGroup 
+        options={subjectTypes} 
+        onSelect={setSubjectType} 
+      />
 
       <div className="list-group">
         {filteredPatterns.map((pattern) => {
@@ -61,6 +85,7 @@ const AgilePatternSelector: React.FC<AgilePatternSelectorProps> = ({ patterns, o
               <div>
                 <h5>{pattern.title}</h5>
                 <p>{pattern.description}</p>
+                <p><i>{pattern.subject}</i></p>
               </div>
               <div>
                 <Checkbox 

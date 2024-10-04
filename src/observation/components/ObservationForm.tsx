@@ -22,6 +22,7 @@ import { AgilePattern } from 'agilepatterns/types';
 import { joinDailyPatterns } from 'observation/utils/joinDailyPatterns';
 import { ObservationList } from './ObservationList';
 import { splitDailyPatterns } from 'observation/utils/splitDailyPatterns';
+import SelectableButtonGroup from 'common/components/ui/SelectableButtonGroup';
 
 interface IProps{
     eventData: EventFormData
@@ -33,15 +34,22 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
   const [notes, setNotes] = useState('');
   const [error, setError] = useState<string | null>('');
   const [analysis, setAnalysis] = useState<ScrumAnalysisResponse | null>(null);
-  const [noteType, setNoteType] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
   const [observations, setObservations] = useState<Observation[]>([]);
   const [observation, setObservation] = useState<Observation | null>(null);
+  const [noteType, setNoteType] = useState<string>(observation?.type || 'Observation');
   const [eventSearchTag, setEventSearchTag] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<NoteTag[]>([]);
   const [agilePatterns, setAgilePatterns] = useState<AgilePattern[]>([]);
   const [dailyAntiPatterns, setDailyAntiPatterns] = useState<{ id: string; key: string }[]>([]);
   const [dailyDesignPatterns, setDailyDesignPatterns] = useState<{ id: string; key: string }[]>([]);
+
+  const noteTypes = [
+    { value: 'Observation', label: 'Observation' },
+    { value: 'Notes', label: 'Just Notes' },
+    { value: 'Someone-said', label: 'Said by someone', hidden: true }, // Hidden button
+    { value: 'Question', label: 'Question' },
+  ];
 
   const handleAgilePatternsUpdate = (latest: AgilePattern[]) =>{
     setAgilePatterns(latest);
@@ -51,6 +59,7 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
     setObservation(observation);
     setNotes(observation.notes);
     setNoteType(observation.type);
+    console.log(`Observation type: ${observation.type}`);
     if(observation.scrumValuesAnalyses){
       setAnalysis({scrum_values_analysis: observation.scrumValuesAnalyses, hypotheses: observation.hypotheses} as ScrumAnalysisResponse);
     }
@@ -59,6 +68,10 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
       const patterns = splitDailyPatterns(observation.patterns);
       setDailyAntiPatterns(patterns.dailyAntiPatterns);
       setDailyDesignPatterns(patterns.dailyDesignPatterns);
+    }
+    else{
+      setDailyAntiPatterns([]);
+      setDailyDesignPatterns([]);
     }
   }
 
@@ -123,7 +136,7 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
         patterns: joinDailyPatterns(dailyAntiPatterns, dailyDesignPatterns),
         hypotheses: analysis?.hypotheses,
         scrumValuesAnalyses: analysis?.scrum_values_analysis,
-        createdAt: new Date(),
+        createdAt: observation? observation.createdAt: new Date(),
         updatedAt: new Date()
       };
       
@@ -131,12 +144,10 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
         await dailyObservationAPI.updateObservation(record, observation._id)
         : await dailyObservationAPI.createObservation(record);
 
-      setTimeout(() => {
-        const unalteredList = observations.filter(obs => obs._id !== observation?._id);
-        setObservations([record, ...unalteredList]);
-        setIsLoading(false);
-        setNotes('');
-      }, 2000);
+      const unalteredList = observations.filter(obs => obs._id !== observation?._id);
+      setObservations([response, ...unalteredList]);
+      setIsLoading(false);
+
 
     } catch (error) {
       console.error('Failed to submit observation:', error);
@@ -172,47 +183,10 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
           title='Observation type'
           description='What type of observation is this?'
         >
-          <div>
-            <div className='d-flex flex-wrap'>
-              <button
-                type='button'
-                className={`my-1 me-3 btn btn-light ${
-                    noteType === 'Notes' ? "btn-select-active" : "btn-select"
-                }`}
-                onClick={() => setNoteType('Notes')}
-              >
-                Just Notes
-              </button>
-              <button
-                type='button'
-                className={`my-1 me-3 btn btn-light ${
-                    noteType === 'Observation'? "btn-select-active" : "btn-select"
-                }`}
-                onClick={() => setNoteType('Observation')}
-              >
-                Observation
-              </button>
-              <button
-                type='button'
-                className={`my-1 me-3 btn btn-light ${
-                    noteType === 'Someone-said'? "btn-select-active" : "btn-select"
-                }`}
-                onClick={() => setNoteType('Someone-said')}
-              >
-                Said by someone
-              </button>
-              <button
-                type='button'
-                className={`my-1 me-3 btn btn-light ${
-                    noteType === 'Question'? "btn-select-active" : "btn-select"
-                }`}
-                onClick={() => setNoteType('Question')}
-              >
-                Question
-              </button>
-            </div>
-
-          </div>
+          <SelectableButtonGroup 
+            options={noteTypes} 
+            defaultSelected={noteType}
+            onSelect={(value) => setNoteType(value)} />
         </FormSectionContainer>
 
         {/* Daily Scrum Anti-Patterns */}

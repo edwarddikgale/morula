@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import AgilePatternSelector from './components/AgilePatternSelector';
-import { AgilePattern } from './types'; // Make sure this type is defined
-import dailyAntipatterns from './data/dailyDesignpatterns.json';
+import { ScrumPattern } from './types/AgilePattern';
+import { scrumAPI } from './utils/API';
 
-const patterns: AgilePattern[] = dailyAntipatterns as AgilePattern[];
 interface IPatternSelectorProps {
   onSelectionChange: (selectedPatterns: { id: string; key: string }[]) => void;
   selected: { id: string; key: string }[]
@@ -11,16 +10,28 @@ interface IPatternSelectorProps {
 
 const DailyAntiPatterns: React.FC<IPatternSelectorProps> = ({onSelectionChange, selected}: IPatternSelectorProps) => {
   const [selectedPatterns, setSelectedPatterns] = useState<{ id: string; key: string }[]>([]);
-  
+  const [designPatterns, setDesignPatterns] = useState<ScrumPattern[]>([]);
+
   const handleSelectionChange = (newSelectedPatterns: { id: string; key: string }[]) => {
     setSelectedPatterns(newSelectedPatterns);
     onSelectionChange(newSelectedPatterns);
   };
 
+  const loadScrumPatterns = async () =>{
+    if(designPatterns && designPatterns.length > 0) return;
+    const {records} =  await scrumAPI.getPatterns();
+    setDesignPatterns(records.filter(pattern => pattern.type === 'design-pattern'));
+  };
+
+  useEffect(() => {
+    loadScrumPatterns();
+  }, []);
+
+
   return (
     <div>
       <AgilePatternSelector 
-        patterns={patterns} 
+        patterns={designPatterns} 
         onSelectionChange={handleSelectionChange}
         selected={selected} />
       <button
