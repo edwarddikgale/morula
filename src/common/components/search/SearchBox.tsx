@@ -4,7 +4,7 @@ import './search-box.css';
 
 interface SearchBoxProps {
   searchQuery: string | null;
-  setSearchQuery: React.Dispatch<React.SetStateAction<string | null>>;
+  setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
   placeholder?: string;
 }
 

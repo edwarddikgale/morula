@@ -7,5 +7,6 @@ export interface Action {
     piResource: string | null,
     resourceUrl: string | null,
     source: string | null,
-    sdg: number | null
+    sdg: number | null,
+    createdOn?: Date
 }

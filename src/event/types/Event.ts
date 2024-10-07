@@ -1,4 +1,5 @@
 export interface Event {
+    _id?: string;
     userId: string;
     title: string;
     organizer?: string;

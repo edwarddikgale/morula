@@ -24,6 +24,7 @@ const useUserProfile = () => {
       }
     } else {
       setUserProfile(null);
+      setError(`User currently not logged in`);
       setLoading(false);
     }
   };

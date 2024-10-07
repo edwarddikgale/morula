@@ -35,7 +35,7 @@ export const ActionListPage = () => {
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [showSwitchSdgModal, setShowSwitchSdgModal] = useState(false);
   const [selectedSdg, setSelectedSdg] = useState<number | undefined>(defaultSdg);
-  const [searchQuery, setSearchQuery] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const eventId = useQueryParameter("eventId");
   const { userProfile, loading, error } = useUserProfile();
   const {userSDG} = useUserSDG();
@@ -222,7 +222,6 @@ export const ActionListPage = () => {
   useEffect(() => {
     if(searchQuery && searchQuery.length > 0){
       const filteredList = filterActionList(searchQuery, actionList);
-      console.log(`filtered list: ${filteredList.length}`);
       setFilteredActionList(filteredList);
     }
     else{
