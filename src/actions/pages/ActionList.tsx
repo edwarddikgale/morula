@@ -24,6 +24,7 @@ import ActionButtons from "actions/components/ActionButtons";
 import useUserSDG from "principles/hooks/userSDGs";
 import { sdgListGetter } from "common/data/sdgListGetter";
 import { SdgHeader } from "actions/types/Sdg";
+import { actionAPI } from "actions/utils/actionAPI";
 
 export const ActionListPage = () => {
 
@@ -49,7 +50,7 @@ export const ActionListPage = () => {
   const [UserAction, setUserAction] = useState<UserAction>({} as UserAction);
   const [sdgHeader, setSdgHeader] = useState<SdgHeader | null>(null);
   const [showMoreInfo, setShowMoreInfo] = useState<boolean>(false);
-  const apiRouteRoot = `https://susact-dev.herokuapp.com/api`;
+  //const apiRouteRoot = `https://susact-dev.herokuapp.com/api`;
 
   useEffect(() => {
     if(userSDG){
@@ -74,12 +75,11 @@ export const ActionListPage = () => {
     setFilteredActionList(filterActionList(searchQuery || "", list));
   }
 
-  const handleDeleteAction = (index: number) => {
+  const handleDeleteAction = async(index: number) => {
     const thisAction = actionList && actionList.length >= 0 ? actionList[index] : null;
     if (thisAction && thisAction.id) {
-      axios.delete(`${apiRouteRoot}/userActions/${thisAction.id}`);
+      await actionAPI.DeleteUserAction(thisAction.id);
     }
-    //todo: have the above code pass before doing the steps below...
     const updatedItems = [...actionList];
     updatedItems.splice(index, 1);
     setActionList(updatedItems);
@@ -95,8 +95,9 @@ export const ActionListPage = () => {
     setIndex(index);
     
     if (selectedSdg && !item.sdg) item.sdg = selectedSdg;
-    const response = await axios.post(`${apiRouteRoot}/userActions`, { ...item, userId: userId, eventId: eventId });
-    const userAction: UserAction = response.data.userAction;
+    //const res = await axios.post(`${apiRouteRoot}/userActions`, { ...item, userId: userId, eventId: eventId });
+    const response = await actionAPI.CreateUserAction({ ...item, userId: userId, eventId: eventId });
+    const userAction: UserAction = response.userAction;//response.data.userAction;
 
     setActionList((prevActionList) => {
       const updatedList = [...prevActionList];
@@ -112,11 +113,12 @@ export const ActionListPage = () => {
       const actionIsNew = !data.id;
       if (selectedSdg && !data.sdg) data.sdg = selectedSdg;
       let response: any = null;
-      response = data.id
+      /*const resp = data.id
         ? await axios.patch(`${apiRouteRoot}/userActions/${data.id}`, data)
-        : await axios.post(`${apiRouteRoot}/userActions`, data);
+        : await axios.post(`${apiRouteRoot}/userActions`, data);*/
 
-      const userAction: UserAction = response.data.userAction;
+      response = data.id ? await actionAPI.UpdateUserAction(data, data.id): await actionAPI.CreateUserAction(data);
+      const userAction: UserAction = response.userAction;
 
       setActionList((prevActionList) => {
         const updatedActionList = prevActionList.map((action) => {
@@ -210,8 +212,7 @@ export const ActionListPage = () => {
 
   useEffect(() => {
     if (userId) {
-      fetch(`${apiRouteRoot}/useractions/user/${userId}?eventId=${eventId}`)
-        .then((response) => response.json())
+      actionAPI.getActions(userId, eventId)
         .then((data) => {
           setActionList(data.records as UserAction[]);
         })

@@ -6,11 +6,15 @@ import { Action } from "../types/Action";
 import useUserProfile from "profile/hooks/useProfile";
 import useEvent from "event/hooks/useEvent";
 import useQueryParameter from "common/url/useQueryParameter";
-import axios from 'axios';
 import { LoaderPrimary } from "common/components/Loader/Loader";
+import { actionAPI } from "actions/utils/actionAPI";
+import { actionGenerator } from "actions/utils/actionGenerator";
+import { UserAction } from "actions/types";
+import ActionEdit from "actions/components/ActionEdit";
+import RightOverlay from "common/components/overlay/RightOverlay";
+import handleUpdateUserAction from "./event-handlers/handleUpdateUserAction";
 
 const ActionListManager: React.FC = () => {
-  const apiRouteRoot = `https://susact-dev.herokuapp.com/api`;
   const eventId = useQueryParameter("eventId");
   const [searchQuery, setSearchQuery] = useState<string>('');
   const { userProfile, loading: userProfileLoading, error: userProfileError } = useUserProfile();
@@ -21,6 +25,19 @@ const ActionListManager: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [actionList, setActionList] = useState<Action[]>([]);
+  const [isLoadingActions, setIsLoadingActions] = useState<boolean>(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [UserAction, setUserAction] = useState<UserAction>({} as UserAction);
+  const [index, setIndex] = useState<number>(-1);
+
+  const generateActions = async () => {
+    setIsLoadingActions(true);
+    const aiActions: Action[] = await actionGenerator(1);
+    if(aiActions)
+      setActionList([...aiActions, ...actionList]);
+    setIsLoadingActions(false);
+  }
+
 
   // Fetch actions when both userProfile and event are available
   useEffect(() => {
@@ -28,8 +45,8 @@ const ActionListManager: React.FC = () => {
       if (userProfile && event) {
         setIsLoading(true);
         try {
-          const response = await axios.get(`${apiRouteRoot}/useractions/user/${userProfile.userId}?eventId=${event._id}`);
-          setActionList(response.data.records as Action[]);
+          const response = await actionAPI.getActions(userProfile.userId, event._id);
+          setActionList(response.records);
         } catch (error) {
           console.error('Error fetching actions:', error);
           setErrorMessage('Error fetching actions');
@@ -40,13 +57,48 @@ const ActionListManager: React.FC = () => {
     };
 
     fetchActions();
-  }, [userProfile, event, apiRouteRoot]);
+  }, [userProfile, event]);
 
   const filteredActionList = actionList.filter((action) => action.title.includes(searchQuery));
 
-  const handleDeleteAction = (index: number) => { /* logic for deleting an action */ };
-  const handleEditAction = (index: number, item: Action) => { /* logic for editing an action */ };
-  const handleCreateAction = (index: number, item: Action) => { /* logic for creating an action */ };
+  const handleDeleteAction = async (index: number) => { 
+    const thisAction = actionList && actionList.length >= 0 ? actionList[index] : null;
+    if (thisAction && thisAction.id) {
+      await actionAPI.DeleteUserAction(thisAction.id);
+    }
+    const updatedItems = [...actionList];
+    updatedItems.splice(index, 1)
+    setActionList(updatedItems);
+  };
+
+  const handleCreateAction = async (index: number, item: Action) => {
+
+    const response = await actionAPI.CreateUserAction({ ...item, userId: userProfile?.userId, eventId: eventId });
+    const userAction: UserAction = response.userAction;//response.data.userAction;
+
+    setActionList((prevActionList) => {
+      const updatedList = [...prevActionList];
+      updatedList[index] = userAction;
+      return updatedList;
+    });
+  };
+
+  const handleEditAction = (index: number, item: Action) => { 
+    setIsEditOpen(true);
+    setUserAction(actionList[index] as UserAction);
+  };
+
+  const onUpdateUserAction = (index: number | null, item: UserAction) => { 
+  
+    handleUpdateUserAction({actionList, index, data: item})
+      .then((newActionList) =>{ setActionList(newActionList);})
+      .catch((e) => setErrorMessage(e))
+      .finally(() => {
+        setIsEditOpen(false);
+        setIndex(-1);
+      });
+  };
+
   const handleSdgChange = () => {} //setSelectedSdg(sdg);
 
   return (
@@ -61,22 +113,45 @@ const ActionListManager: React.FC = () => {
         <>
           <ActionListHeaderContainer
             selectedSdg={selectedSdg || 1} // Defaulting SDG to 1 if not set
-            sdgHeader={sdgHeader || { title: "Default SDG" }} // Placeholder sdgHeader
+            sdgHeader={sdgHeader || { title: "Default Agile Principle" }} // Placeholder sdgHeader
             onHandleSwitchSdg={handleSdgChange}
             showMoreInfo={false} // Set the default value or pass state if needed
             setShowMoreInfo={() => {}} // Placeholder
             eventId={eventId as string}
+            actionCount={(actionList && actionList.length) || 0 }
           />
 
           <ActionListContainer
             actionList={actionList}
             filteredActionList={filteredActionList}
             searchQuery={searchQuery}
+            isLoadingActions={isLoadingActions}
             setSearchQuery={setSearchQuery}
             handleDeleteAction={handleDeleteAction}
             handleEditAction={handleEditAction}
             handleCreateAction={handleCreateAction}
+            generateActions={generateActions}
           />
+
+          <RightOverlay 
+                  onClose={() => setIsEditOpen(false)}
+                  isOpen={isEditOpen}
+                  children={
+                    <div>
+                        {isEditOpen && (
+                        <ActionEdit
+                          userProfile={userProfile}
+                          event={event}
+                          data={UserAction}
+                          onCancel={() => setIsEditOpen(false)}
+                          onUpdate={onUpdateUserAction}
+                          onDelete={() => {}}
+                          index={index}
+                        />
+                      )}
+                    </div>
+                  }
+          /> 
         </>
       )}
 

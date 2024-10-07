@@ -7,7 +7,7 @@ import { refreshOutline } from 'ionicons/icons';
 interface ActionButtonsProps {
   getActions: () => void;
   createCustomAction: () => void;
-  handleOpenFeedbackModal: () => void;
+  handleOpenFeedbackModal?: () => void;
   isLoading: boolean;
   actionList: any[];
   hideExport?: boolean;
@@ -38,7 +38,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
           {" "}
           + Add My Action
         </Button>
-        {!hideExport && 
+        {!hideExport && handleOpenFeedbackModal &&
         <Button variant='success' onClick={handleOpenFeedbackModal}>
           Export Actions to Excel
         </Button>

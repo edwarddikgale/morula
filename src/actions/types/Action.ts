@@ -8,5 +8,5 @@ export interface Action {
     resourceUrl: string | null,
     source: string | null,
     sdg: number | null,
-    createdOn?: Date
+    createdAt?: Date
 }
