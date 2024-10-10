@@ -96,7 +96,7 @@ export const ActionListPage = () => {
     
     if (selectedSdg && !item.sdg) item.sdg = selectedSdg;
     //const res = await axios.post(`${apiRouteRoot}/userActions`, { ...item, userId: userId, eventId: eventId });
-    const response = await actionAPI.CreateUserAction({ ...item, userId: userId, eventId: eventId });
+    const response = await actionAPI.createUserAction({ ...item, userId: userId, eventId: eventId });
     const userAction: UserAction = response.userAction;//response.data.userAction;
 
     setActionList((prevActionList) => {
@@ -117,7 +117,7 @@ export const ActionListPage = () => {
         ? await axios.patch(`${apiRouteRoot}/userActions/${data.id}`, data)
         : await axios.post(`${apiRouteRoot}/userActions`, data);*/
 
-      response = data.id ? await actionAPI.UpdateUserAction(data, data.id): await actionAPI.CreateUserAction(data);
+      response = data.id ? await actionAPI.updateUserAction(data, data.id): await actionAPI.createUserAction(data);
       const userAction: UserAction = response.userAction;
 
       setActionList((prevActionList) => {

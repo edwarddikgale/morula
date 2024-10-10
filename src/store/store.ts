@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { profileReducer } from "./slices/profileSlice";
+import { actionReducer } from "./slices/actionSlice";
 
 export const store = configureStore({
     reducer:{
-        profile: profileReducer
+        profile: profileReducer,
+        action: actionReducer
     }
 });
 

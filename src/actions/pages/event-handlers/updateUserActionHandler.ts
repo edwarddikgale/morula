@@ -7,18 +7,16 @@ interface IProps {
     data: UserAction;
 }
 
-const handleUpdateUserAction = ({actionList, index, data}: IProps): Promise<Action[]> => {
+const updateUserActionHandler = ({actionList, index, data}: IProps): Promise<Action[]> => {
   return new Promise(async (resolve, reject) => {
-    //setTimeout(() => setIsEditOpen(false), 400);
-
     try {
         const actionIsNew = !data.id;
         let response: any = null;
 
         // Either update or create user action
         response = data.id
-        ? await actionAPI.UpdateUserAction(data, data.id)
-        : await actionAPI.CreateUserAction(data);
+        ? await actionAPI.updateUserAction(data, data.id)
+        : await actionAPI.createUserAction(data);
 
         const userAction: UserAction = response.userAction;
 
@@ -37,7 +35,6 @@ const handleUpdateUserAction = ({actionList, index, data}: IProps): Promise<Acti
           updatedActionList[index] = userAction;
         }
 
-      //setIndex(-1);
       // Resolve the promise if successful
       resolve(updatedActionList);
     } catch (error) {
@@ -49,4 +46,4 @@ const handleUpdateUserAction = ({actionList, index, data}: IProps): Promise<Acti
   });
 };
 
-export default handleUpdateUserAction;
+export {updateUserActionHandler};

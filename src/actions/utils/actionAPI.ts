@@ -10,7 +10,7 @@ export interface UpdateUserActionResponse {userAction: UserAction};
 
 export const actionAPI = {
 
-  async CreateUserAction(formData: any): Promise<CreateUserActionResponse> {
+  async createUserAction(formData: any): Promise<CreateUserActionResponse> {
     const response = await fetch(`${API_URL}/userActions`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -24,7 +24,7 @@ export const actionAPI = {
     return response.json();
   },
 
-  async UpdateUserAction(formData: any, actionId: string): Promise<UpdateUserActionResponse> {
+  async updateUserAction(formData: any, actionId: string): Promise<UpdateUserActionResponse> {
     const response = await fetch(`${API_URL}/userActions/${actionId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },

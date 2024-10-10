@@ -12,9 +12,14 @@ import { actionGenerator } from "actions/utils/actionGenerator";
 import { UserAction } from "actions/types";
 import ActionEdit from "actions/components/ActionEdit";
 import RightOverlay from "common/components/overlay/RightOverlay";
-import handleUpdateUserAction from "./event-handlers/handleUpdateUserAction";
+import {updateUserActionHandler, deleteActionHandler, createActionHandler} from "./event-handlers";
+import { AppDispatch, RootState } from "store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserActions } from "store/actions/action";
+import { fetchEventUserActions } from "store/actions/action/fetchUserAction";
 
 const ActionListManager: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const eventId = useQueryParameter("eventId");
   const [searchQuery, setSearchQuery] = useState<string>('');
   const { userProfile, loading: userProfileLoading, error: userProfileError } = useUserProfile();
@@ -25,6 +30,8 @@ const ActionListManager: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [actionList, setActionList] = useState<Action[]>([]);
+  const {data, list, loading, isProcessing} = useSelector((state: RootState) => state.action);
+
   const [isLoadingActions, setIsLoadingActions] = useState<boolean>(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [UserAction, setUserAction] = useState<UserAction>({} as UserAction);
@@ -38,6 +45,11 @@ const ActionListManager: React.FC = () => {
     setIsLoadingActions(false);
   }
 
+  useEffect(() => {
+    if(userProfile && event && event._id){
+      dispatch(fetchEventUserActions({userId: userProfile.userId, eventId: event._id}));
+    }
+  }, [userProfile, event, dispatch]);
 
   // Fetch actions when both userProfile and event are available
   useEffect(() => {
@@ -56,31 +68,24 @@ const ActionListManager: React.FC = () => {
       }
     };
 
-    fetchActions();
+    //fetchActions();
   }, [userProfile, event]);
 
   const filteredActionList = actionList.filter((action) => action.title.includes(searchQuery));
 
   const handleDeleteAction = async (index: number) => { 
-    const thisAction = actionList && actionList.length >= 0 ? actionList[index] : null;
-    if (thisAction && thisAction.id) {
-      await actionAPI.DeleteUserAction(thisAction.id);
-    }
-    const updatedItems = [...actionList];
-    updatedItems.splice(index, 1)
-    setActionList(updatedItems);
+    deleteActionHandler(actionList, index)
+      .then(updatedList =>{
+        setActionList(updatedList);
+      })
+      .catch(e => (setErrorMessage(e)));
   };
 
   const handleCreateAction = async (index: number, item: Action) => {
 
-    const response = await actionAPI.CreateUserAction({ ...item, userId: userProfile?.userId, eventId: eventId });
-    const userAction: UserAction = response.userAction;//response.data.userAction;
-
-    setActionList((prevActionList) => {
-      const updatedList = [...prevActionList];
-      updatedList[index] = userAction;
-      return updatedList;
-    });
+    createActionHandler({index, item, userProfile, eventId, actionList})
+      .then((updatedList) =>{setActionList(updatedList)})
+      .catch((e) => setErrorMessage(e));
   };
 
   const handleEditAction = (index: number, item: Action) => { 
@@ -90,7 +95,7 @@ const ActionListManager: React.FC = () => {
 
   const onUpdateUserAction = (index: number | null, item: UserAction) => { 
   
-    handleUpdateUserAction({actionList, index, data: item})
+    updateUserActionHandler({actionList, index, data: item})
       .then((newActionList) =>{ setActionList(newActionList);})
       .catch((e) => setErrorMessage(e))
       .finally(() => {
@@ -104,7 +109,7 @@ const ActionListManager: React.FC = () => {
   return (
     <div>
       {/* Show loader or message when user profile or event is missing */}
-      {(userProfileLoading || eventLoading || isLoading) && <LoaderPrimary />}
+      {(loading || userProfileLoading || eventLoading || isLoading) && <LoaderPrimary />}
       {(!userProfile && !userProfileLoading) && <p>No user profile available.</p>}
       {(!event && !eventLoading) && <p>No event data available.</p>}
 
@@ -122,7 +127,7 @@ const ActionListManager: React.FC = () => {
           />
 
           <ActionListContainer
-            actionList={actionList}
+            actionList={list || actionList}
             filteredActionList={filteredActionList}
             searchQuery={searchQuery}
             isLoadingActions={isLoadingActions}
