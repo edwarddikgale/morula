@@ -3,7 +3,7 @@ import { UserAction } from "actions/types/";
 import { CreateUserActionResponse, UpdateUserActionResponse } from "actions/utils/actionAPI";
 import { fetchUserAction, fetchUserActions, createUserAction, updateUserAction } from "../actions/action/";
 import { UserActionState } from "../states/UserActionState";
-import { fetchEventUserActions } from "store/actions/action/fetchUserAction";
+import { fetchAiUserActions, fetchEventUserActions } from "store/actions/action/fetchUserAction";
 
 export const API_URL = process.env.REACT_APP_API_BASE_URL;
 export const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -75,7 +75,24 @@ const actionSlice = createSlice({
                 state.list = <UserAction[]>[];
                 state.error = action.payload?.toString() || "Sorry, seems like something went wrong";
                 state.processingDone = false;
-            })           
+            })
+            .addCase(fetchAiUserActions.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+                state.processingDone = false;
+            })
+            .addCase(fetchAiUserActions.fulfilled, (state, action) => {
+                state.loading = false;
+                state.error = null;
+                state.list = [...(action.payload as UserAction[]), ...state.list];
+                state.processingDone = false;
+            })
+            .addCase(fetchAiUserActions.rejected, (state, action) => {
+                state.loading = false;
+                state.list = <UserAction[]>[];
+                state.error = action.payload?.toString() || "Sorry, seems like something went wrong";
+                state.processingDone = false;
+            })            
             // Handle createUserAction cases
             .addCase(createUserAction.pending, (state) => {
                 state.loading = false;

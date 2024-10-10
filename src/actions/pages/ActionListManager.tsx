@@ -15,8 +15,8 @@ import RightOverlay from "common/components/overlay/RightOverlay";
 import {updateUserActionHandler, deleteActionHandler, createActionHandler} from "./event-handlers";
 import { AppDispatch, RootState } from "store/store";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserActions } from "store/actions/action";
-import { fetchEventUserActions } from "store/actions/action/fetchUserAction";
+import { createUserAction, fetchUserActions } from "store/actions/action";
+import { fetchAiUserActions, fetchEventUserActions } from "store/actions/action/fetchUserAction";
 
 const ActionListManager: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -39,10 +39,11 @@ const ActionListManager: React.FC = () => {
 
   const generateActions = async () => {
     setIsLoadingActions(true);
-    const aiActions: Action[] = await actionGenerator(1);
+    /*const aiActions: Action[] = await actionGenerator(1);
     if(aiActions)
-      setActionList([...aiActions, ...actionList]);
-    setIsLoadingActions(false);
+      setActionList([...aiActions, ...actionList]);*/
+    dispatch(fetchAiUserActions({limit: 1}));
+    setTimeout(() => setIsLoadingActions(false), 1000);
   }
 
   useEffect(() => {
@@ -50,26 +51,6 @@ const ActionListManager: React.FC = () => {
       dispatch(fetchEventUserActions({userId: userProfile.userId, eventId: event._id}));
     }
   }, [userProfile, event, dispatch]);
-
-  // Fetch actions when both userProfile and event are available
-  useEffect(() => {
-    const fetchActions = async () => {
-      if (userProfile && event) {
-        setIsLoading(true);
-        try {
-          const response = await actionAPI.getActions(userProfile.userId, event._id);
-          setActionList(response.records);
-        } catch (error) {
-          console.error('Error fetching actions:', error);
-          setErrorMessage('Error fetching actions');
-        } finally {
-          setIsLoading(false);
-        }
-      }
-    };
-
-    //fetchActions();
-  }, [userProfile, event]);
 
   const filteredActionList = actionList.filter((action) => action.title.includes(searchQuery));
 
@@ -82,10 +63,13 @@ const ActionListManager: React.FC = () => {
   };
 
   const handleCreateAction = async (index: number, item: Action) => {
+    if(!userProfile || !userProfile.userId) throw Error(`No user profile`);
+    const userAction: UserAction = { ...item, userId: userProfile?.userId, eventId: eventId };
+    dispatch(createUserAction(userAction));
 
-    createActionHandler({index, item, userProfile, eventId, actionList})
+    /*createActionHandler({index, item, userProfile, eventId, actionList})
       .then((updatedList) =>{setActionList(updatedList)})
-      .catch((e) => setErrorMessage(e));
+      .catch((e) => setErrorMessage(e));*/
   };
 
   const handleEditAction = (index: number, item: Action) => { 

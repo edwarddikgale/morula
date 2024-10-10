@@ -1,5 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { Action } from "actions/types";
 import { actionAPI } from "actions/utils/actionAPI";
+import { actionGenerator } from "actions/utils/actionGenerator";
 
 
 export const fetchUserActions = createAsyncThunk(
@@ -22,6 +24,20 @@ export const fetchEventUserActions = createAsyncThunk(
         try {
             const response = actionAPI.getActions(userId, eventId);
             return response;
+        }
+        catch (error: any) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
+
+export interface FetchAiUserActionsProps {limit: number}
+export const fetchAiUserActions = createAsyncThunk(
+    'action/fetchAiUserActions',
+    async ({limit}: FetchAiUserActionsProps, { rejectWithValue }) => {
+        try {
+            const aiActions: Action[] = await actionGenerator(limit);
+            return aiActions;
         }
         catch (error: any) {
             return rejectWithValue(error.message);
