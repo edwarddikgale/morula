@@ -1,12 +1,24 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UserAction } from "actions/types/";
-import { CreateUserActionResponse, UpdateUserActionResponse } from "actions/utils/actionAPI";
-import { fetchUserAction, fetchUserActions, createUserAction, updateUserAction } from "../actions/action/";
+// actionSlice.ts
+import { createSlice } from "@reduxjs/toolkit";
 import { UserActionState } from "../states/UserActionState";
-import { fetchAiUserActions, fetchEventUserActions } from "store/actions/action/fetchUserAction";
-
-export const API_URL = process.env.REACT_APP_API_BASE_URL;
-export const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+import { 
+    fetchUserAction, 
+    fetchUserActions, 
+    createUserAction, 
+    editUserAction,
+    updateUserAction,
+    fetchAiUserActions, 
+    fetchEventUserActions  
+} from "../actions/action/";
+import { 
+    handleFetchUserAction, 
+    handleFetchUserActions, 
+    handleCreateUserAction, 
+    handleUpdateUserAction, 
+    handleFetchEventUserActions,
+    handleFetchAiUserActions,
+    handleEditUserAction
+} from "../handlers/actionHandlers";
 
 const initialState: UserActionState = {
     data: null,
@@ -24,118 +36,35 @@ const actionSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            // Handle fetchUserAction cases
-            .addCase(fetchUserAction.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-                state.processingDone = false;
-            })
-            .addCase(fetchUserAction.fulfilled, (state, action) => {
-                state.loading = false;
-                state.error = null;
-                state.data = action.payload.useraction;
-                state.processingDone = false;
-            })
-            .addCase(fetchUserAction.rejected, (state, action) => {
-                state.loading = false;
-                state.data = <UserAction>{};
-                state.error = action.payload?.toString() || "Sorry, seems like something went wrong";
-                state.processingDone = false;
-            })
-            .addCase(fetchUserActions.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-                state.processingDone = false;
-            })
-            .addCase(fetchUserActions.fulfilled, (state, action) => {
-                state.loading = false;
-                state.error = null;
-                state.list = action.payload.records;
-                state.processingDone = false;
-            })
-            .addCase(fetchUserActions.rejected, (state, action) => {
-                state.loading = false;
-                state.list = <UserAction[]>[];
-                state.error = action.payload?.toString() || "Sorry, seems like something went wrong";
-                state.processingDone = false;
-            })  
-            .addCase(fetchEventUserActions.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-                state.processingDone = false;
-            })
-            .addCase(fetchEventUserActions.fulfilled, (state, action) => {
-                state.loading = false;
-                state.error = null;
-                state.list = action.payload.records;
-                state.processingDone = false;
-            })
-            .addCase(fetchEventUserActions.rejected, (state, action) => {
-                state.loading = false;
-                state.list = <UserAction[]>[];
-                state.error = action.payload?.toString() || "Sorry, seems like something went wrong";
-                state.processingDone = false;
-            })
-            .addCase(fetchAiUserActions.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-                state.processingDone = false;
-            })
-            .addCase(fetchAiUserActions.fulfilled, (state, action) => {
-                state.loading = false;
-                state.error = null;
-                state.list = [...(action.payload as UserAction[]), ...state.list];
-                state.processingDone = false;
-            })
-            .addCase(fetchAiUserActions.rejected, (state, action) => {
-                state.loading = false;
-                state.list = <UserAction[]>[];
-                state.error = action.payload?.toString() || "Sorry, seems like something went wrong";
-                state.processingDone = false;
-            })            
-            // Handle createUserAction cases
-            .addCase(createUserAction.pending, (state) => {
-                state.loading = false;
-                state.isProcessing = true;
-                state.error = null;
-                state.processingDone = false;
-            })
-            .addCase(createUserAction.fulfilled, (state, action: PayloadAction<CreateUserActionResponse>) => {
-                state.loading = false;
-                state.data = action.payload.userAction;
-                state.error = null;
-                state.processingDone = true;
-                state.isProcessing = false;
-            })
-            .addCase(createUserAction.rejected, (state, action: PayloadAction<string | unknown>) => {
-                state.loading = false;
-                state.error = typeof action.payload === 'string' ? action.payload : 'Failed to create action';
-                state.processingDone = true;
-                state.isProcessing = false;
-            })
-            // Handle updateUserAction cases
-            .addCase(updateUserAction.pending, (state) => {
-                state.loading = false;
-                state.isProcessing = true;
-                state.error = null;
-                state.processingDone = false;
-            })
-            .addCase(updateUserAction.fulfilled, (state, action: PayloadAction<UpdateUserActionResponse>) => {
-                state.loading = false;
-                state.data = action.payload.userAction;
-                state.error = null;
-                state.isProcessing = false;
-                state.processingDone = true;
-            })
-            .addCase(updateUserAction.rejected, (state, action: PayloadAction<string | unknown>) => {
-                state.loading = false;
-                state.error = typeof action.payload === 'string' ? action.payload : 'Failed to update action';
-                state.isProcessing = false;
-                state.processingDone = true;
-            });
+            .addCase(fetchUserAction.pending, handleFetchUserAction.pending)
+            .addCase(fetchUserAction.fulfilled, handleFetchUserAction.fulfilled)
+            .addCase(fetchUserAction.rejected, handleFetchUserAction.rejected)
+
+            .addCase(fetchUserActions.pending, handleFetchUserActions.pending)
+            .addCase(fetchUserActions.fulfilled, handleFetchUserActions.fulfilled)
+            .addCase(fetchUserActions.rejected, handleFetchUserActions.rejected)
+
+            .addCase(fetchEventUserActions.pending, handleFetchEventUserActions.pending)
+            .addCase(fetchEventUserActions.fulfilled, handleFetchEventUserActions.fulfilled)
+            .addCase(fetchEventUserActions.rejected, handleFetchEventUserActions.rejected)
+
+            .addCase(fetchAiUserActions.pending, handleFetchAiUserActions.pending)
+            .addCase(fetchAiUserActions.fulfilled, handleFetchAiUserActions.fulfilled)
+            .addCase(fetchAiUserActions.rejected, handleFetchAiUserActions.rejected)
+
+            .addCase(createUserAction.pending, handleCreateUserAction.pending)
+            .addCase(createUserAction.fulfilled, handleCreateUserAction.fulfilled)
+            .addCase(createUserAction.rejected, handleCreateUserAction.rejected)
+
+            .addCase(editUserAction.pending, handleEditUserAction.pending)
+            .addCase(editUserAction.fulfilled, handleEditUserAction.fulfilled)
+            .addCase(editUserAction.rejected, handleEditUserAction.rejected)
+
+            .addCase(updateUserAction.pending, handleUpdateUserAction.pending)
+            .addCase(updateUserAction.fulfilled, handleUpdateUserAction.fulfilled)
+            .addCase(updateUserAction.rejected, handleUpdateUserAction.rejected);
     },
 });
 
-
 export const actionReducer = actionSlice.reducer;
-export {createUserAction, fetchUserAction, updateUserAction};
+export { createUserAction, fetchUserAction, fetchUserActions, updateUserAction };
