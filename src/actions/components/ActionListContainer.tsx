@@ -9,6 +9,7 @@ interface ActionListContainerProps {
   filteredActionList: Action[];
   searchQuery: string;
   isLoadingActions: boolean;
+  isCreating: boolean;
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
   handleDeleteAction: (index: number) => void;
   handleEditAction: (index: number, item: Action) => void;
@@ -21,6 +22,7 @@ const ActionListContainer: React.FC<ActionListContainerProps> = ({
   filteredActionList, 
   searchQuery, 
   isLoadingActions,
+  isCreating,
   generateActions,
   setSearchQuery, 
   handleDeleteAction, 
@@ -51,6 +53,7 @@ const ActionListContainer: React.FC<ActionListContainerProps> = ({
         onDeleteItem={handleDeleteAction}
         onEditItem={handleEditAction}
         onCreateItem={handleCreateAction}
+        isCreating={isCreating}
       />
     </div>
   );

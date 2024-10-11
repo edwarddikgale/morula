@@ -38,7 +38,7 @@ export const actionAPI = {
     return response.json();
   },
 
-  async DeleteUserAction(actionId: string): Promise<DeleteUserActionResponse>  {
+  async deleteUserAction(actionId: string): Promise<DeleteUserActionResponse>  {
     const response = await fetch(`${API_URL}/userActions/${actionId}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" }

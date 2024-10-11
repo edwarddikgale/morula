@@ -6,7 +6,7 @@ const deleteActionHandler = async (actionList: Action[] ,index: number): Promise
         try{
             const thisAction = actionList && actionList.length >= 0 ? actionList[index] : null;
             if (thisAction && thisAction.id) {
-              await actionAPI.DeleteUserAction(thisAction.id);
+              await actionAPI.deleteUserAction(thisAction.id);
             }
             const updatedItems = [...actionList];
             updatedItems.splice(index, 1);

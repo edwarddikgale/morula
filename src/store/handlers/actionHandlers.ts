@@ -96,19 +96,26 @@ export const handleFetchEventUserActions = {
 export const handleCreateUserAction = {
     pending: (state: UserActionState) => {
         state.loading = false;
+        state.isCreating = true;
         state.isProcessing = true;
         state.error = null;
         state.processingDone = false;
     },
-    fulfilled: (state: UserActionState, action: PayloadAction<CreateUserActionResponse>) => {
+    fulfilled: (state: UserActionState, action: PayloadAction<{response: CreateUserActionResponse, index: number}>) => {
+        const {userAction} = action.payload.response;
+        const {index} = action.payload;
+
         state.loading = false;
-        state.data = action.payload.userAction;
+        state.isCreating = false;
+        state.data = userAction;
+        state.list[index] = userAction;
         state.error = null;
         state.processingDone = true;
         state.isProcessing = false;
     },
     rejected: (state: UserActionState, action: PayloadAction<string | unknown>) => {
         state.loading = false;
+        state.isCreating = false;
         state.error = typeof action.payload === 'string' ? action.payload : 'Failed to create action';
         state.processingDone = true;
         state.isProcessing = false;
@@ -118,16 +125,18 @@ export const handleCreateUserAction = {
 // Update User Action Handlers
 export const handleDeleteUserAction = {
     pending: (state: UserActionState) => {
-        state.loading = false;
+        state.loading = true;
         state.isProcessing = true;
         state.error = null;
         state.processingDone = false;
     },
-    fulfilled: (state: UserActionState, action: PayloadAction<DeleteUserActionResponse>) => {
+    fulfilled: (state: UserActionState, action: PayloadAction<{response: DeleteUserActionResponse | null; index: number}>) => {
+        const {index} = action.payload;
         state.loading = false;
         state.error = null;
         state.isProcessing = false;
         state.processingDone = true;
+        state.list.splice(index, 1);
     },
     rejected: (state: UserActionState, action: PayloadAction<string | unknown>) => {
         state.loading = false;

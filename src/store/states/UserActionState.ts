@@ -8,5 +8,6 @@ export interface UserActionState {
     loading: boolean;
     processingDone: boolean;
     isProcessing: boolean;
-    error: string | null;
+    isCreating: boolean;
+    error: string | null;    
 }

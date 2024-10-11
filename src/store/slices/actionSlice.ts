@@ -5,6 +5,7 @@ import {
     fetchUserAction, 
     fetchUserActions, 
     createUserAction, 
+    deleteUserAction,
     editUserAction,
     updateUserAction,
     fetchAiUserActions, 
@@ -14,6 +15,7 @@ import {
     handleFetchUserAction, 
     handleFetchUserActions, 
     handleCreateUserAction, 
+    handleDeleteUserAction,
     handleUpdateUserAction, 
     handleFetchEventUserActions,
     handleFetchAiUserActions,
@@ -25,6 +27,7 @@ const initialState: UserActionState = {
     loading: false,
     processingDone: false,
     isProcessing: false,
+    isCreating: false,
     error: null,
     list: [],
     index: null
@@ -55,6 +58,11 @@ const actionSlice = createSlice({
             .addCase(createUserAction.pending, handleCreateUserAction.pending)
             .addCase(createUserAction.fulfilled, handleCreateUserAction.fulfilled)
             .addCase(createUserAction.rejected, handleCreateUserAction.rejected)
+
+            .addCase(deleteUserAction.pending, handleDeleteUserAction.pending)
+            .addCase(deleteUserAction.fulfilled, handleDeleteUserAction.fulfilled)
+            .addCase(deleteUserAction.rejected, handleDeleteUserAction.rejected)
+
 
             .addCase(editUserAction.pending, handleEditUserAction.pending)
             .addCase(editUserAction.fulfilled, handleEditUserAction.fulfilled)

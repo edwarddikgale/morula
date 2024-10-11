@@ -12,14 +12,14 @@ interface ActionListProps {
   onDeleteItem: (index: number) => void;
   onEditItem: (index: number, item: Action) => void;
   onCreateItem: (index: number, item: Action) => void;
-  isCreateLoading?:boolean;
+  isCreating?:boolean;
 }
 
-const Actions: React.FC<ActionListProps> = ({ data, onDeleteItem, onCreateItem, onEditItem, isCreateLoading }) => {
+const Actions: React.FC<ActionListProps> = ({ data, onDeleteItem, onCreateItem, onEditItem, isCreating }) => {
   return (
     <div className="list-group my-3 ms-2">
       {data.map((item, index) => (
-        <div key={item.id} className="list-group-item d-flex justify-content-between align-items-center mb-3 p-3 border rounded">
+        <div key={item.id} className="list-group-item d-flex justify-content-between align-items-center mb-4 p-3 border rounded">
           
           <RoundNumber text={`${index + 1}`} />
           <div>
@@ -37,7 +37,7 @@ const Actions: React.FC<ActionListProps> = ({ data, onDeleteItem, onCreateItem, 
             >
                 <IonIcon icon={addCircleOutline} className="custom-button-icon" />
                 <span className='small'>Keep</span>
-                {isCreateLoading &&
+                {isCreating &&
                   <Spinner animation="border" variant="light" size="sm" className="custom-spinner" />
                 } 
                 </div>
