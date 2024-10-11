@@ -6,8 +6,36 @@ import useQueryParameter from "common/url/useQueryParameter";
 import EventDetails from "event/components/EventDetails";
 import { useSelector } from "react-redux";
 import { RootState } from "store/store";
+import useEvent from "event/hooks/useEvent";
+import { Hypothesis } from "observation/types/ScrumAnalysis";
+import { dailyObservationAPI } from "observation/utils/API";
 
 const ActionHypotheses = () => {
+  const eventId = useQueryParameter("eventId");
+  const {list, loading} = useSelector((state: RootState) => state.action);
+  const { event, loading: eventLoading, error } = useEvent(eventId);
+  const [hypothesisList, setHypothesisList] = useState<Hypothesis[]>([]);
+
+  const fetchHypotheses = async(eventId: string) =>{
+    const response = await dailyObservationAPI.getObservationsByEvent(eventId);
+    let hypotheses: Hypothesis[] = [];
+    response.observations.forEach(obs => {
+      if(obs.hypotheses){
+        hypotheses = [...hypotheses, ...obs.hypotheses];
+      }
+    });
+
+    setHypothesisList(hypotheses);
+  };
+
+  useEffect(() =>{
+    console.log(`attempting to fetch event`);
+    if(event && event._id){
+      console.log(`Fetching event hypothesese`);
+      fetchHypotheses(event._id);
+    }
+  }, [event])
+
   const tabs = [
     {
       id: "tab1",
@@ -17,12 +45,9 @@ const ActionHypotheses = () => {
     {
       id: "tab2",
       label: "Hypotheses",
-      content: <HypothesisList />,
+      content: <HypothesisList hypotheses={hypothesisList} />,
     },
   ];
-
-  const eventId = useQueryParameter("eventId");
-  const {list, loading} = useSelector((state: RootState) => state.action);
 
   return (
     <div className='container-fluid '>

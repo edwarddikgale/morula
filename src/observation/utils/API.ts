@@ -9,6 +9,8 @@ export interface UpdateDailyObservationResponse extends Observation {}
 
 export interface DeleteObservationResponse {success: boolean}
 
+export interface FetchEventObservationsResponse {observations: Observation[]}
+
 export const dailyObservationAPI = {
 
   async analyseScrumNotes(notes: string): Promise<ScrumAnalysisResponse> {
@@ -74,7 +76,7 @@ export const dailyObservationAPI = {
 
     return result; // Assuming result is of type UserProfile
   },
-  async getObservationsByEvent(eventId: string) {
+  async getObservationsByEvent(eventId: string): Promise<FetchEventObservationsResponse> {
     const response = await fetch(`${API_URL}/observation/event/${eventId}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
