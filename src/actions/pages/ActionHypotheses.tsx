@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {ActionListManager} from "./ActionListManager";
-import {HypothesisList} from "./HypothesisList";
+import {HypothesisList} from "../components/HypothesisList";
 import Tabs from "common/components/ui/Tab";
 import useQueryParameter from "common/url/useQueryParameter";
 import EventDetails from "event/components/EventDetails";
@@ -33,7 +33,7 @@ const ActionHypotheses = () => {
     if(event && event._id){
       console.log(`Fetching event hypothesese`);
       fetchHypotheses(event._id);
-    }
+    } 
   }, [event])
 
   const tabs = [

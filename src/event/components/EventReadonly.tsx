@@ -19,6 +19,7 @@ const EventReadOnly: React.FC<IProps> = ({ id, event }) => {
     const {
         title,
         category,
+        parentId,
         tags,
         locationType,
         venue,
@@ -55,6 +56,12 @@ const EventReadOnly: React.FC<IProps> = ({ id, event }) => {
                 description="Details about the event"
             >
                 <div className="row">
+                    <div className="col-md-3">
+                        <strong>Event Parent</strong>
+                    </div>
+                    <div className="col-md-9">
+                        <p>{parentId? parentId: 'None'}</p>
+                    </div>
                     <div className="col-md-3">
                         <strong>Event Category</strong>
                     </div>

@@ -1,5 +1,7 @@
 export const API_URL = process.env.REACT_APP_API_BASE_URL;
 
+interface GetSprintsResponse {events: any[]};
+
 export const eventsAPI = {
   async createEvent(formData: any) {
     const response = await fetch(`${API_URL}/events`, {
@@ -33,6 +35,20 @@ export const eventsAPI = {
     const response = await fetch(`${API_URL}/events/user/${userId}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch events!");
+    }
+
+    return await response.json();
+  },
+
+  
+  async getSprints(userId: string, teamId?: string): Promise<GetSprintsResponse> {
+    const response = await fetch(`${API_URL}/events/sprints/${userId}/${teamId || ''}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" }
     });
 
     if (!response.ok) {

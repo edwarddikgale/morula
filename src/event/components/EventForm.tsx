@@ -37,6 +37,7 @@ import { findEventCatByVal } from "event/utils/findEventCategory";
 const tagOptions: EventTag[] = eventTags;
 const categories: EventCategory[] = eventCategories;
 
+
 interface IProps {
   event?: EventFormData;
   id?: string;
@@ -62,6 +63,8 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
   const [eventOrganizer, setEventOrganizer] = useState("Event Organizer Inc.");
   const [eventType, setEventType] = useState("");
   const [eventCategory, setEventCategory] = useState("");
+  const [eventParent, setEventParent] = useState<string | null>(null);
+  const [sprints, setSprints] = useState<EventFormData[]>([]);
   const [eventSearchTag, setEventSearchTag] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<EventTag[]>([]);
   const [estimatedAttendees, setEstimatedAttendees] = useState<number>(0);
@@ -96,8 +99,13 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
   // description
   const [content, setContent] = useState<string>("");
 
+  const loadSprints = async (userId: string, teamId?: string) => { 
+    const response =  await eventsAPI.getSprints(userId, teamId);
+    setSprints(response.events.map(evt => evt as EventFormData));
+  }
     // Effect to pre-populate form fields if event prop is provided
     useEffect(() => {
+      
       if (event && !formIsPopulated) {
         setEventTitle(event.title);
         setEstimatedAttendees(event.attendee_estimate || 0);
@@ -124,10 +132,16 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
         setEventSummary(event.summary);
         setContent(event.description || "");
         setEventStatus(event.status || "Draft");
+        setEventParent(event.parentId || null);
         setFormIsPopulated(true);
       }
     }, [event]);
-    
+  
+    useEffect(()=>{
+      if(userId){
+        loadSprints(userId);
+      }
+    }, [userId])
   const handleStartCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
     setShowStartTime(checked);
@@ -157,8 +171,8 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
     setEventOrganizer(event.target.value);
     // console.log(event.target.value);
   };
-  const handleTypeSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setEventType(event.target.value);
+  const handleSprintSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setEventParent(event.target.value);
     // console.log(event.target.value);
   };
 
@@ -206,6 +220,7 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
 
     const eventData: EventFormData = {
       userId: userId,
+      parentId: eventParent,
       title: eventTitle,
       organizer: eventOrganizer,
       category: eventCategory,
@@ -268,28 +283,32 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
           className='basic-info'
           icon={faTextSlash}
           title='Basic Info'
-          description='Name your event and tell event-goers why they should come. Add details that highlights what make its unique'
+          description='Name your event event and provide more details for better analysis'
         >
           <div>
             {/* basic info field */}
             <div className='row g-2 mb-3'>
-              <div className='col-12 col-md-4 d-none'>
+              <div className='col-12 col-md-4'>
                 <div className='form-floating'>
                   <select
                     className='form-select'
-                    id='type'
+                    id='sprint'
                     aria-label='Floating label select example'
-                    value={eventType}
-                    onChange={handleTypeSelectChange}
+                    value={eventParent || ""}
+                    onChange={handleSprintSelectChange}
                   >
-                    <option value='0' selected>
-                      Type
-                    </option>
-                    <option value='1'>One</option>
-                    <option value='2'>Two</option>
-                    <option value='3'>Three</option>
+                    <option value={''}>Select Parent Sprint...</option>
+                    {sprints.map((sprint) =>(
+                      <option key={sprint._id} value={sprint._id} selected={eventParent === sprint._id}>
+                        {sprint.title} 
+                        {" , "} dates:: {" "} 
+                        {sprint.startDate? new Date(sprint.startDate).toLocaleDateString(): 'Unknown'}
+                        {" - "}
+                        {sprint.endDate? new Date(sprint.endDate).toLocaleDateString(): 'Unknown'}
+                      </option>
+                    ))}
                   </select>
-                  <label htmlFor='type'>Works with selects</label>
+                  <label htmlFor='sprint'>Parent Sprint</label>
                 </div>
               </div>
               <div className='col-12 col-md-4'>
@@ -307,12 +326,6 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
                         {category.label}
                       </option>
                     ))}
-                    <option value='0' selected>
-                      Category
-                    </option>
-                    <option value='1'>One</option>
-                    <option value='2'>Two</option>
-                    <option value='3'>Three</option>
                   </select>
                   <label htmlFor='floatingSelectGrid'>Category</label>
                 </div>

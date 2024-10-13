@@ -39,9 +39,9 @@ function App() {
           <Routes>
             <Route element={<PrivateRoutes />}>
               <Route path='/actions-intro' element={<ActionIntroPage />} />
-              <Route path='/actions' element={<ActionListPage />} />
+              <Route path='/actions-old' element={<ActionListPage />} />
               <Route path='/action-list' element={<ActionListManager />} />
-              <Route path='/action-hypotheses' element={<ActionHypotheses />} />
+              <Route path='/actions' element={<ActionHypotheses />} />
               <Route path='/dashboard' element={<DashboardPage />} />
               <Route path='/settings' element={<SettingsPage />} />
               <Route path='/profile' element={<ProfilePage />} />
