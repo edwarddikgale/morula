@@ -1,5 +1,5 @@
 .pattern-subject {
-    padding: 2px;
+    padding: 4px;
     font-size: 0.8rem;
     border-radius: 12px; /* Adjusted the border-radius to make it more subtle */
     background-color: rgb(205, 240, 229); /* Background color */
@@ -7,4 +7,17 @@
     display: inline-block; /* Makes the background wrap around the content */
     text-align: center;
     min-width: 55px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.pattern-eventType {
+    padding: 4px;
+    font-size: 0.8rem;
+    border-radius: 12px; /* Adjusted the border-radius to make it more subtle */
+    background-color: rgb(181, 183, 113); /* Background color */
+    border: 1px solid rgb(181, 183, 113); /* Border with same color */
+    display: inline-block; /* Makes the background wrap around the content */
+    text-align: center;
+    min-width: 55px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }

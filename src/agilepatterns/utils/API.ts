@@ -8,7 +8,8 @@ export interface GetScrumPatternsResponse {records: ScrumPattern[]};
 export const scrumAPI = {
   async getPatterns(query?: any): Promise<GetScrumPatternsResponse>  {
     
-    const response = await fetch(`${API_URL}/scrum/patterns`, {
+    const {eventType} = query;
+    const response = await fetch(`${API_URL}/scrum/patterns/${eventType}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });

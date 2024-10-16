@@ -20,7 +20,7 @@ const DailyAntiPatterns: React.FC<IPatternSelectorProps> = ({onSelectionChange, 
 
   const loadScrumPatterns = async () =>{
     if(antiPatterns && antiPatterns.length > 0) return;
-    const {records} =  await scrumAPI.getPatterns();
+    const {records} =  await scrumAPI.getPatterns({eventType: 'daily'});
     setAntiPatterns(records.filter(pattern => pattern.type === 'anti-pattern'));
   };
 

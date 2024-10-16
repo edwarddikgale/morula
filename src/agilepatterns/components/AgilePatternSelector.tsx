@@ -91,6 +91,7 @@ const AgilePatternSelector: React.FC<AgilePatternSelectorProps> = ({ patterns, o
                 <h5>{pattern.title}</h5>
                 <p>{pattern.description}</p>
                 <p className='pattern-subject'><i>{pattern.subject}</i></p>
+                <p className='pattern-eventType ms-2'><i>{pattern.eventType}</i></p>
               </div>
               <div>
                 <Checkbox 
