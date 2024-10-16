@@ -11,7 +11,8 @@ interface IPatternSelectorProps {
 
 const DailyAntiPatterns: React.FC<IPatternSelectorProps> = ({onSelectionChange, selected, eventType}: IPatternSelectorProps) => {
   const [selectedPatterns, setSelectedPatterns] = useState<{ id: string; key: string }[]>([]);
-  const [designPatterns, setDesignPatterns] = useState<ScrumPattern[]>([]);
+  const [patterns, setPatterns] = useState<ScrumPattern[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleSelectionChange = (newSelectedPatterns: { id: string; key: string }[]) => {
     setSelectedPatterns(newSelectedPatterns);
@@ -19,9 +20,11 @@ const DailyAntiPatterns: React.FC<IPatternSelectorProps> = ({onSelectionChange, 
   };
 
   const loadScrumPatterns = async () =>{
-    if(designPatterns && designPatterns.length > 0) return;
+    if(patterns && patterns.length > 0) return;
+    setLoading(true);
     const {records} =  await scrumAPI.getPatterns({eventType: eventType});
-    setDesignPatterns(records.filter(pattern => pattern.type === 'design-pattern'));
+    setPatterns(records.filter(pattern => pattern.type === 'design-pattern'));
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -32,9 +35,10 @@ const DailyAntiPatterns: React.FC<IPatternSelectorProps> = ({onSelectionChange, 
   return (
     <div>
       <AgilePatternSelector 
-        patterns={designPatterns} 
+        patterns={patterns} 
         onSelectionChange={handleSelectionChange}
-        selected={selected} />
+        selected={selected} 
+        loading={loading}/>
       <button
         className="btn btn-primary mt-3 d-none"
         onClick={() => console.log('Selected Design-Patterns:', selectedPatterns)}

@@ -30,7 +30,11 @@ const FormSectionContainer = ({ title, description, icon, className, isHr, child
         <div className='ms-0 ms-md-5 w-100'>
           <div className="d-flex justify-content-between align-items-center w-100">
             <FormSectionHeader subTitle={subTitle} title={title} description={description} />
-            <button className="btn btn-link p-0" onClick={toggleExpand} aria-expanded={isExpanded}>
+            <button 
+              type="button"
+              className="btn btn-link p-0" 
+              onClick={toggleExpand} 
+              aria-expanded={isExpanded}>
               <FontAwesomeIcon icon={isExpanded ? faChevronUp : faChevronDown} />
             </button>
           </div>

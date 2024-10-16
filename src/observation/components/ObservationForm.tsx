@@ -119,7 +119,7 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-
+    console.log(`Creating an observation`);
     if(!eventData._id) {
       throw new Error(`Error, no event id provided`);
     }

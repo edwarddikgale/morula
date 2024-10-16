@@ -9,15 +9,15 @@ import '../styles/agilepatternselector.css';
 interface AgilePatternSelectorProps {
   patterns: AgilePattern[];
   onSelectionChange: (selectedPatterns: { id: string; key: string }[]) => void;
-  selected?: { id: string; key: string }[]
+  selected?: { id: string; key: string }[];
+  loading: boolean
 }
 
-const AgilePatternSelector: React.FC<AgilePatternSelectorProps> = ({ patterns, onSelectionChange, selected }) => {
+const AgilePatternSelector: React.FC<AgilePatternSelectorProps> = ({ patterns, onSelectionChange, loading, selected }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [subjectType, setSubjectType] = useState<string | undefined>();
   const [selectedPatterns, setSelectedPatterns] = useState<{ id: string; key: string }[]>(selected || []); 
   const [filteredPatterns, setFilteredPatterns] = useState<AgilePattern[]>(patterns);
-  const [loading, setLoading] = useState<boolean>(false);
 
   const subjectTypes = [
     { value: 'Team', label: 'Team' },
@@ -43,7 +43,6 @@ const AgilePatternSelector: React.FC<AgilePatternSelectorProps> = ({ patterns, o
   };
 
   useEffect(() => {
-    setLoading(patterns === null || patterns.length === 0);
 
     const updatedFilteredPatterns = patterns.filter(
       (pattern) =>
