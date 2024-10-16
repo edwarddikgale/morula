@@ -5,10 +5,11 @@ import { scrumAPI } from './utils/API';
 
 interface IPatternSelectorProps {
   onSelectionChange: (selectedPatterns: { id: string; key: string }[]) => void;
-  selected: { id: string; key: string }[]
+  selected: { id: string; key: string }[],
+  eventType: string
 }
 
-const DailyAntiPatterns: React.FC<IPatternSelectorProps> = ({onSelectionChange, selected}: IPatternSelectorProps) => {
+const DailyAntiPatterns: React.FC<IPatternSelectorProps> = ({onSelectionChange, selected, eventType}: IPatternSelectorProps) => {
   const [selectedPatterns, setSelectedPatterns] = useState<{ id: string; key: string }[]>([]);
   const [designPatterns, setDesignPatterns] = useState<ScrumPattern[]>([]);
 
@@ -19,7 +20,7 @@ const DailyAntiPatterns: React.FC<IPatternSelectorProps> = ({onSelectionChange, 
 
   const loadScrumPatterns = async () =>{
     if(designPatterns && designPatterns.length > 0) return;
-    const {records} =  await scrumAPI.getPatterns({eventType: 'daily'});
+    const {records} =  await scrumAPI.getPatterns({eventType: eventType});
     setDesignPatterns(records.filter(pattern => pattern.type === 'design-pattern'));
   };
 

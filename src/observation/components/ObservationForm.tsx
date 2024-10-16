@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight, faCalendarAlt, faCalendarDay, faCalendarDays, faClock, faNoteSticky, faPencilAlt, faTags, faTeletype } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarAlt, faCalendarDay, faCalendarDays, faClock, faNoteSticky, faPencilAlt, faTags, faTeletype } from '@fortawesome/free-solid-svg-icons';
 import '../styles/observation-form.css';
 import { Link } from 'react-router-dom';
 import { LoaderSm } from '../../common/components/Loader/Loader';
@@ -13,16 +12,17 @@ import Select from "react-select";
 import noteTags from '../data/noteTags.json';
 import { NoteTag } from 'observation/types/NoteTag';
 import ScrumValueRating from 'rating/ScrumValueRating';
-import DailyAntiPatterns from 'agilepatterns/DailyAntiPatterns';
+import ScrumAntiPatterns from 'agilepatterns/ScrumAntiPatterns';
 import { ScrumAnalysisResponse } from 'observation/types/ScrumAnalysis';
-import DailyDesignPatterns from 'agilepatterns/DailyDesignPatterns';
+import ScrumDesignPatterns from 'agilepatterns/ScrumDesignPatterns';
 import HypothesisList from './HypothesisList';
 import { dailyObservationAPI } from 'observation/utils/API';
 import { AgilePattern } from 'agilepatterns/types';
-import { joinDailyPatterns } from 'observation/utils/joinDailyPatterns';
+import { joinDailyPatterns } from 'observation/utils/joinScrumPatterns';
 import { ObservationList } from './ObservationList';
-import { splitDailyPatterns } from 'observation/utils/splitDailyPatterns';
+import { splitScrumPatterns } from 'observation/utils/splitScrumPatterns';
 import SelectableButtonGroup from 'common/components/ui/SelectableButtonGroup';
+import capitaliseFirstLetter from 'common/utils/capitaliseFirstLetter';
 
 interface IProps{
     eventData: EventFormData
@@ -41,8 +41,9 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
   const [eventSearchTag, setEventSearchTag] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<NoteTag[]>([]);
   const [agilePatterns, setAgilePatterns] = useState<AgilePattern[]>([]);
-  const [dailyAntiPatterns, setDailyAntiPatterns] = useState<{ id: string; key: string }[]>([]);
-  const [dailyDesignPatterns, setDailyDesignPatterns] = useState<{ id: string; key: string }[]>([]);
+  const [scrumAntiPatterns, setScrumAntiPatterns] = useState<{ id: string; key: string }[]>([]);
+  const [scrumDesignPatterns, setScrumDesignPatterns] = useState<{ id: string; key: string }[]>([]);
+  const [eventCategory, setEventCategory] = useState<string | undefined>(undefined);
 
   const noteTypes = [
     { value: 'Observation', label: 'Observation' },
@@ -66,13 +67,13 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
     }
 
     if(observation.patterns){
-      const patterns = splitDailyPatterns(observation.patterns);
-      setDailyAntiPatterns(patterns.dailyAntiPatterns);
-      setDailyDesignPatterns(patterns.dailyDesignPatterns);
+      const patterns = splitScrumPatterns(observation.patterns);
+      setScrumAntiPatterns(patterns.scrumAntiPatterns);
+      setScrumDesignPatterns(patterns.scrumDesignPatterns);
     }
     else{
-      setDailyAntiPatterns([]);
-      setDailyDesignPatterns([]);
+      setScrumAntiPatterns([]);
+      setScrumDesignPatterns([]);
     }
   }
 
@@ -84,6 +85,7 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
   useEffect(() =>{
     if(!eventData._id) return;
     loadObservations(eventData._id);
+    setEventCategory(capitaliseFirstLetter(eventData.category));
   },[eventData]);
 
   const evalNotes = async () =>{
@@ -120,7 +122,6 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
 
     if(!eventData._id) {
       throw new Error(`Error, no event id provided`);
-      console.error(`Error, no event id provided`);
     }
 
     setIsLoading(true);
@@ -134,7 +135,7 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
         source: eventData.category,
         sourceId: eventData._id,
         tags: selectedTags.map(t => t.value),
-        patterns: joinDailyPatterns(dailyAntiPatterns, dailyDesignPatterns),
+        patterns: joinDailyPatterns(scrumAntiPatterns, scrumDesignPatterns),
         hypotheses: analysis?.hypotheses,
         scrumValuesAnalyses: analysis?.scrum_values_analysis,
         createdAt: observation? observation.createdAt: new Date(),
@@ -190,43 +191,49 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
             onSelect={(value) => setNoteType(value)} />
         </FormSectionContainer>
 
-        {/* Daily Scrum Anti-Patterns */}
-        <FormSectionContainer
-          isHr={true}
-          className='time-date'
-          icon={faTags}
-          title='Daily Scrum Anti Patterns'
-          description={`Find anti patterns observed (${dailyAntiPatterns.length} selected)`}
-          isCollapsed={true}
-        >
-            <div className='my-2'>
-              <p className='form-field-title d-none'>Search and select more than 1 anti pattern if needed</p>
-              <div className='mb-3'>
-                <DailyAntiPatterns 
-                  selected={dailyAntiPatterns}
-                  onSelectionChange={(patterns) => setDailyAntiPatterns(patterns)} />
-              </div>
-            </div>  
-        </FormSectionContainer>  
+        {/* Scrum Anti-Patterns */}
+        {eventCategory &&
+          <FormSectionContainer
+            isHr={true}
+            className='time-date'
+            icon={faTags}
+            title={`${eventCategory} Scrum Anti Patterns`}
+            description={`Find anti patterns observed (${scrumAntiPatterns.length} selected)`}
+            isCollapsed={true}
+          >
+              <div className='my-2'>
+                <p className='form-field-title d-none'>Search and select more than 1 anti pattern if needed</p>
+                <div className='mb-3'>
+                  <ScrumAntiPatterns 
+                    selected={scrumAntiPatterns}
+                    onSelectionChange={(patterns) => setScrumAntiPatterns(patterns)} 
+                    eventType={eventCategory} />
+                </div>
+              </div>  
+          </FormSectionContainer>  
+        } 
 
-        {/* Daily Scrum Design-Patterns */}
-        <FormSectionContainer
-          isHr={true}
-          className='time-date'
-          icon={faTags}
-          title='Daily Scrum Design Patterns'
-          description={`Find design patterns observed (${dailyDesignPatterns.length} selected)`}
-          isCollapsed={true}
-        >
-            <div className='my-2'>
-              <p className='form-field-title d-none'>Search and select more than 1 design pattern if needed</p>
-              <div className='mb-3'>
-                <DailyDesignPatterns
-                  selected={dailyDesignPatterns} 
-                  onSelectionChange={(patterns) => setDailyDesignPatterns(patterns)} />
-              </div>
-            </div>  
-        </FormSectionContainer> 
+        {/* Scrum Design-Patterns */} 
+        {eventCategory &&  
+          <FormSectionContainer
+            isHr={true}
+            className='time-date'
+            icon={faTags}
+            title={`${eventCategory} Scrum Design Patterns`}
+            description={`Find design patterns observed (${scrumDesignPatterns.length} selected)`}
+            isCollapsed={true}
+          >
+              <div className='my-2'>
+                <p className='form-field-title d-none'>Search and select more than 1 design pattern if needed</p>
+                <div className='mb-3'>
+                  <ScrumDesignPatterns
+                    selected={scrumDesignPatterns} 
+                    onSelectionChange={(patterns: React.SetStateAction<{ id: string; key: string; }[]>) => setScrumDesignPatterns(patterns)} 
+                    eventType={eventCategory} />
+                </div>
+              </div>  
+          </FormSectionContainer> 
+        }
 
         {/* Notes Text Area */}
         <FormSectionContainer

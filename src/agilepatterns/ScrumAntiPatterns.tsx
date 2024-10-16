@@ -6,10 +6,11 @@ import { ScrumPattern } from './types/AgilePattern';
 interface IPatternSelectorProps {
   //patterns: AgilePattern[];
   onSelectionChange: (selectedPatterns: { id: string; key: string }[]) => void;
-  selected: { id: string; key: string }[]
+  selected: { id: string; key: string }[],
+  eventType: string
 }
 
-const DailyAntiPatterns: React.FC<IPatternSelectorProps> = ({onSelectionChange, selected}: IPatternSelectorProps) => {
+const DailyAntiPatterns: React.FC<IPatternSelectorProps> = ({onSelectionChange, selected, eventType}: IPatternSelectorProps) => {
   const [selectedPatterns, setSelectedPatterns] = useState<{ id: string; key: string }[]>([]);
   const [antiPatterns, setAntiPatterns] = useState<ScrumPattern[]>([]);
 
@@ -20,7 +21,7 @@ const DailyAntiPatterns: React.FC<IPatternSelectorProps> = ({onSelectionChange, 
 
   const loadScrumPatterns = async () =>{
     if(antiPatterns && antiPatterns.length > 0) return;
-    const {records} =  await scrumAPI.getPatterns({eventType: 'daily'});
+    const {records} =  await scrumAPI.getPatterns({eventType: eventType});
     setAntiPatterns(records.filter(pattern => pattern.type === 'anti-pattern'));
   };
 
