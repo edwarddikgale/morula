@@ -9,6 +9,7 @@ import { pageNames } from "config/pageNames";
 import { findEventCatByVal } from "event/utils/findEventCategory";
 import ObservationForm from "observation/components/ObservationForm";
 import RightOverlay from "common/components/overlay/RightOverlay";
+import EventDetails from "./EventDetails";
 
 interface IProps {
     event: EventFormData;
@@ -60,7 +61,14 @@ const EventReadOnly: React.FC<IProps> = ({ id, event }) => {
                         <strong>Event Parent</strong>
                     </div>
                     <div className="col-md-9">
-                        <p>{parentId? parentId: 'None'}</p>
+                        {parentId
+                            &&
+                            <EventDetails 
+                                eventId={parentId} 
+                                preText={``}
+                                showSubDetails={true} />
+                        }
+
                     </div>
                     <div className="col-md-3">
                         <strong>Event Category</strong>

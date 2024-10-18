@@ -1,0 +1,1 @@
+export { fetchEventObservations } from './fetchEventObservation';

@@ -2,6 +2,7 @@ export interface Event {
     _id?: string;
     userId: string;
     title: string;
+    category?:string;
     organizer?: string;
     tags?: string[];
     locationType?: string;

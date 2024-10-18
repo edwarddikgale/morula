@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ActionListContainer from "../components/ActionListContainer";
 import CustomModal from "../components/CustomModal";
 import { Action } from "../types/Action";
+import { Event } from "event/types/Event";
 import useUserProfile from "profile/hooks/useProfile";
 import useEvent from "event/hooks/useEvent";
 import useQueryParameter from "common/url/useQueryParameter";
@@ -13,9 +14,13 @@ import { AppDispatch, RootState } from "store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { createUserAction, deleteUserAction, editUserAction, updateUserAction } from "store/actions/action";
 import { fetchAiUserActions, fetchEventUserActions } from "store/actions/action/fetchUserAction";
-import EventDetails from "event/components/EventDetails";
+import { Hypothesis } from "observation/types/ScrumAnalysis";
 
-const ActionListManager: React.FC = () => {
+interface ActionListManagerProps {
+  hypotheses?: Hypothesis[];
+}
+
+const ActionListManager: React.FC<ActionListManagerProps> = ({hypotheses}: ActionListManagerProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const eventId = useQueryParameter("eventId");
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -31,7 +36,8 @@ const ActionListManager: React.FC = () => {
 
   const generateActions = async () => {
     setIsLoadingActions(true);
-    dispatch(fetchAiUserActions({limit: 1}));
+    const myEvent: Event = event as Event;
+    dispatch(fetchAiUserActions({limit: 1, event: event as Event, hypothesisList: hypotheses || []}));
     setTimeout(() => setIsLoadingActions(false), 1000);
   }
 
@@ -70,6 +76,7 @@ const ActionListManager: React.FC = () => {
       {(loading) && <LoaderPrimary />}
       {(!userProfile && !userProfileLoading) && <p>No user profile available.</p>}
       {(!event && !eventLoading) && <p>No event data available.</p>}
+      {errorMessage && <div>{errorMessage}</div>}
 
       {/* Only render the action list if user profile and event are valid */}
       {userProfile && (
@@ -94,15 +101,15 @@ const ActionListManager: React.FC = () => {
                     children={
                       <div>
                           {isEditOpen && (
-                          <ActionEdit
-                            userProfile={userProfile}
-                            event={event}
-                            data={data || {} as UserAction}
-                            onCancel={() => setIsEditOpen(false)}
-                            onUpdate={onUpdateUserAction}
-                            onDelete={() => {}}
-                            index={index}
-                          />
+                            <ActionEdit
+                              userProfile={userProfile}
+                              event={event}
+                              data={data || {} as UserAction}
+                              onCancel={() => setIsEditOpen(false)}
+                              onUpdate={onUpdateUserAction}
+                              onDelete={() => {}}
+                              index={index}
+                            />
                         )}
                       </div>
                     }

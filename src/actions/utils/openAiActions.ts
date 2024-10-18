@@ -1,42 +1,54 @@
 import OpenAI from "openai";
-import {OpenAIResponse} from "../../common/ai/openai/models";
-import { SdgHeader } from "actions/types/Sdg";
 import { Action } from "actions/types/Action";
-import { getAgilePrincipleById } from "./getSdg";
+import { ActionGeneratorPayload } from "actions/types/ActionGeneratorPayload";
 
-const API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
+const actionGenerator = async (aiPrompt: string) => {
 
-const openAiActions = {
+    // Initialize OpenAI API client
+    const openai = new OpenAI({
+        apiKey: process.env.REACT_APP_OPENAI_API_KEY,
+        dangerouslyAllowBrowser: true
+    });
 
-    getActionBySdg : async (sdgNum: number) => {
-
-        const agilePrinciple = getAgilePrincipleById(sdgNum);
-        //const principleAsJson = JSON.stringify(agilePrinciple);
-        const aiPrompt = `Give me recommended actions for a scrum team to improve agile principle ${agilePrinciple.goal} and its relevant scrum values & scrum pillars? Please format the response as JSON of pairs {title, description}. make the description min 1 sentence`;
-        console.log(`ai prompt: ${aiPrompt}`);
-        
-        const openai = new OpenAI({
-            apiKey: API_KEY, //process.env.OPENAI_API_KEY,
-            dangerouslyAllowBrowser: true    
-        });
-
+    try {
+        // Call the OpenAI API
         const response = await openai.chat.completions.create({
-            model: "gpt-3.5-turbo",
+            model: `${process.env.REACT_APP_OPENAI_MODEL}`,  // Fetch model from environment variables
             messages: [
                 {
-                "role": "user",
-                "content": aiPrompt
+                    "role": "user",
+                    "content": aiPrompt
                 }
             ],
-            temperature: 0.5,
-            max_tokens: 64,
-            top_p: 1,
-            response_format: { type: "json_object" },
+            max_tokens: 1000,  // Increased token limit as per your requirements
+            temperature: 0.7
         });
 
-        const action = JSON.parse(response.choices[0].message.content as unknown as string) as Action;
-        return {...action, source: "ai"};
-    }      
-}
+        // Parse the AI response as JSON
+        const aiResponse = JSON.parse(response.choices[0].message.content as unknown as string) as Action[];
+        return aiResponse;
+    } catch (error: any) {
+        throw new Error(`Failed to get a response from OpenAI: ${error.message}`);
+    }
+};
+
+const openAiActions = {
+    getActions: async (details: ActionGeneratorPayload): Promise<Action[]> => {
+
+        // Create the AI prompt based on the provided details
+        const aiPrompt = `Give me recommended actions for a scrum team to improve a scrum event ${details.event.category} based on hypothesis generated from this event ${JSON.stringify(details.hypothesisList)}. Please format the response as JSON of pairs {title, description}. Make the description at least one sentence.`;
+
+        console.log(`AI prompt: ${aiPrompt}`);
+
+        // Call the action generator
+        const aiActions = await actionGenerator(aiPrompt);
+
+        // Return the generated actions from OpenAI
+        return aiActions.map((action) => ({
+            ...action,
+            source: "ai"
+        }));
+    }
+};
 
 export default openAiActions;

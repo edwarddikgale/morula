@@ -1,9 +1,8 @@
 import { SdgHeader } from "actions/types/Sdg";
 import sdgList from "common/data/sdg-n-indicators.json";
 
-const getAgilePrincipleById = (id: number): SdgHeader => {
-    const sdgHeader = sdgList.find((sdg) => sdg.id === id);
-    return sdgHeader || sdgList[0];
+const getAgilePrinciplesByIds = (ids: number[]): SdgHeader[] => {
+    return sdgList.filter((sdg) => ids.includes(sdg.id));
 };
 
-export {getAgilePrincipleById};
+export {getAgilePrinciplesByIds};

@@ -4,43 +4,44 @@ import {HypothesisList} from "../components/HypothesisList";
 import Tabs from "common/components/ui/Tab";
 import useQueryParameter from "common/url/useQueryParameter";
 import EventDetails from "event/components/EventDetails";
-import { useSelector } from "react-redux";
-import { RootState } from "store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "store/store";
 import useEvent from "event/hooks/useEvent";
 import { Hypothesis } from "observation/types/ScrumAnalysis";
-import { dailyObservationAPI } from "observation/utils/API";
+import { fetchEventObservations } from "store/actions/observation";
 
 const ActionHypotheses = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const eventId = useQueryParameter("eventId");
   const {list, loading} = useSelector((state: RootState) => state.action);
+  const {list:obsList, loading: obsLoading} = useSelector((state: RootState) => state.observation);
   const { event, loading: eventLoading, error } = useEvent(eventId);
   const [hypothesisList, setHypothesisList] = useState<Hypothesis[]>([]);
 
-  const fetchHypotheses = async(eventId: string) =>{
-    const response = await dailyObservationAPI.getObservationsByEvent(eventId);
-    let hypotheses: Hypothesis[] = [];
-    response.observations.forEach(obs => {
-      if(obs.hypotheses){
-        hypotheses = [...hypotheses, ...obs.hypotheses];
-      }
-    });
+  useEffect(() => {
+    if(obsList){
+      let hypotheses: Hypothesis[] = [];
+      obsList.forEach(obs => {
+        if(obs.hypotheses){
+          hypotheses = [...hypotheses, ...obs.hypotheses];
+        }
+      });  
+      setHypothesisList(hypotheses);  
+    }
 
-    setHypothesisList(hypotheses);
-  };
+  }, [obsList]);
 
-  useEffect(() =>{
-    console.log(`attempting to fetch event`);
+  useEffect(() => {
     if(event && event._id){
-      console.log(`Fetching event hypothesese`);
-      fetchHypotheses(event._id);
+      dispatch(fetchEventObservations(event._id));
     } 
-  }, [event])
+  }, [event]);
 
   const tabs = [
     {
       id: "tab1",
       label: "Actions",
-      content: <ActionListManager />,
+      content: <ActionListManager hypotheses={hypothesisList} />,
     },
     {
       id: "tab2",

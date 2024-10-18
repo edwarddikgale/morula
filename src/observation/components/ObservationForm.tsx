@@ -97,7 +97,13 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
     setError(null);
     
     try {
-      const response = await dailyObservationAPI.analyseScrumNotes(notes);
+      if(!eventCategory) throw new Error(`Unable to analyse unspecified event category`);
+      const response = await dailyObservationAPI.analyseScrumEvent({
+        notes: notes,
+        eventType: eventCategory,
+        antiPatterns: observation?.patterns?.filter(pattern => pattern.type === 'anti-pattern'),
+        designPatterns: observation?.patterns?.filter(pattern => pattern.type === 'design-pattern')
+      });
       setAnalysis(response);
      
       setIsLoading(false);

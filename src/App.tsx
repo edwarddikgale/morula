@@ -1,7 +1,7 @@
 import React from "react";
 import logo from "./logo.svg";
 
-import { ActionListPage, ActionListManager, ActionHypotheses, ActionIntroPage } from "./actions/pages/";
+import { ActionListManager, ActionHypotheses } from "./actions/pages/";
 import { LoginPage, RegisterPage, ResetPasswordPage } from "./auth";
 import { HomePage } from "./home/pages/HomePage";
 import { NotFound } from "./common/components/NotFound";
@@ -38,8 +38,6 @@ function App() {
         <Layout>
           <Routes>
             <Route element={<PrivateRoutes />}>
-              <Route path='/actions-intro' element={<ActionIntroPage />} />
-              <Route path='/actions-old' element={<ActionListPage />} />
               <Route path='/action-list' element={<ActionListManager />} />
               <Route path='/actions' element={<ActionHypotheses />} />
               <Route path='/dashboard' element={<DashboardPage />} />

@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { profileReducer } from "./slices/profileSlice";
 import { actionReducer } from "./slices/actionSlice";
+import { observationReducer } from "./slices/observationSlice";
 
 export const store = configureStore({
     reducer:{
         profile: profileReducer,
-        action: actionReducer
+        action: actionReducer,
+        observation: observationReducer
     }
 });
 

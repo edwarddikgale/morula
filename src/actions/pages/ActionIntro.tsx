@@ -6,4 +6,4 @@ export const ActionIntroPage = () => {
     return (
         <ActionInstructions />
     );
-}
+};

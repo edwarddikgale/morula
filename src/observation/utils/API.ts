@@ -1,5 +1,6 @@
 import { ScrumAnalysisResponse } from "observation/types/ScrumAnalysis";
 import { Observation } from "../types/Observation";
+import { ScrumPattern } from "agilepatterns/types/AgilePattern";
 
 export const API_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -11,13 +12,14 @@ export interface DeleteObservationResponse {success: boolean}
 
 export interface FetchEventObservationsResponse {observations: Observation[]}
 
+export interface AnalyseScrumEventPayload {notes: string, eventType: string, antiPatterns?: ScrumPattern[], designPatterns?: ScrumPattern[]}
 export const dailyObservationAPI = {
 
-  async analyseScrumNotes(notes: string): Promise<ScrumAnalysisResponse> {
-    const response = await fetch(`${API_URL}/scrum/analyze-scrum`, {
+  async analyseScrumEvent(details: AnalyseScrumEventPayload): Promise<ScrumAnalysisResponse> {
+    const response = await fetch(`${API_URL}/scrum/analyze-event`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({notes: notes}),
+      body: JSON.stringify(details),
     });
 
     if (!response.ok) {
