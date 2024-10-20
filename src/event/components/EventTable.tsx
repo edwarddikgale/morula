@@ -10,13 +10,17 @@ import { eventsAPI } from "../utils/API";
 import { extractMonthAndDate, formatDateFull } from "./utils/utils";
 import useAuthUserId from "auth/hooks/useAuthUser";
 import ContextMenu from "./ContextMenu";
+import eventCategories from '../data/eventCategory.json';
 
 import "react-calendar/dist/Calendar.css";
 import "./styles/event.css";
+import capitaliseFirstLetter from "common/utils/capitaliseFirstLetter";
+import { EventCategory } from "./types/EventCategory";
 
 type ValuePiece = Date | null;
 
 type Value = ValuePiece | [ValuePiece, ValuePiece];
+const categories: EventCategory[] = eventCategories;
 
 const daysUntilEvent = (eventDateTime: string): number => {
   const eventDate = new Date(eventDateTime);
@@ -52,7 +56,7 @@ const EventTable = () => {
     const filterStatus = event.target.value;
     setSelectedFilterValue(filterStatus);
     const filtered = events.filter(event => 
-      event.status.toLowerCase() === filterStatus || filterStatus === "all"
+      event.category.toLowerCase() === filterStatus || filterStatus === "all"
     );
     setFilteredEvents(filtered);
   };
@@ -202,9 +206,11 @@ const EventTable = () => {
                 value={selectedFilterValue}
                 onChange={handleFilterChange}
               >
-                <option value='all'>All</option>
-                <option value='draft'>Draft</option>
-                <option value='published'>Published</option>
+                {categories.map((category) =>(
+                      <option key={category.value} value={category.value} selected={selectedFilterValue === category.value}>
+                        {category.label}
+                      </option>
+                ))}
               </select>
             </div>
           </div>
@@ -242,7 +248,7 @@ const EventTable = () => {
                   <th>Event</th>
                   <th>Actions</th>
                   <th>Est. Attendees</th>
-                  <th>Status</th>
+                  <th>Category</th>
                   <th></th>
                 </tr>
               </thead>
@@ -282,7 +288,7 @@ const EventTable = () => {
                     </td>
                     <td>
                       {" "}
-                      <p className='mb-0 text-muted'>{event.status}</p>
+                      <p className='mb-0 text-muted'>{capitaliseFirstLetter(event.category)}</p>
                     </td>
                     <td>
                       {/* action */}
