@@ -2,13 +2,16 @@ import OpenAI from "openai";
 import { Action } from "actions/types/Action";
 import { ActionGeneratorPayload } from "actions/types/ActionGeneratorPayload";
 
-const actionGenerator = async (aiPrompt: string) => {
+interface ActionGeneratorResponse {recommendedActions: Action[];}
+const actionGenerator = async (aiPrompt: string): Promise<ActionGeneratorResponse> => {
 
     // Initialize OpenAI API client
     const openai = new OpenAI({
         apiKey: process.env.REACT_APP_OPENAI_API_KEY,
         dangerouslyAllowBrowser: true
     });
+
+    console.log(`Ai MODEL: ${process.env.REACT_APP_OPENAI_MODEL}`);
 
     try {
         // Call the OpenAI API
@@ -21,12 +24,14 @@ const actionGenerator = async (aiPrompt: string) => {
                 }
             ],
             max_tokens: 1000,  // Increased token limit as per your requirements
-            temperature: 0.7
+            temperature: 0.7,
+            response_format: { type: "json_object" }
         });
 
         // Parse the AI response as JSON
-        const aiResponse = JSON.parse(response.choices[0].message.content as unknown as string) as Action[];
+        const aiResponse = JSON.parse(response.choices[0].message.content as unknown as string);
         return aiResponse;
+
     } catch (error: any) {
         throw new Error(`Failed to get a response from OpenAI: ${error.message}`);
     }
@@ -41,7 +46,7 @@ const openAiActions = {
         console.log(`AI prompt: ${aiPrompt}`);
 
         // Call the action generator
-        const aiActions = await actionGenerator(aiPrompt);
+        const aiActions = (await actionGenerator(aiPrompt)).recommendedActions;
 
         // Return the generated actions from OpenAI
         return aiActions.map((action) => ({

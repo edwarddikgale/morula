@@ -10,7 +10,7 @@ export const actionGenerator = (details: ActionGeneratorPayload): Promise<Action
 
       //rndAGen = new RandomActionGenerator(selectedSdg, false);
 
-      const aiActions: any[] = [await openAiActions.getActions(details)];
+      const aiActions: any[] = [...await openAiActions.getActions(details)];
       //const globalActions: any[] = rndAGen.getRandomActions(2);
 
       //resolve([...globalActions, ...aiActions]);

@@ -7,6 +7,8 @@ import { IonIcon } from '@ionic/react';
 import { addCircleOutline, addCircleSharp, pencil } from 'ionicons/icons';
 import DeleteConfirmation from 'common/components/ui/DeleteConfirmation';
 
+import "./styles/action-list.css";
+
 interface ActionListProps {
   data: Action[];
   onDeleteItem: (index: number) => void;
@@ -19,7 +21,7 @@ const ActionList: React.FC<ActionListProps> = ({ data, onDeleteItem, onCreateIte
   return (
     <div className="list-group my-3 ms-2">
       {data.map((item, index) => (
-        <div key={item.id} className="list-group-item d-flex justify-content-between align-items-center mb-4 p-3 border rounded">
+        <div key={item.id || `key-${index}`} className="list-group-item d-flex justify-content-between align-items-center mb-4 p-3 border rounded">
           
           <RoundNumber text={`${index + 1}`} />
           <div>
@@ -28,7 +30,7 @@ const ActionList: React.FC<ActionListProps> = ({ data, onDeleteItem, onCreateIte
             <small>Created on: {item.createdAt? new Date(item.createdAt).toLocaleDateString(): 'Unknown'}</small>
           </div>
           <div>
-          <div className='d-flex justify-content-between mb-2 mr-2 '>
+          <div className='d-flex justify-content-between mb-2 mr-2'>
             {!item.id && 
               <div 
                 className="custom-button"
