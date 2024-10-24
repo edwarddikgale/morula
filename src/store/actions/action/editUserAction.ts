@@ -5,7 +5,6 @@ export const editUserAction = createAsyncThunk(
     'action/editUserAction',
     async (action: UserAction, { rejectWithValue }) => {
         try {
-            console.log(`Editing user action ${JSON.stringify(action)}`);
             // Since we are just editing locally, we can directly resolve the action.
             return Promise.resolve(action);
         } catch (error) {

@@ -114,7 +114,7 @@
     margin-right: 8px;
   }
 
-  .action-sdg{
+  .action-type{
     padding: 5px;
     border: 1px solid gray;
     letter-spacing: 0.1rem;
@@ -122,6 +122,7 @@
     font-weight: 900;
     border-radius: 10px;
     min-width: 70px;
+    max-width: 100px;
     margin-left: -10px;
     box-shadow: 0 2px 4px rgba(76, 69, 69, 0.2);
   }

@@ -7,7 +7,7 @@ export const updateUserAction = createAsyncThunk(
     'action/updateUserAction',
     async (action: UserAction, { rejectWithValue }) => {
         try {
-            const response = await actionAPI.createUserAction(action);
+            const response = await actionAPI.updateUserAction(action, action.id!);
             await delay(1000);
             return response;
         }

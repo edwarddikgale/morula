@@ -9,6 +9,7 @@ import { AppDispatch, RootState } from "store/store";
 import useEvent from "event/hooks/useEvent";
 import { Hypothesis } from "observation/types/ScrumAnalysis";
 import { fetchEventObservations } from "store/actions/observation";
+import { SprintSummary } from "event/components/SprintSummary";
 
 const ActionHypotheses = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -48,6 +49,11 @@ const ActionHypotheses = () => {
       label: "Hypotheses",
       content: <HypothesisList hypotheses={hypothesisList} />,
     },
+    {
+      id: "tab3",
+      label: "Sprint Summary",
+      content: <SprintSummary />
+    }
   ];
 
   return (

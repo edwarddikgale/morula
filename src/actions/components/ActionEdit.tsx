@@ -26,6 +26,7 @@ interface ActionEditProps {
 }
 
 const ActionEdit: React.FC<ActionEditProps> = (props: ActionEditProps) => {
+  
   const { userProfile, event, index, data, onUpdate, onCancel, onDelete } = props;
   const [canDelete, setCanDelete] = useState<boolean>(index && index === -1 ? false : true);
 
@@ -90,6 +91,7 @@ const ActionEdit: React.FC<ActionEditProps> = (props: ActionEditProps) => {
     title: "",
     description: "",
     requirement: "Recommended",
+    actionType: "Experiment",
     frequency: "NA",
     piResource: "",
     resourceUrl: "",
@@ -101,6 +103,7 @@ const ActionEdit: React.FC<ActionEditProps> = (props: ActionEditProps) => {
     ...(data || initialFormData),
     requirement: data?.requirement || "Recommended",
     frequency: data?.frequency || "NA",
+    actionType: data?.actionType || "Experiment"
   });
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -116,12 +119,10 @@ const ActionEdit: React.FC<ActionEditProps> = (props: ActionEditProps) => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
     onUpdate(index, formData);
   };
 
   const handleDelete = () => {
-    console.log("Object deleted");
     if (canDelete && index) onDelete(index);
   };
 
@@ -133,7 +134,6 @@ const ActionEdit: React.FC<ActionEditProps> = (props: ActionEditProps) => {
   // Task start
   const handleCreateTask = async () => {
     if (taskTitle === "" || selectedStatusValue === "") {
-      console.log("cancelling task creation");
       return;
     }
 
@@ -200,7 +200,47 @@ const ActionEdit: React.FC<ActionEditProps> = (props: ActionEditProps) => {
       <div className='p-3'>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <h4>Create/Update or Customise your action</h4>
+            <h4>{`${data.id? "Update": "Create"}`} your action</h4>
+          </div>
+          <div className='mb-3'>
+            <div className='row'>
+              <div className='col'>
+                <label className='form-label fw-bold'>Is this action Recommended or Required?</label>
+              </div>
+            </div>
+            <div className='row'>
+              <div className='col'>
+                <div className='btn-group' role='group' aria-label='actionType'>
+                  <input
+                    type='radio'
+                    className='btn-check'
+                    id='radioExperiment'
+                    name='actionType'
+                    value='Experiment'
+                    checked={formData.actionType === "Experiment"}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  <label className='btn btn-outline-warning' htmlFor='radioExperiment'>
+                    Experiment
+                  </label>
+
+                  <input
+                    type='radio'
+                    className='btn-check'
+                    id='radioConcrete'
+                    name='actionType'
+                    value='Concrete'
+                    checked={formData.actionType === "Concrete"}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  <label className='btn btn-outline-warning' htmlFor='radioConcrete'>
+                    Concrete
+                  </label>
+                </div>
+              </div>
+            </div>
           </div>
           <div className='mb-3'>
             <label className='form-label'>
@@ -232,7 +272,7 @@ const ActionEdit: React.FC<ActionEditProps> = (props: ActionEditProps) => {
               maxLength={1000}
             />
           </div>
-          <div className='d-none mb-3'>
+          <div className='mb-3'>
             <div className='row'>
               <div className='col'>
                 <label className='form-label fw-bold'>Is this action Recommended or Required?</label>
@@ -301,7 +341,7 @@ const ActionEdit: React.FC<ActionEditProps> = (props: ActionEditProps) => {
               </div>
             </div>
           )}
-          <div className='d-none mb-3'>
+          <div className='mb-3'>
             <div className='row'>
               <div className='col'>
                 <label className='form-label'>

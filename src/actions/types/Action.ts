@@ -4,6 +4,7 @@ export interface Action {
     description: string;
     requirement: string | null,
     frequency: string | null,
+    actionType: string | null,
     piResource: string | null,
     resourceUrl: string | null,
     source: string | null,

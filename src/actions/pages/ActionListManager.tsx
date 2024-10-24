@@ -66,6 +66,7 @@ const ActionListManager: React.FC<ActionListManagerProps> = ({hypotheses}: Actio
 
   const onUpdateUserAction = (index: number | null, item: UserAction) => { 
     dispatch(updateUserAction(item));
+    setIsEditOpen(false);
   };
 
   const handleSdgChange = () => {} //setSelectedSdg(sdg);

@@ -27,7 +27,10 @@ const ActionList: React.FC<ActionListProps> = ({ data, onDeleteItem, onCreateIte
           <div>
             <h5>{item.title}</h5>
             <LimitedCharacters text={item.description} limit={200} />
-            <small>Created on: {item.createdAt? new Date(item.createdAt).toLocaleDateString(): 'Unknown'}</small>
+            <div className=''>
+              <p className='action-type'>{item.actionType}</p>
+              <small className='ms-auto'>Created on: {item.createdAt? new Date(item.createdAt).toLocaleDateString(): 'Unknown'}</small>
+            </div>
           </div>
           <div>
           <div className='d-flex justify-content-between mb-2 mr-2'>

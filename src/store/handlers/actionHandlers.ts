@@ -78,7 +78,6 @@ export const handleFetchEventUserActions = {
       state.processingDone = false;
     },
     fulfilled: (state: UserActionState, action: PayloadAction<Action[]>) => {
-      console.log(`Hello...`);  
       state.loading = false;
       state.error = null;
       state.list = [...(action.payload as unknown as UserAction[]), ...state.list];
@@ -170,6 +169,12 @@ export const handleUpdateUserAction = {
     fulfilled: (state: UserActionState, action: PayloadAction<UpdateUserActionResponse>) => {
         state.loading = false;
         state.data = action.payload.userAction;
+        const index = state.list.findIndex(item => item.id === action.payload.userAction.id);
+        if (index !== -1) {// If the action exists, replace it
+            state.list[index] = action.payload.userAction;
+        } else {// If the action doesn't exist, add it to the list
+            state.list.push(action.payload.userAction);
+        }
         state.error = null;
         state.isProcessing = false;
         state.processingDone = true;
