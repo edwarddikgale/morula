@@ -4,7 +4,7 @@ interface GetSprintsResponse {events: any[]};
 
 export const eventsAPI = {
   async createEvent(formData: any) {
-    const response = await fetch(`${API_URL}/events`, {
+    const response = await fetch(`c`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
@@ -105,6 +105,19 @@ export const eventsAPI = {
 
     if (!response.ok) {
       throw new Error(`Failed to fetch event summary for event with id ${eventId}!`);
+    }
+
+    return await response.json();  
+  },
+
+  async getSprintSummary(eventId: string){
+    const response = await fetch(`${API_URL}/scrum/sprint-summary/${eventId}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch sprint summary for event with id ${eventId}!`);
     }
 
     return await response.json();  

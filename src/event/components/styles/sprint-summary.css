@@ -1,0 +1,48 @@
+/* Styling for the list-group to match a sleek, modern design */
+.styled-list .list-group-item {
+    border: none;
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.5rem;
+    border-radius: 12px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .styled-list .list-group-item:hover {
+    background-color: #eaeaea;
+  }
+  
+  .styled-list .fw-bold {
+    color: #333;
+  }
+  
+  /* Styling the card titles */
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: #333;
+  }
+  
+  /* Enhancing the card shadow for a prominent effect */
+  .card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05), 0 10px 20px rgba(0, 0, 0, 0.1), 0 20px 40px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+  }
+  
+  /* Adding a more prominent shadow on hover */
+  .card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Larger shadow on hover */
+  }
+  
+  /* General padding and spacing */
+  .card-body {
+    padding: 1.5rem;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: auto;
+  }
+  

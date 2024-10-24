@@ -52,7 +52,7 @@ const ActionHypotheses = () => {
     {
       id: "tab3",
       label: "Sprint Summary",
-      content: <SprintSummary />
+      content: <SprintSummary eventId={event?._id} />
     }
   ];
 
