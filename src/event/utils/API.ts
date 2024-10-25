@@ -4,7 +4,7 @@ interface GetSprintsResponse {events: any[]};
 
 export const eventsAPI = {
   async createEvent(formData: any) {
-    const response = await fetch(`c`, {
+    const response = await fetch(`${API_URL}/events/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),

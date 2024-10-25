@@ -48,13 +48,17 @@ const ActionHypotheses = () => {
       id: "tab2",
       label: "Hypotheses",
       content: <HypothesisList hypotheses={hypothesisList} />,
-    },
-    {
-      id: "tab3",
-      label: "Sprint Summary",
-      content: <SprintSummary eventId={event?._id} />
     }
   ];
+
+  // Conditionally add the Sprint Summary tab if event.category is 'sprint'
+  if (event?.category === 'sprint') {
+    tabs.push({
+      id: "tab3",
+      label: "Sprint Summary",
+      content: <SprintSummary eventId={event?._id} />,
+    });
+  }
 
   return (
     <div className='container-fluid '>
