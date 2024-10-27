@@ -1,14 +1,18 @@
 /* Styling for the list-group to match a sleek, modern design */
 .styled-list .list-group-item {
     border: none;
-    padding: 1rem 1.25rem;
-    margin-bottom: 0.5rem;
+    border-bottom: 1px solid #f1eaea;
+    padding: 10px;
     border-radius: 12px;
+    font-size: 1.1rem;
+    color: #343a40;
+    background-color: #ffffff;
     transition: background-color 0.3s ease;
+    margin-bottom: 8px;
   }
   
   .styled-list .list-group-item:hover {
-    background-color: #eaeaea;
+    background-color: #e9ecef;
   }
   
   .styled-list .fw-bold {
@@ -43,6 +47,28 @@
   
   .container {
     max-width: 1200px;
-    margin: auto;
+    margin-top: 20px;
   }
+
+  .custom-card {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    border: none;
+  }
+
+  .icon-green {
+    color: #28a745;
+    margin-bottom: 10px;
+  }
+  
+  .icon-yellow {
+    color: #ffc107;
+    margin-bottom: 10px;
+  }
+  
+  .icon-red {
+    color: #dc3545;
+    margin-bottom: 10px;
+  }
+
+
   
