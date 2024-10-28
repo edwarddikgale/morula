@@ -3,7 +3,7 @@ import { eventsAPI } from 'event/utils/API';
 import React, { useEffect, useState } from 'react';
 import { Card, Row, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartLine, faUsers, faCheckCircle, faExclamationCircle, faList } from '@fortawesome/free-solid-svg-icons';
+import { faChartLine, faUsers, faCheckCircle, faExclamationCircle, faList, faBullseye, faEye, faHandshake, faHeart } from '@fortawesome/free-solid-svg-icons';
 import './styles/sprint-summary.css';
 import { SprintEvaluation } from './types/SprintEvaluation';
 
@@ -26,7 +26,7 @@ const SprintSummary: React.FC<{ eventId?: string }> = ({ eventId }) => {
       {/* Attendance Stats */}
       <Row className="mb-4">
         <Col md={3}>
-          <Card className="text-center custom-card">
+          <Card className="text-center custom-card summary-count">
             <Card.Body>
               <FontAwesomeIcon icon={faChartLine} className="icon-green" size="lg" />
               <Card.Title>Number of Events</Card.Title>
@@ -34,8 +34,8 @@ const SprintSummary: React.FC<{ eventId?: string }> = ({ eventId }) => {
             </Card.Body>
           </Card>
         </Col>
-        <Col md={2}>
-          <Card className="text-center custom-card">
+        <Col md={3}>
+          <Card className="text-center custom-card summary-count">
             <Card.Body>
               <FontAwesomeIcon icon={faUsers} className="icon-yellow" size="lg" />
               <Card.Title>Daily Average Attendance</Card.Title>
@@ -44,7 +44,7 @@ const SprintSummary: React.FC<{ eventId?: string }> = ({ eventId }) => {
           </Card>
         </Col>
         <Col md={2}>
-          <Card className="text-center custom-card">
+          <Card className="text-center custom-card summary-count">
             <Card.Body>
               <FontAwesomeIcon icon={faUsers} className="icon-green" size="lg" />
               <Card.Title>Retrospective Attendance</Card.Title>
@@ -53,7 +53,7 @@ const SprintSummary: React.FC<{ eventId?: string }> = ({ eventId }) => {
           </Card>
         </Col>
         <Col md={2}>
-          <Card className="text-center custom-card">
+          <Card className="text-center custom-card summary-count">
             <Card.Body>
               <FontAwesomeIcon icon={faUsers} className="icon-yellow" size="lg" />
               <Card.Title>Refinement Attendance</Card.Title>
@@ -61,12 +61,70 @@ const SprintSummary: React.FC<{ eventId?: string }> = ({ eventId }) => {
             </Card.Body>
           </Card>
         </Col>
-        <Col md={3}>
-          <Card className="text-center custom-card">
+        <Col md={2}>
+          <Card className="text-center custom-card summary-count">
             <Card.Body>
               <FontAwesomeIcon icon={faUsers} className="icon-red" size="lg" />
               <Card.Title>Review Attendance</Card.Title>
               <Card.Text className="fw-bold">{summary.attendance.review}</Card.Text>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+      {/* Scrum Value Averages */}
+      <Row className="mb-4">
+        <Col md={3}>
+          <Card className="text-center custom-card summary-count">
+            <Card.Body>
+              <FontAwesomeIcon icon={faCheckCircle} className="icon-green" size="lg" />
+              <Card.Title>Commitment</Card.Title>
+              <Card.Text className="fw-bold">
+                {summary.scrumValueAverages.commitment !== null ? summary.scrumValueAverages.commitment : 'N/A'}
+              </Card.Text>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={3}>
+          <Card className="text-center custom-card summary-count">
+            <Card.Body>
+              <FontAwesomeIcon icon={faBullseye} className="icon-blue" size="lg" />
+              <Card.Title>Focus</Card.Title>
+              <Card.Text className="fw-bold">
+                {summary.scrumValueAverages.focus !== null ? summary.scrumValueAverages.focus : 'N/A'}
+              </Card.Text>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={2}>
+          <Card className="text-center custom-card summary-count">
+            <Card.Body>
+              <FontAwesomeIcon icon={faEye} className="icon-purple" size="lg" />
+              <Card.Title>Openness</Card.Title>
+              <Card.Text className="fw-bold">
+                {summary.scrumValueAverages.openness !== null ? summary.scrumValueAverages.openness : 'N/A'}
+              </Card.Text>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={2}>
+          <Card className="text-center custom-card summary-count">
+            <Card.Body>
+              <FontAwesomeIcon icon={faHandshake} className="icon-orange" size="lg" />
+              <Card.Title>Respect</Card.Title>
+              <Card.Text className="fw-bold">
+                {summary.scrumValueAverages.respect !== null ? summary.scrumValueAverages.respect : 'N/A'}
+              </Card.Text>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={2}>
+          <Card className="text-center custom-card summary-count">
+            <Card.Body>
+              <FontAwesomeIcon icon={faHeart} className="icon-red" size="lg" />
+              <Card.Title>Courage</Card.Title>
+              <Card.Text className="fw-bold">
+                {summary.scrumValueAverages.courage !== null ? summary.scrumValueAverages.courage : 'N/A'}
+              </Card.Text>
             </Card.Body>
           </Card>
         </Col>

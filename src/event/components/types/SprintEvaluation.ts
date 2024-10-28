@@ -38,6 +38,14 @@ interface Attendance {
     note: string;
     explanation: string;
   }
+
+  interface ScrumValuesAverages {
+    commitment: number | null;
+    focus: number | null;
+    openness: number | null;
+    respect: number | null;
+    courage: number | null;
+  }
   
   interface SprintEvaluation {
     attendance: Attendance;
@@ -53,6 +61,7 @@ interface Attendance {
     };
     actions: string[];
     eventCount: number;
+    scrumValueAverages: ScrumValuesAverages;
   }
 
 export type {SprintEvaluation};
