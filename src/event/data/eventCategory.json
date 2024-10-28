@@ -9,7 +9,7 @@
     {"value": "refinement", "label": "Refinement"},
     {"value": "reporting", "label": "Reporting"},
     {"value": "research", "label": "Research"},
-    {"value": "retro", "label": "Retrospective"},
+    {"value": "retrospective", "label": "Retrospective"},
     {"value": "social", "label": "Social"},
     {"value": "sprint_planning_1", "label": "Sprint Planning (1)"},
     {"value": "sprint_planning_2", "label": "Sprint Planning (2)"},
