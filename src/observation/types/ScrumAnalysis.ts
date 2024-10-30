@@ -6,6 +6,7 @@ interface ScrumValueAnalysis {
   interface Hypothesis {
     hypothesis: string;
     explanation: string;
+    probability: number;
   }
   
   interface ScrumValuesAnalyses{

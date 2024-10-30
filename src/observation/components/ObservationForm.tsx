@@ -13,10 +13,10 @@ import noteTags from '../data/noteTags.json';
 import { NoteTag } from 'observation/types/NoteTag';
 import ScrumValueRating from 'rating/ScrumValueRating';
 import ScrumAntiPatterns from 'agilepatterns/ScrumAntiPatterns';
-import { ScrumAnalysisResponse } from 'observation/types/ScrumAnalysis';
+import { Hypothesis, ScrumAnalysisResponse } from 'observation/types/ScrumAnalysis';
 import ScrumDesignPatterns from 'agilepatterns/ScrumDesignPatterns';
 import HypothesisList from './HypothesisList';
-import { dailyObservationAPI } from 'observation/utils/API';
+import { scrumEventObservationAPI } from 'observation/utils/API';
 import { AgilePattern } from 'agilepatterns/types';
 import { joinDailyPatterns } from 'observation/utils/joinScrumPatterns';
 import { ObservationList } from './ObservationList';
@@ -78,7 +78,7 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
   }
 
   const loadObservations = async (eventId: string) =>{
-    const response = await dailyObservationAPI.getObservationsByEvent(eventId);
+    const response = await scrumEventObservationAPI.getObservationsByEvent(eventId);
     setObservations(response.observations);
   }
 
@@ -97,16 +97,18 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
     setError(null);
     
     try {
+      
       if(!eventCategory) throw new Error(`Unable to analyse unspecified event category`);
-      const response = await dailyObservationAPI.analyseScrumEvent({
+      const response = await scrumEventObservationAPI.analyseScrumEvent({
         notes: notes,
         eventType: eventCategory,
         antiPatterns: observation?.patterns?.filter(pattern => pattern.type === 'anti-pattern'),
         designPatterns: observation?.patterns?.filter(pattern => pattern.type === 'design-pattern')
       });
+
       setAnalysis(response);
-     
       setIsLoading(false);
+
     } catch (err) {
       setError('Failed to analyze Scrum values. Please try again.');
       setIsLoading(false);
@@ -115,7 +117,7 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
 
   const handleObservationDelete = async (observation: Observation) =>{
     if(!observation?._id) throw Error(`Cannot delete an item with no id`);
-    const response: any = await dailyObservationAPI.deleteObservation(observation?._id);
+    const response: any = await scrumEventObservationAPI.deleteObservation(observation?._id);
 
     if(response.success){
         const updatedObsList = observations.filter((item) => item._id !== observation?._id);
@@ -125,7 +127,6 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-    console.log(`Creating an observation`);
     if(!eventData._id) {
       throw new Error(`Error, no event id provided`);
     }
@@ -142,15 +143,15 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
         sourceId: eventData._id,
         tags: selectedTags.map(t => t.value),
         patterns: joinDailyPatterns(scrumAntiPatterns, scrumDesignPatterns),
-        hypotheses: analysis?.hypotheses,
+        hypotheses: observation?.hypotheses || analysis?.hypotheses,
         scrumValuesAnalyses: analysis?.scrum_values_analysis,
         createdAt: observation? observation.createdAt: new Date(),
         updatedAt: new Date()
       };
       
       const response = observation?._id? 
-        await dailyObservationAPI.updateObservation(record, observation._id)
-        : await dailyObservationAPI.createObservation(record);
+        await scrumEventObservationAPI.updateObservation(record, observation._id)
+        : await scrumEventObservationAPI.createObservation(record);
 
       const unalteredList = observations.filter(obs => obs._id !== observation?._id);
       setObservations([response, ...unalteredList]);
@@ -167,6 +168,22 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
     const arr = selectedOptions.map((item: any) => item.value);
     setSelectedTags(selectedOptions);
     setEventSearchTag(arr);
+  };
+
+  const handleHypothesisUpdate = (index: number, updatedHypothesis: Hypothesis) => {
+   
+    if(!observation) return;
+
+    setObservation((prev: any) => {
+      const updatedHypotheses = [...(prev.hypotheses || [])]; // Copy current hypotheses
+      updatedHypotheses[index] = updatedHypothesis; // Update specific hypothesis at index
+  
+      return {
+        ...prev,
+        hypotheses: updatedHypotheses, // Set the updated hypotheses array
+      };
+    });
+
   };
 
   return (
@@ -330,6 +347,7 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
               <div className='mb-3'>
                 <HypothesisList 
                   hypotheses={analysis?.hypotheses}
+                  onUpdate={handleHypothesisUpdate}
                 />
               </div>
             </div>  

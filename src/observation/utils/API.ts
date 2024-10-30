@@ -13,7 +13,7 @@ export interface DeleteObservationResponse {success: boolean}
 export interface FetchEventObservationsResponse {observations: Observation[]}
 
 export interface AnalyseScrumEventPayload {notes: string, eventType: string, antiPatterns?: ScrumPattern[], designPatterns?: ScrumPattern[]}
-export const dailyObservationAPI = {
+export const scrumEventObservationAPI = {
 
   async analyseScrumEvent(details: AnalyseScrumEventPayload): Promise<ScrumAnalysisResponse> {
     const response = await fetch(`${API_URL}/scrum/analyze-event`, {
