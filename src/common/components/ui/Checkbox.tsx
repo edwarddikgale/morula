@@ -28,7 +28,7 @@ export const Checkbox = ({ label, checked, onChange, isRounded, borderStyle = 'd
         id={label}
         style={{ borderColor: borderStyle === 'dark-bordered' ? '#fff' : '' }} // Light border color
       />
-      <label className="form-check-label" htmlFor={label}>
+      <label className="form-check-label ms-2 mt-1" htmlFor={label}>
         {label}
       </label>
     </div>

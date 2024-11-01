@@ -18,7 +18,7 @@ const TimeZoneSelect: React.FC<TimeZoneSelectProps> = ({ value, onChange, classN
                 value={value}
                 onChange={onChange}
             >
-                {TimeZones.map((tz) => (
+                {TimeZones.map((tz:any) => (
                     <option key={tz.value} value={tz.value}>
                         {tz.label}
                     </option>
@@ -29,4 +29,4 @@ const TimeZoneSelect: React.FC<TimeZoneSelectProps> = ({ value, onChange, classN
     );
 };
 
-export default TimeZoneSelect;
+export {TimeZoneSelect};

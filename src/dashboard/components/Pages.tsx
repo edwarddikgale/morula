@@ -46,24 +46,26 @@ const Pages = () => {
           </div>
         </div>
         <div className='col-md-6 '>
-          <div className='page-card' onClick={() => navigate(pageNames.SETTINGS)}>
+          <div className='page-card' onClick={() => navigate(pageNames.TEAMS)}>
             <div className='d-flex'>
               <span>
                 <SettingIcon />
               </span>
-              <h3 className='ms-4 title'>IS020121 Evidence</h3>
+              <h3 className='ms-4 title'>My Teams</h3>
             </div>
 
             <p className='text-muted mt-3'>
-              Gathering evidence for your implementation of  ISO 20121 will support your reporting and/or certification process 
+              Manage your teams including team members
             </p>
 
             <div>
+              {false &&
               <ProgressAlert 
                 data={orgSettings?.OrgSettings} 
                 emptyText={"Please complete your ISO2012 info"} 
                 completionRateEval={evalOrgSettingsProgress}
                />
+              }
             </div>
           </div>
         </div>

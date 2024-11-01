@@ -29,6 +29,7 @@ import ActionBoardPage from "./board/pages/ActionBoardPage";
 import PrinciplesSelectorPage from "principles/pages/PrinciplesSelectorPage";
 import PrinciplesSelectedPage from "principles/pages/PrinciplesSelectedPage";
 import EventReport from "event/pages/EventReport";
+import TeamPage from "team/pages/TeamPage";
 
 function App() {
   useEffect(() => {}, []);
@@ -51,6 +52,7 @@ function App() {
               <Route path='/actionboard' element={<ActionBoardPage />} />
               <Route path='/principlesselector' element={<PrinciplesSelectorPage />} />
               <Route path='/principlesselected' element={<PrinciplesSelectedPage />} />
+              <Route path='/teams' element={<TeamPage />} />
             </Route>
             <Route path='/' element={<HomePage />} />
             <Route path='/evidence' element={<EvidencePage />} />

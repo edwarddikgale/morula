@@ -26,7 +26,7 @@ import { pageNames } from "../../config/pageNames";
 import Select from "react-select";
 import useAuthUserId from "auth/hooks/useAuthUser";
 
-import TimeZoneSelect from "./TimeZoneSelect";
+import {TimeZoneSelect} from "common/components/ui/";
 import { EventTag } from "./types/EventTag";
 import { EventCategory } from "./types/EventCategory";
 

@@ -17,5 +17,6 @@ export const pageNames = {
   REGISTER: "/register",
   RESET_PWD: "/reset-password",
   SDG_SELECTOR: "/principlesselector",
-  SDG_SELECTED: "/principlesselected"
+  SDG_SELECTED: "/principlesselected",
+  TEAMS: "/teams"
 };
