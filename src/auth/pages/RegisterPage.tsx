@@ -32,7 +32,7 @@ export const RegisterPage = () => {
 
       try {
         setIsLoading(false);
-        navigate(pageNames.ACTIONS_INTRO);
+        navigate(pageNames.DASHBOARD);
       } catch (error) {
         console.log(`🚀 ~ signup error`, error);
         setErrorMessage('There was a problem signing you up, please check your inputs and try again');
