@@ -169,7 +169,7 @@ const EventTable = () => {
                 placeholder='Search events'
               />
             </div>
-            <div className='bt-grp d-flex align-items-center my-2'>
+            <div className='bt-grp d-flex align-items-center' style={{marginTop: "-10px"}}>
               {/* list button */}
               <button className='btn btn-primary btn-list me-0 me-md-3' onClick={() => handleList()}>
                 <span className='me-2'>
