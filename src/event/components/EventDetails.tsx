@@ -21,12 +21,12 @@ const EventDetails: React.FC<EventDetailsProps> = ({ eventId, showSubDetails = t
     return (
         <div>
             {event ? (
-                <div className='mx-4 my-2 ms-2'>
+                <div className='my-2'>
                     <h5 className='d-flex align-items-center'>
                         <strong className='me-2'>{preText}</strong>
                         <Link to={`${pageNames.EVENT_READONLY}/${eventId}`} style={{ textDecoration: "none", display: 'flex', alignItems: 'center' }}>
-                        <FontAwesomeIcon icon={faChevronLeft} className='me-2' />
-                        <span>{event.title}</span>
+                            <FontAwesomeIcon icon={faChevronLeft} className='me-2' />
+                            <span>{event.title}</span>
                         </Link>
                     </h5>
                     {showSubDetails && (

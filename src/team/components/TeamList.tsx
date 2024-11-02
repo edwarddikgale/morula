@@ -20,6 +20,9 @@ interface TeamListProps {
 const TeamList: React.FC<TeamListProps> = ({ data, onDeleteItem, onEditItem, onViewMembers, isLoading }) => {
   return (
     <div className="list-group my-3 ms-2">
+      {(!data || data.length === 0) &&
+        <div className="text-warning">You currently have no teams setup.</div>
+      }
       {data.map((team, index) => (
         <div key={team._id || `key-${index}`} className="list-group-item d-flex justify-content-between align-items-center mb-4 p-3 border rounded">
           <RoundNumber text={`${index + 1}`} />

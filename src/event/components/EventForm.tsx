@@ -258,7 +258,7 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
         }).then(() => {
           setIsLoading(false);
           resetFrom();
-          navigate(pageNames.EVENT);
+          navigate(`${pageNames.EVENT_READONLY}/${res._id}`);
         });
       }
     } catch (error) {

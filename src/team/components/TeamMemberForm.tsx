@@ -18,7 +18,7 @@ const TeamMemberForm: React.FC<TeamMemberFormProps> = ({ member, onSubmit, onDel
   const [nickName, setNickName] = useState(member?.nickName || '');
   const [jobTitle, setJobTitle] = useState(member?.jobTitle || '');
   const [description, setDescription] = useState(member?.description || '');
-  const [isActive, setIsActive] = useState<boolean>(member?.isActive || true);
+  const [isActive, setIsActive] = useState<boolean>(member?.isActive || false);
   const [workStartTime, setWorkStartTime] = useState(member?.workStartTime || '');
   const [workEndTime, setWorkEndTime] = useState(member?.workEndTime || '');
   const [timeZone, setTimeZone] = useState(member?.timeZone || 'America/New_York');
@@ -133,9 +133,9 @@ const TeamMemberForm: React.FC<TeamMemberFormProps> = ({ member, onSubmit, onDel
           <div className="form-check mb-3">
             <Checkbox 
                 label={'Active'} 
-                checked={false}
+                checked={isActive}
                 onChange={(checked:boolean) => setIsActive(checked)}            
-            />
+            /> {isActive}
           </div>
         </FormSectionContainer>
 

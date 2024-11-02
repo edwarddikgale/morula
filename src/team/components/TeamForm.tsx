@@ -16,7 +16,7 @@ const TeamForm: React.FC<TeamFormProps> = ({ team, onSubmit, onDelete, onCancel 
   const [teamName, setTeamName] = useState(team?.name || '');
   const [description, setDescription] = useState(team?.description || '');
   const [code, setCode] = useState(team?.code || '');
-  const [isActive, setIsActive] = useState<boolean>(team?.isActive || true);
+  const [isActive, setIsActive] = useState<boolean>(team?.isActive || false);
   const [dailyStartTime, setDailyStartTime] = useState(team?.dailyStartTime || '');
   const [dailyEndTime, setDailyEndTime] = useState(team?.dailyEndTime || '');
   const [timeZone, setTimeZone] = useState(team?.timeZone || 'America/New_York');
@@ -103,7 +103,7 @@ const TeamForm: React.FC<TeamFormProps> = ({ team, onSubmit, onDelete, onCancel 
           <div className="form-check mb-3">
             <Checkbox 
                 label={'Active '} 
-                checked={false}
+                checked={isActive}
                 onChange={(checked:boolean) => setIsActive(checked)}            
             />
           </div>
