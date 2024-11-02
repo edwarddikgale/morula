@@ -33,6 +33,10 @@ import { EventCategory } from "./types/EventCategory";
 import eventTags from '../data/eventTags.json';
 import eventCategories from '../data/eventCategory.json';
 import { findEventCatByVal } from "event/utils/findEventCategory";
+import EventDetails from "./EventDetails";
+import TeamSelect from "./selections/TeamSelect";
+import { teamService } from "team/services/teamService";
+import { Team } from "team/types/Team";
 
 const tagOptions: EventTag[] = eventTags;
 const categories: EventCategory[] = eventCategories;
@@ -59,23 +63,25 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [formIsPopulated, setFormIsPopulated] = useState<boolean>(false);
   // basic section
+  const [eventTeamId, setEventTeamId] = useState<string | null>(null);
   const [eventTitle, setEventTitle] = useState("");
   const [eventOrganizer, setEventOrganizer] = useState("Event Organizer Inc.");
   const [eventType, setEventType] = useState("");
   const [eventCategory, setEventCategory] = useState("");
   const [eventParent, setEventParent] = useState<string | null>(null);
   const [sprints, setSprints] = useState<EventFormData[]>([]);
+  const [teams, setTeams] = useState<Team[]>([]);
   const [eventSearchTag, setEventSearchTag] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<EventTag[]>([]);
   const [estimatedAttendees, setEstimatedAttendees] = useState<number>(0);
 
   // location section
   const [searchVenueQuery, setSearchVenueQuery] = useState("");
-  const [activeEventLocation, setActiveEventLocation] = useState("");
+  const [activeEventLocation, setActiveEventLocation] = useState("Online");
   const [isMultiVenue, setIsMultiVenue] = useState<boolean>(false);
 
   // date and time
-  const [isRecurring, setIsRecurring] = useState<boolean | null>(null);
+  const [isRecurring, setIsRecurring] = useState<boolean | null>(false);
   const [eventStartDate, setEventStartDate] = useState(formatToDateString(new Date()));
   const [eventStartTime, setEventStartTime] = useState(formatToTimeString(new Date()));
 
@@ -103,10 +109,16 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
     const response =  await eventsAPI.getSprints(userId, teamId);
     setSprints(response.events.map(evt => evt as EventFormData));
   }
+
+  const loadTeams = async (userId: string) => { 
+    const response =  await teamService.getTeams(userId);
+    setTeams(response.teams.filter(team => team.isActive) || []);
+  }
     // Effect to pre-populate form fields if event prop is provided
     useEffect(() => {
       
       if (event && !formIsPopulated) {
+        setEventTeamId(event.teamId || null);
         setEventTitle(event.title);
         setEstimatedAttendees(event.attendee_estimate || 0);
         setEventOrganizer(event.organizer || "Event Organizer Inc.");
@@ -117,7 +129,7 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
         //setSelectedTags(eventTags);
         setSelectedTags(tagOptions.filter(tag => eventTags.includes(tag.value)));
         setSearchVenueQuery(event.venue || "");
-        setActiveEventLocation(event.locationType || "");
+        setActiveEventLocation(event.locationType || "Online");
         setIsRecurring(event.isRecurring || false);
         setIsMultiVenue(event.isMultiVenue || false);
         setEventStartDate(formatToDateString(new Date(event.startDate.toString())));
@@ -140,8 +152,10 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
     useEffect(()=>{
       if(userId){
         loadSprints(userId);
+        loadTeams(userId);
       }
     }, [userId])
+
   const handleStartCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
     setShowStartTime(checked);
@@ -181,8 +195,17 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
     setEventCategory(event.target.value);
 
     if(category && (!eventTitle || eventTitle.length === 0)){
-      setEventTitle(`${category.label} Meeting`);
+      setEventTitle(`${category.title?? 'Meeting'} `);
     }
+
+    if(category && (!eventSummary || eventSummary.length === 0)){
+      setEventSummary(`${category.summary}`);
+    }
+
+    if(category && (!content || content.length === 0)){
+      setContent(`${category.summary}`);
+    }
+
   };
 
   const handleTagChange = (selectedOptions: any) => {
@@ -191,6 +214,16 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
     setEventSearchTag(arr);
   };
 
+  const handleTeamChange = (teamId: string | null) =>{
+    setEventTeamId(teamId);
+    if(!teamId) return;
+    const team = teams.filter(team => team._id === teamId)[0];
+    if(eventCategory === 'daily'){ //todo: convert this to an enum
+      setEventStartTime(team.dailyStartTime);
+      setEventEndTime(team.dailyEndTime);
+      setEventTimeZone(team.timeZone);
+    }
+  }
   // form action
 
   function resetFrom() {
@@ -292,6 +325,31 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
                 <div className='form-floating'>
                   <select
                     className='form-select'
+                    id='Category'
+                    aria-label='Floating label select example'
+                    value={eventCategory}
+                    onChange={handleCategorySelectChange}
+                  >
+                    <option value={''}>Select Category...</option>
+                    {categories.map((category) =>(
+                      <option key={category.value} value={category.value} selected={eventCategory === category.value}>
+                        {category.label}
+                      </option>
+                    ))}
+                  </select>
+                  <label htmlFor='floatingSelectGrid'>Category</label>
+                </div>
+              </div>
+              <div className='col-12 col-md-4'>
+                <TeamSelect 
+                  teams={teams} 
+                  selectedTeamId={eventTeamId} 
+                  onSelectChange={handleTeamChange} />
+              </div>  
+              <div className='col-12 col-md-4'>
+                <div className='form-floating'>
+                  <select
+                    className='form-select'
                     id='sprint'
                     aria-label='Floating label select example'
                     value={eventParent || ""}
@@ -309,25 +367,6 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
                     ))}
                   </select>
                   <label htmlFor='sprint'>Parent Sprint</label>
-                </div>
-              </div>
-              <div className='col-12 col-md-4'>
-                <div className='form-floating'>
-                  <select
-                    className='form-select'
-                    id='Category'
-                    aria-label='Floating label select example'
-                    value={eventCategory}
-                    onChange={handleCategorySelectChange}
-                  >
-                    <option value={''}>Select Category...</option>
-                    {categories.map((category) =>(
-                      <option key={category.value} value={category.value} selected={eventCategory === category.value}>
-                        {category.label}
-                      </option>
-                    ))}
-                  </select>
-                  <label htmlFor='floatingSelectGrid'>Category</label>
                 </div>
               </div>
             </div>
@@ -379,24 +418,6 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
               <p className=''>
                 Improve discoverability or event by adding tags relevant to the subject matter
               </p>
-
-              {/* <div className='form-floating mb-3'>
-                <input
-                  maxLength={25}
-                  type='text'
-                  className='form-control'
-                  id='evenTitle'
-                  placeholder='search tag'
-                  value={eventSearchTag}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEventSearchTag(e.target.value)}
-                />
-
-                <label htmlFor='evenTitle'>Please enter to add a tag</label>
-                <div className='d-flex justify-content-between align-items-center'>
-                  <p className='text-muted fs-12 mb-0'>0/10 tags</p>
-                  <p className='text-muted fs-12 mb-0'>{eventSearchTag.length}/25</p>
-                </div>
-              </div> */}
 
               <div className='mb-3'>
                 <Select
