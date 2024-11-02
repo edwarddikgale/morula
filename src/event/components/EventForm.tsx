@@ -250,9 +250,10 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     if(!userId) throw Error("User currently not logged in");
-
+    
     const eventData: EventFormData = {
       userId: userId,
+      teamId: eventTeamId,
       parentId: eventParent,
       title: eventTitle,
       organizer: eventOrganizer,
@@ -276,7 +277,8 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
       supplier_estimate: supplier_estimate,
       status: eventStatus
     };
-    // console.log({ eventData });
+    
+    console.log({ eventData });
 
     setIsLoading(true);
     try {
