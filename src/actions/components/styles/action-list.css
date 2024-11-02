@@ -119,11 +119,14 @@
     border: 1px solid gray;
     letter-spacing: 0.1rem;
     color: gray;
+    background-color: bisque;
     font-weight: 900;
     border-radius: 10px;
-    min-width: 70px;
-    max-width: 100px;
-    margin-left: -10px;
+    margin-left: 10px;
     box-shadow: 0 2px 4px rgba(76, 69, 69, 0.2);
   }
   
+  .vertical-text {
+    transform: rotate(90deg); /* Rotate the text 90 degrees */
+    transform-origin: left top; /* Set origin so text flows correctly */
+  }

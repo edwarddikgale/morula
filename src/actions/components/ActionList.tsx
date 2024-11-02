@@ -24,13 +24,17 @@ const ActionList: React.FC<ActionListProps> = ({ data, onDeleteItem, onCreateIte
         <div key={item.id || `key-${index}`} className="list-group-item d-flex justify-content-between align-items-center mb-4 p-3 border rounded">
           
           <RoundNumber text={`${index + 1}`} />
-          <div>
-            <h5>{item.title}</h5>
-            <LimitedCharacters text={item.description} limit={200} />
-            <div className=''>
-              <p className='action-type'>{item.actionType}</p>
-              <small className='ms-auto'>Created on: {item.createdAt? new Date(item.createdAt).toLocaleDateString(): 'Unknown'}</small>
+          <div className='row g-1 mb-3'>
+            <div className='col-1 col-md-1'>
+              <p className='action-type vertical-text'>{item.actionType}</p>
             </div>
+            <div className='col-11 col-md-11'>
+              <h5>{item.title}</h5>
+              <LimitedCharacters text={item.description} limit={200} />
+              <div className=''>
+                <small className='ms-auto'>Created on: {item.createdAt? new Date(item.createdAt).toLocaleDateString(): 'Unknown'}</small>
+              </div>
+            </div>  
           </div>
           <div>
           <div className='d-flex justify-content-between mb-2 mr-2'>
