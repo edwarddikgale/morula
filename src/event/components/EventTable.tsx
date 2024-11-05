@@ -16,6 +16,8 @@ import "react-calendar/dist/Calendar.css";
 import "./styles/event.css";
 import capitaliseFirstLetter from "common/utils/capitaliseFirstLetter";
 import { EventCategory } from "./types/EventCategory";
+import DeleteConfirmation from "common/components/ui/DeleteConfirmation";
+import { Event } from '../types/Event';
 
 type ValuePiece = Date | null;
 
@@ -119,7 +121,7 @@ const EventTable = () => {
   };
 
   useEffect(() => {
-    if(userId){
+    if(userId && events.length === 0){
       handleFetchEvent(userId);
     }
     else{
@@ -142,6 +144,14 @@ const EventTable = () => {
     onChange(value);
     setCalenderOpen(false);
   };
+
+  const onDeleteItem = async(index: number, id: string) =>{
+    const response = await eventsAPI.deleteEvent(id);
+    if (response.success) { // Ensure the delete request was successful
+      setEvents((prevEvents) => prevEvents.filter((_, i) => i !== index));
+      setFilteredEvents(prevList => prevList.filter((_, i) => i !== index));
+    }
+  }
 
   const progress = {
     total: 100,
@@ -242,6 +252,7 @@ const EventTable = () => {
       {!isLoading && !errorMessage && (
         <>
           <div className='my-5'>
+            -- {filteredEvents.length} --
             <Table className='event-table' responsive>
               <thead>
                 <tr>
@@ -250,10 +261,11 @@ const EventTable = () => {
                   <th>Est. Attendees</th>
                   <th>Category</th>
                   <th></th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
-                {filteredEvents.map((event) => (
+                {filteredEvents.map((event, index) => (
                   <tr key={event._id}>
                     <td>
                       <div className='d-flex align-items-center'>
@@ -291,8 +303,16 @@ const EventTable = () => {
                       <p className='mb-0 text-muted'>{capitaliseFirstLetter(event.category)}</p>
                     </td>
                     <td>
+                      <DeleteConfirmation 
+                          index={index}
+                          item={event}
+                          label={'Remove'}
+                          buttonIsCustom={true}
+                          onDelete={() => onDeleteItem(index, event._id)}
+                        />
+                    </td>
+                    <td>
                       {/* action */}
-
                       <div className='position-relative'>
                         <div
                           className='pl-3 cursor-pointer'

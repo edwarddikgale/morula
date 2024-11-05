@@ -1,6 +1,7 @@
 export const API_URL = process.env.REACT_APP_API_BASE_URL;
 
 interface GetSprintsResponse {events: any[]};
+interface DeleteEventResponse {success: boolean};
 
 export const eventsAPI = {
   async createEvent(formData: any) {
@@ -12,6 +13,19 @@ export const eventsAPI = {
 
     if (!response.ok) {
       throw new Error("Event creation failed!");
+    }
+
+    return response.json();
+  },
+
+  async deleteEvent(id: string): Promise<DeleteEventResponse> {
+    const response = await fetch(`${API_URL}/events/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (!response.ok) {
+      throw new Error("Event deletion failed!");
     }
 
     return response.json();
