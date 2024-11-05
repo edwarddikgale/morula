@@ -252,7 +252,6 @@ const EventTable = () => {
       {!isLoading && !errorMessage && (
         <>
           <div className='my-5'>
-            -- {filteredEvents.length} --
             <Table className='event-table' responsive>
               <thead>
                 <tr>
