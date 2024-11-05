@@ -8,7 +8,22 @@ const Welcome: React.FC = () => {
     <div>
       <div className="hero-section">
         <div className="welcome-message">
-          <h3><i>Welcome to MORULA</i></h3>
+          <h3>MORULA <i>E</i>mperik</h3>
+            <p>
+              Welcome to Morula Emperik – Your Intelligent Assistant for Scrum Mastery
+            </p>
+            <p>
+              As a Scrum Master or Agile Coach, you know that effective guidance comes from keen observation and insightful analysis. But capturing every detail during scrum events, tracking team dynamics, and identifying areas for continuous improvement can be overwhelming – especially without the right support.
+            </p>
+            <p>
+              Morula Emperik is here to help. Designed specifically for Scrum Masters, our platform acts as an intelligent assistant, enabling you to take structured notes during scrum events and capture valuable data from your observations. Morula Emperik transforms these notes into actionable hypotheses, helping you pinpoint improvement opportunities grounded in real team interactions.
+            </p>
+            <p>
+              With Morula Emperik, you gain a clear view of recurring patterns, potential challenges, and growth areas for your team – empowering you to guide your team towards data-driven, continuous improvement. 
+            </p>
+            <p>
+              Start your journey with Morula Emperik, and make every scrum event a step toward a high-performing, cohesive, and responsive team.
+            </p>
         </div>
         <div className="account-actions">
           <h2>Get Started</h2>

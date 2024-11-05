@@ -49,8 +49,8 @@ interface Attendance {
   
   interface SprintEvaluation {
     attendance: Attendance;
-    designPatterns: PatternOccurrence[];
-    antiPatterns: PatternOccurrence[];
+    designPatterns: { [key: string]: number }; //PatternOccurrence[];
+    antiPatterns: { [key: string]: number }; //PatternOccurrence[];
     generalObservations: string[];
     hypotheses: string[];
     hypothesisSummary: {

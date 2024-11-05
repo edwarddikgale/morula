@@ -1,4 +1,4 @@
-export const API_URL = "https://susact-dev.herokuapp.com/api";
+export const API_URL = process.env.REACT_APP_API_BASE_URL;
 
 export const orgSettingsAPI = {
   async createSettings(formData: any) {

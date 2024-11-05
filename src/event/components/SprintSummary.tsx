@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChartLine, faUsers, faCheckCircle, faExclamationCircle, faList, faBullseye, faEye, faHandshake, faHeart } from '@fortawesome/free-solid-svg-icons';
 import './styles/sprint-summary.css';
 import { SprintEvaluation } from './types/SprintEvaluation';
+import PatternList from './PatternList';
 
 const SprintSummary: React.FC<{ eventId?: string }> = ({ eventId }) => {
   const [summary, setSummary] = useState<SprintEvaluation | null>(null);
@@ -131,36 +132,16 @@ const SprintSummary: React.FC<{ eventId?: string }> = ({ eventId }) => {
       </Row>
 
       {/* Design Patterns & Anti Patterns Side by Side */}
-      <Row className="mb-4">
+      <Row>
         <Col lg={6}>
-          <Card className="custom-card">
-            <Card.Body>
-              <FontAwesomeIcon icon={faCheckCircle} className="icon-green" size="lg" />
-              <Card.Title>Top 5 Design Patterns</Card.Title>
-              <ul className="list-group styled-list">
-                {summary.designPatterns.map((dp: any, index: number) => (
-                  <li key={index} className="list-group-item">
-                    <span className="fw-bold">{dp.pattern.title}</span>: {dp.occurrences} times
-                  </li>
-                ))}
-              </ul>
-            </Card.Body>
-          </Card>
+          <PatternList 
+            title="Top 5 Design Patterns" 
+            patterns={summary.designPatterns} />
         </Col>
         <Col lg={6}>
-          <Card className="custom-card">
-            <Card.Body>
-              <FontAwesomeIcon icon={faExclamationCircle} className="icon-red" size="lg" />
-              <Card.Title>Top 5 Anti Patterns</Card.Title>
-              <ul className="list-group styled-list">
-                {summary.antiPatterns.map((ap: any, index: number) => (
-                  <li key={index} className="list-group-item">
-                    <span className="fw-bold">{ap.pattern.title}</span>: {ap.occurrences} times
-                  </li>
-                ))}
-              </ul>
-            </Card.Body>
-          </Card>
+          <PatternList 
+            title="Top 5 Anti Patterns" 
+            patterns={summary.antiPatterns} />
         </Col>
       </Row>
 
@@ -172,7 +153,7 @@ const SprintSummary: React.FC<{ eventId?: string }> = ({ eventId }) => {
               <FontAwesomeIcon icon={faList} className="icon-yellow" size="lg" />
               <Card.Title>Hypothesis Summary</Card.Title>
               <ul className="list-group styled-list">
-                {summary.hypothesisSummary.hypotheses.map((hyp: any, index: number) => (
+                {false && summary?.hypothesisSummary && summary?.hypothesisSummary?.hypotheses.map((hyp: any, index: number) => (
                   <li key={index} className="list-group-item">
                     <strong>Summary:</strong> {hyp.summary}<br />
                     <strong>Root Cause:</strong> {hyp.rootCause}<br />
@@ -193,7 +174,7 @@ const SprintSummary: React.FC<{ eventId?: string }> = ({ eventId }) => {
               <FontAwesomeIcon icon={faList} className="icon-green" size="lg" />
               <Card.Title>Note Summary</Card.Title>
               <ul className="list-group styled-list">
-                {summary.noteSummary.notes.map((note: any, index: number) => (
+                {false && summary?.noteSummary && summary?.noteSummary?.notes.map((note: any, index: number) => (
                   <li key={index} className="list-group-item">
                     <strong>Note:</strong> {note.note}<br />
                     <strong>Explanation:</strong> {note.explanation}
