@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Row, Col } from "react-bootstrap";
 import "../styles/hypothesis-list.css";
+import { ProbabilitySlider } from 'common/components/custom/ProbabilitySlider';
 
 interface Hypothesis {
   hypothesis: string;
@@ -31,24 +32,14 @@ const HypothesisList: React.FC<HypothesisListProps> = ({ hypotheses, onUpdate })
         <div key={index} className="hypothesis-item mb-4 p-4 border rounded shadow-sm">
           <h5 className="hypothesis-title mb-2">{item.hypothesis}</h5>
           <p className="hypothesis-explanation text-muted">{item.explanation}</p>
-          <Form.Group controlId={`probability-slider-${index}`}>
-            <Form.Label className="text-muted text-strong">Probability</Form.Label>
-            <Row className="align-items-center">
-              <Col>
-                <Form.Range
-                  min={0}
-                  max={100}
-                  step={1}
-                  value={item.probability || 100}
-                  className="probability-slider"
-                  onChange={(e) => handleProbabilityChange(index, parseInt(e.target.value))}
-                />
-              </Col>
-              <Col xs="auto" className="text-muted">
-                {item.probability || 100}%
-              </Col>
-            </Row>
-          </Form.Group>
+          <div>
+            <ProbabilitySlider 
+              labelText={'Likelyhood'} 
+              controlId={`probability-slider-${index}`} 
+              value={item.probability || 100} 
+              onChange={(newVal: number) => handleProbabilityChange(index, newVal)}            
+            />
+          </div>
         </div>
       ))}
     </div>
