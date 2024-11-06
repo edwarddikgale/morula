@@ -129,4 +129,5 @@
   .vertical-text {
     transform: rotate(90deg); /* Rotate the text 90 degrees */
     transform-origin: left top; /* Set origin so text flows correctly */
+    min-width: 95px;
   }

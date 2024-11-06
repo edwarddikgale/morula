@@ -26,7 +26,9 @@ const ActionList: React.FC<ActionListProps> = ({ data, onDeleteItem, onCreateIte
           <RoundNumber text={`${index + 1}`} />
           <div className='row g-1 mb-3'>
             <div className='col-1 col-md-1'>
-              <p className='action-type vertical-text'>{item.actionType}</p>
+              <p className='action-type vertical-text'>
+                  {item.actionType || 'Unknown'}
+              </p>
             </div>
             <div className='col-11 col-md-11'>
               <h5>{item.title}</h5>
