@@ -259,6 +259,7 @@ const EventTable = () => {
                   <th>Actions</th>
                   <th>Est. Attendees</th>
                   <th>Category</th>
+                  <th>Team</th>
                   <th></th>
                   <th></th>
                 </tr>
@@ -300,6 +301,10 @@ const EventTable = () => {
                     <td>
                       {" "}
                       <p className='mb-0 text-muted'>{capitaliseFirstLetter(event.category)}</p>
+                    </td>
+                    <td>
+                      {" "}
+                      <p className='mb-0 text-muted'>{event.teamName}</p>
                     </td>
                     <td>
                       <DeleteConfirmation 
