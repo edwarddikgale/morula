@@ -476,6 +476,15 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
               <button
                 type='button'
                 className={`my-1 me-3 btn btn-light ${
+                  activeEventLocation === "Online" ? "btn-select-active" : "btn-select"
+                }`}
+                onClick={() => setActiveEventLocation("Online")}
+              >
+                Online Event
+              </button>
+              <button
+                type='button'
+                className={`my-1 me-3 btn btn-light ${
                   activeEventLocation === "Physical" ? "btn-select-active" : "btn-select"
                 }`}
                 onClick={() => setActiveEventLocation("Physical")}
@@ -485,11 +494,11 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
               <button
                 type='button'
                 className={`my-1 me-3 btn btn-light ${
-                  activeEventLocation === "Online" ? "btn-select-active" : "btn-select"
+                  activeEventLocation === "Hybrid" ? "btn-select-active" : "btn-select"
                 }`}
-                onClick={() => setActiveEventLocation("Online")}
+                onClick={() => setActiveEventLocation("Hybrid")}
               >
-                Online Event
+                Hybrid
               </button>
               <button
                 type='button'

@@ -1,0 +1,41 @@
+[
+    {
+      "type": "radio",
+      "title": "How good was the sprint?",
+      "name": "sprint_quality",
+      "options": [
+        { "value": 0, "label": "Very Bad" },
+        { "value": 1, "label": "Bad" },
+        { "value": 2, "label": "Okay" },
+        { "value": 3, "label": "Good" },
+        { "value": 4, "label": "Very Good" },
+        { "value": 5, "label": "Excellent" }
+      ]
+    },
+    {
+      "type": "radio",
+      "title": "How valuable was the sprint?",
+      "name": "sprint_value",
+      "options": [
+        { "value": 0, "label": "Very Low" },
+        { "value": 1, "label": "Low" },
+        { "value": 2, "label": "Moderate" },
+        { "value": 3, "label": "High" },
+        { "value": 4, "label": "Very High" },
+        { "value": 5, "label": "Extremely High" }
+      ]
+    },
+    {
+      "type": "radio",
+      "title": "How well did we collaborate?",
+      "name": "collaboration",
+      "options": [
+        { "value": 0, "label": "Very Poor" },
+        { "value": 1, "label": "Poor" },
+        { "value": 2, "label": "Fair" },
+        { "value": 3, "label": "Good" },
+        { "value": 4, "label": "Very Good" },
+        { "value": 5, "label": "Excellent" }
+      ]
+    }
+  ]

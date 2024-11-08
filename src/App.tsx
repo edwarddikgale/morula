@@ -30,6 +30,7 @@ import PrinciplesSelectorPage from "principles/pages/PrinciplesSelectorPage";
 import PrinciplesSelectedPage from "principles/pages/PrinciplesSelectedPage";
 import EventReport from "event/pages/EventReport";
 import TeamPage from "team/pages/TeamPage";
+import CustomFormRenderer from "survey/pages/Form";
 
 function App() {
   useEffect(() => {}, []);
@@ -53,6 +54,7 @@ function App() {
               <Route path='/principlesselector' element={<PrinciplesSelectorPage />} />
               <Route path='/principlesselected' element={<PrinciplesSelectedPage />} />
               <Route path='/teams' element={<TeamPage />} />
+              <Route path='/form' element={<CustomFormRenderer />} />
             </Route>
             <Route path='/' element={<HomePage />} />
             <Route path='/evidence' element={<EvidencePage />} />
