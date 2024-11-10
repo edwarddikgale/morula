@@ -12,6 +12,7 @@ import "../css/profile.css";
 import { AppDispatch, RootState } from "store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { createUserProfile, updateUserProfile } from "store/actions/profile";
+import AnimatedButton from "common/components/ui/AnimatedButton";
 
 interface IProps {
   userData: UserProfile;
@@ -273,6 +274,12 @@ const ProfileUpdateForm = ({ userData }: IProps) => {
         {/* Organization info end */}
 
         <div className='text-end pb-5'>
+          <AnimatedButton 
+            className='d-none btn btn-primary py-3 px-4'
+            type='submit'
+            isProcessing={isProcessing}>
+              Update Profile
+          </AnimatedButton>
           <button type='submit' className='btn btn-primary py-3 px-4'>
             Update Profile {(isProcessing) && <LoaderSm />}
           </button>

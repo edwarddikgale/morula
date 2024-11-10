@@ -1,0 +1,27 @@
+.btn {
+    position: relative;
+    overflow: hidden;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn.processing {
+    pointer-events: none; /* Disable clicking while processing */
+  }
+  
+  .btn.processing::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.2); /* Darker shade for the animation */
+    animation: progress-animation 2.5s forwards;
+  }
+  
+  @keyframes progress-animation {
+    to {
+      left: 100%;
+    }
+  }
+  
