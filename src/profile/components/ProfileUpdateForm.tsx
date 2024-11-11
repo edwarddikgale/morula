@@ -73,8 +73,8 @@ const ProfileUpdateForm = ({ userData }: IProps) => {
     }  
   }, [error, processingDone, userData._id]);
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
+  const handleSubmit = async (e?:any) => {
+    if(e) e.preventDefault();
 
     const profileData: Partial<UserProfile> = {
       fullName: fullName,
@@ -101,7 +101,7 @@ const ProfileUpdateForm = ({ userData }: IProps) => {
   return (
     <div className='py-3'>
       {/*Personal info start  */}
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={(e) => e.preventDefault()}>
         <section className='pInfo'>
           <h3 className='section-title'>Personal Information</h3>
 
@@ -275,14 +275,12 @@ const ProfileUpdateForm = ({ userData }: IProps) => {
 
         <div className='text-end pb-5'>
           <AnimatedButton 
-            className='d-none btn btn-primary py-3 px-4'
-            type='submit'
+            className='btn btn-primary py-3 px-4'
+            type='button'
+            onClick={handleSubmit}
             isProcessing={isProcessing}>
               Update Profile
           </AnimatedButton>
-          <button type='submit' className='btn btn-primary py-3 px-4'>
-            Update Profile {(isProcessing) && <LoaderSm />}
-          </button>
         </div>
       </form>
     </div>
