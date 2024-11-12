@@ -6,7 +6,7 @@ interface AnimatedButtonProps {
   className?: string; // Bootstrap class like btn-primary, btn-secondary, etc.
   isProcessing?: boolean; // Controls animation
   onClick?: () => void; // Handle button click
-  type?: 'button' | 'submit' | 'reset';
+  type?: 'button' | 'reset'; //| 'submit'
 }
 
 const AnimatedButton: React.FC<AnimatedButtonProps> = ({
@@ -22,10 +22,6 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
   // Combine the passed className with Bootstrap classes and conditionally add 'processing' class
   const buttonClassName = `btn ${className} ${processing ? 'processing' : ''}`;
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    // Prevent the default action for submit if the button is processing
-    if (type === 'submit') {
-      e.preventDefault(); // Prevent the form submission while processing
-    }
 
     setProcessing(true);
 
@@ -37,14 +33,7 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
     // Allow the form to submit after the animation is complete
     setTimeout(() => {
       // Check if the button is inside a form before submitting it
-      const form = buttonRef.current?.form;
-
-      if (type === 'submit' && form) {
-        form.submit(); // Explicitly trigger form submission if inside a form
-      } else if (type === 'submit' && !form) {
-        console.warn('Button is not inside a form. Form submission skipped.');
-      }
-
+      //const form = buttonRef.current?.form;
       setProcessing(false); // Stop the animation
     }, 750); // Delay to match the animation duration
   };

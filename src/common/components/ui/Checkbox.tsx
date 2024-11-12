@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/checkbox.css';
 
 interface CheckboxProps {
@@ -11,6 +11,11 @@ interface CheckboxProps {
 
 export const Checkbox = ({ label, checked, onChange, isRounded, borderStyle = 'default' }: CheckboxProps) => {
   const [isChecked, setIsChecked] = useState(checked);
+
+    // Sync internal state with the checked prop
+  useEffect(() => {
+    setIsChecked(checked);
+  }, [checked]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { checked } = event.target;

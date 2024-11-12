@@ -37,6 +37,7 @@ import EventDetails from "./EventDetails";
 import TeamSelect from "./selections/TeamSelect";
 import { teamService } from "team/services/teamService";
 import { Team } from "team/types/Team";
+import { EventAttendees } from "./EventAttendees";
 
 const tagOptions: EventTag[] = eventTags;
 const categories: EventCategory[] = eventCategories;
@@ -829,13 +830,28 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
             </Link>
           </div>
         </FormSectionContainer>
-    
+         
+        {eventTeamId &&
+        <FormSectionContainer
+          isHr={true}
+          className='status'
+          icon={faMap}
+          title='Event Attendees'
+          description='Specify the current people who attended this event'
+        >
+          <div>
+              <EventAttendees teamId={eventTeamId} />
+          </div>
+        </FormSectionContainer>
+        }
+
         <FormSectionContainer
           isHr={true}
           className='status'
           icon={faMap}
           title='Event Status'
           description='Specify the current status of your event'
+          hidden={true}
         >
           <div>
             <div className='d-flex flex-wrap'>

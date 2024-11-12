@@ -12,9 +12,10 @@ interface IProps {
   isHr?: boolean;
   isCollapsed?:boolean;
   children: React.ReactElement | React.ReactNode;
+  hidden?: boolean
 }
 
-const FormSectionContainer = ({ title, description, icon, className, isHr, children, subTitle, isCollapsed }: IProps) => {
+const FormSectionContainer = ({ title, description, icon, className, isHr, children, subTitle, isCollapsed, hidden = false }: IProps) => {
   const [isExpanded, setIsExpanded] = useState(!isCollapsed);
 
   const toggleExpand = () => {
@@ -22,7 +23,7 @@ const FormSectionContainer = ({ title, description, icon, className, isHr, child
   };
 
   return (
-    <div className={`${className}`}>
+    <div className={`${className} ${hidden? 'd-none': ''}`}>
       <div className='d-flex flex-m-col align-items-start'>
         <div>
           <FontAwesomeIcon icon={icon} size='2xl' style={{ color: "#dce5f4" }} />
