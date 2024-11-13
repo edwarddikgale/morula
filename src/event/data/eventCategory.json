@@ -1,10 +1,12 @@
 [
     {"value": "coaching_1_to_1", "label": "1-1 coaching", "title": "", "summary": ""},
+    {"value": "agile_collab", "label": "Agile Collaboration", "title": "Session to enhance team agility", "summary": "Session to enhance team agility"},
     {"value": "alignment", "label": "Alignment", "title": "", "summary": ""},
     {"value": "daily", "label": "Daily Scrum", "title": "Daily team alignment & planning", "summary": "team together to plan their work for the day towards sprint goal"},
     {"value": "daily", "label": "Daily Scrum (Nexus)", "title": "Cross Team Daily alignment & planning", "summary": "two or more teams get together to plan their work with reps from each team, for the day towards sprint goal"},
     {"value": "discovery", "label": "Discovery", "title": "", "summary": ""},
     {"value": "impromptu", "label": "Impromptu", "title": "", "summary": ""},
+    {"value": "knowledge_sharing", "label": "Knowledge Sharing", "title": "", "summary": ""},
     {"value": "networking", "label": "Networking", "title": "", "summary": ""},
     {"value": "parking_lot", "label": "Parking Lot", "title": "", "summary": ""},
     {"value": "refinement", "label": "Refinement", "title": "", "summary": ""},

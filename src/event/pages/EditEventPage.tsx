@@ -28,8 +28,8 @@ const EditEventPage = () => {
         <div className='event-container'>
             <div className='mx-3'>
                 <Link to={pageNames.EVENT} style={{ textDecoration: "none" }}>
-                <FontAwesomeIcon icon={faChevronLeft} />
-                Events
+                    <FontAwesomeIcon icon={faChevronLeft} />
+                    Events
                 </Link>
                 {eventData && 
                     <EventForm 

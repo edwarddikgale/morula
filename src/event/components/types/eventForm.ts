@@ -25,4 +25,5 @@ export interface EventFormData {
   attendee_estimate?: number;
   supplier_estimate?: number;
   status?: string;
+  teamMemberIds?: string[]
 }

@@ -4,18 +4,24 @@ import { TeamMember } from 'team/types/TeamMember';
 
 interface TeamMemberSelectProps {
   teamMembers: TeamMember[];
+  selectedMemberIds?: Set<string>;
   selectAllByDefault?: boolean;
   onSelectChange: (selectedMembers: TeamMember[]) => void;
+  readonly?:boolean;
 }
 
-const TeamMemberSelect: React.FC<TeamMemberSelectProps> = ({ teamMembers, selectAllByDefault = false, onSelectChange }) => {
+const TeamMemberSelect: React.FC<TeamMemberSelectProps> = ({ teamMembers, selectedMemberIds, selectAllByDefault = false, readonly = false, onSelectChange }) => {
   // State to track selected members as a Set of strings (IDs)
-  const [selectedMembers, setSelectedMembers] = useState<Set<string>>(new Set());
-  const [members, setMembers] = useState<TeamMember[]>(teamMembers);
+  const [selectedMembers, setSelectedMembers] = useState<Set<string>>(selectedMemberIds || new Set());
+  const [members, setMembers] = useState<TeamMember[]>(!readonly? teamMembers: teamMembers.filter(member => selectedMemberIds?.has(member._id!)));
   const [isAllSelected, setIsAllSelected] = useState<boolean>(false);
   // useRef to track the state of data fetching or selection
   const isSelectionInitialized = useRef(false); // Ref to prevent initial effect from causing loop
 
+  const updateAndRaiseSelection = (selectedMemberIds: Set<string>) =>{
+    setSelectedMembers(selectedMemberIds);
+    onSelectChange(members.filter(member => selectedMemberIds.has(member._id!)));
+  }
   // Handle change when a checkbox is toggled
   const handleSelectChange = (id: string, checked: boolean) => {
     const updatedSelectedMembers = new Set(selectedMembers);
@@ -25,7 +31,7 @@ const TeamMemberSelect: React.FC<TeamMemberSelectProps> = ({ teamMembers, select
       updatedSelectedMembers.delete(id);
     }
 
-    setSelectedMembers(updatedSelectedMembers);
+    updateAndRaiseSelection(updatedSelectedMembers);
   };
 
   // Handle the select all or unselect all checkbox
@@ -35,7 +41,7 @@ const TeamMemberSelect: React.FC<TeamMemberSelectProps> = ({ teamMembers, select
       members.forEach((member) => updatedSelectedMembers.add(member._id!));
     }
 
-    setSelectedMembers(updatedSelectedMembers);
+    updateAndRaiseSelection(updatedSelectedMembers);
   };
 
   // Update the parent with the selected members whenever selection changes
@@ -64,13 +70,16 @@ const TeamMemberSelect: React.FC<TeamMemberSelectProps> = ({ teamMembers, select
     <div className="team-member-select">
       {/* Select All Checkbox */}
       <div className="row mb-3">
+        {!readonly &&
         <div className="col-12">
           <Checkbox
             label="Select All"
             checked={isAllSelected}
             onChange={handleSelectAllChange}
+            readonly={readonly}
           />
         </div>
+        }
       </div>
 
       {/* Team Member List */}
@@ -79,7 +88,7 @@ const TeamMemberSelect: React.FC<TeamMemberSelectProps> = ({ teamMembers, select
         
           {members.map((member, index) => {
             const fullName = `${member.firstName} ${member.lastName}`;
-            const isSelected = selectedMembers.has(String(member._id!)); // Check if the member is selected
+            const isSelected = selectedMembers.has(member._id!); // Check if the member is selected
             
             return (
               <div className="row align-items-center" key={index}>
@@ -88,6 +97,7 @@ const TeamMemberSelect: React.FC<TeamMemberSelectProps> = ({ teamMembers, select
                     label=""
                     checked={isSelected}
                     onChange={(checked) => handleSelectChange(member._id!, checked)}
+                    readonly={readonly}
                   />
                 </div>
                 <div className="col-3">

@@ -4,18 +4,22 @@ import { teamMemberService } from 'team/services/teamMemberService';
 import { TeamMember } from 'team/types/TeamMember';
 
 interface IEventAttendeesProps{
-    teamId: string
+    teamId: string,
+    readonly?: boolean,
+    onSelectMembers?: (members: TeamMember[]) => void,
+    selectedMemberIds: Set<string>
 }   
 
-const EventAttendees: React.FC<IEventAttendeesProps> = ({ teamId }) => {
-    const [selectedMembers, setSelectedMembers] = useState<TeamMember[]>([]);
+const EventAttendees: React.FC<IEventAttendeesProps> = ({ onSelectMembers, selectedMemberIds, teamId, readonly = false }) => {
     const [teamMembers, setTeamMembers] = useState<TeamMember[] | null>(null);
+    const [selectedMembers, setSelectedMembers] = useState<TeamMember[]>([]);
+
     const dataFetchedRef = useRef(false);
   
     const fetchMembers = async (teamId: string) => {
       const response = await teamMemberService.getTeamMembers(teamId);
       setTeamMembers(response.teamMembers); // Fetch and set the team members
-      console.log(`Members fetched as ${JSON.stringify(response.teamMembers)}`);
+      setSelectedMembers([...response.teamMembers.filter(member => selectedMemberIds.has(member._id!))]);
     };
   
     useEffect(() => {
@@ -27,16 +31,19 @@ const EventAttendees: React.FC<IEventAttendeesProps> = ({ teamId }) => {
   
     const handleSelectChange = (selected: TeamMember[]) => {
       setSelectedMembers(selected);
+      if(onSelectMembers){ onSelectMembers(selected); }
     };
 
   return (
     <div>
-      <h3>Team Member Selection</h3>
+      {!readonly && <h3>Team Member Selection</h3>}
       {teamMembers &&   
         <TeamMemberSelect
             teamMembers={teamMembers}
             selectAllByDefault={true}
             onSelectChange={handleSelectChange}
+            selectedMemberIds={selectedMemberIds}
+            readonly={readonly}
         />
       }
     </div>

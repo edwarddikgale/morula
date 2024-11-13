@@ -38,6 +38,7 @@ import TeamSelect from "./selections/TeamSelect";
 import { teamService } from "team/services/teamService";
 import { Team } from "team/types/Team";
 import { EventAttendees } from "./EventAttendees";
+import { TeamMember } from "team/types/TeamMember";
 
 const tagOptions: EventTag[] = eventTags;
 const categories: EventCategory[] = eventCategories;
@@ -95,6 +96,7 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
   const [eventTimeZone, setEventTimeZone] = useState("UTC");
   const [eventPageLanguage, setEventPageLanguage] = useState("English");
   const [eventStatus, setEventStatus] = useState("Draft");
+  const [teamMemberIds, setTeamMemberIds] = useState<string[]>([]);
 
   // event media
   const [displayMediaAlert, setDisplayMediaAlert] = useState(true);
@@ -146,6 +148,7 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
         setContent(event.description || "");
         setEventStatus(event.status || "Draft");
         setEventParent(event.parentId || null);
+        setTeamMemberIds(event.teamMemberIds || []);
         setFormIsPopulated(true);
       }
     }, [event]);
@@ -248,6 +251,11 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
     setContent("");
   }
 
+  const handleSelectMembers = (members: TeamMember[]) =>{
+    const memberIds = members.map(member => member._id!);
+    setTeamMemberIds([...memberIds]);
+  }
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     if(!userId) throw Error("User currently not logged in");
@@ -276,10 +284,9 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
       description: content,
       attendee_estimate: estimatedAttendees,
       supplier_estimate: supplier_estimate,
-      status: eventStatus
+      status: eventStatus,
+      teamMemberIds: teamMemberIds
     };
-    
-    console.log({ eventData });
 
     setIsLoading(true);
     try {
@@ -840,7 +847,11 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
           description='Specify the current people who attended this event'
         >
           <div>
-              <EventAttendees teamId={eventTeamId} />
+              <EventAttendees 
+                teamId={eventTeamId} 
+                onSelectMembers={handleSelectMembers} 
+                selectedMemberIds={new Set<string>(teamMemberIds)}
+                />
           </div>
         </FormSectionContainer>
         }

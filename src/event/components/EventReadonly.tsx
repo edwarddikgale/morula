@@ -10,6 +10,7 @@ import { findEventCatByVal } from "event/utils/findEventCategory";
 import ObservationForm from "observation/components/ObservationForm";
 import RightOverlay from "common/components/overlay/RightOverlay";
 import EventDetails from "./EventDetails";
+import { EventAttendees } from "./EventAttendees";
 
 interface IProps {
     event: EventFormData;
@@ -32,7 +33,9 @@ const EventReadOnly: React.FC<IProps> = ({ id, event }) => {
         timeZone,
         summary,
         description,
-        attendee_estimate
+        attendee_estimate,
+        teamId: eventTeamId,
+        teamMemberIds
     } = event;
 
     const eventCategory = findEventCatByVal(category);
@@ -178,6 +181,24 @@ const EventReadOnly: React.FC<IProps> = ({ id, event }) => {
                     </div>
                 </div>
             </FormSectionContainer>
+
+            {eventTeamId &&
+                <FormSectionContainer
+                isHr={true}
+                className='status'
+                icon={faMap}
+                title='Event Attendees'
+                description='The list of people who attended this event'
+                >
+                <div>
+                    <EventAttendees 
+                        teamId={eventTeamId} 
+                        readonly={true}
+                        selectedMemberIds={new Set<string>(teamMemberIds)}
+                        />
+                </div>
+                </FormSectionContainer>
+            }
 
             <div className='text-end pb-4 my-4'>
                 
