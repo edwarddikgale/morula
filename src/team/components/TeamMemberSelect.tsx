@@ -84,14 +84,14 @@ const TeamMemberSelect: React.FC<TeamMemberSelectProps> = ({ teamMembers, select
 
       {/* Team Member List */}
       <div className="row mb-3">
-        <div className="col-12">
+        <div className="col-12 list-group">
         
           {members.map((member, index) => {
             const fullName = `${member.firstName} ${member.lastName}`;
             const isSelected = selectedMembers.has(member._id!); // Check if the member is selected
             
             return (
-              <div className="row align-items-center" key={index}>
+              <div className="row list-group-item d-flex justify-content-between align-items-center mb-1 p-3 border rounded" key={index}>
                 <div className="col-1">
                   <Checkbox
                     label=""

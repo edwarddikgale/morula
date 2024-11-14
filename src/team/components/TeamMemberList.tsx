@@ -22,7 +22,7 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({ data, team, onDeleteIte
   return (
     <>
         <div>
-            <h5 className='mb-4'>Team Members for team {team.name}</h5>
+            <h5 className='mb-4'>( {data?.length} ) Team Members for team :: {team.name}</h5>
         </div>
         <div className="list-group my-3 ms-2">
             {(!data || data.length === 0) &&

@@ -184,11 +184,11 @@ const EventReadOnly: React.FC<IProps> = ({ id, event }) => {
 
             {eventTeamId &&
                 <FormSectionContainer
-                isHr={true}
-                className='status'
-                icon={faMap}
-                title='Event Attendees'
-                description='The list of people who attended this event'
+                    isHr={true}
+                    className='status'
+                    icon={faMap}
+                    title='Event Attendees'
+                    description='The list of people who attended this event'
                 >
                 <div>
                     <EventAttendees 
