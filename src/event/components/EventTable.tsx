@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { CustomIcon, SearchIcon } from "../../utils/CustomIcon";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendar, faList, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faCalendar, faList, faPlus, faArrowDown } from "@fortawesome/free-solid-svg-icons";
 import { ProgressBar, Table } from "react-bootstrap";
 import tImg from "../assets/t1.jpg";
 import { useNavigate } from "react-router-dom";
@@ -18,6 +18,8 @@ import capitaliseFirstLetter from "common/utils/capitaliseFirstLetter";
 import { EventCategory } from "./types/EventCategory";
 import DeleteConfirmation from "common/components/ui/DeleteConfirmation";
 import { Event } from '../types/Event';
+import { Pagination } from "common/types/list/Pagination";
+import { LoaderPrimary, LoaderSm } from "common/components/Loader/Loader";
 
 type ValuePiece = Date | null;
 
@@ -69,6 +71,7 @@ const EventTable = () => {
   const [warningMessage, setWarningMessage] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { getEventsByUser, getEventTaskCompletionRates } = eventsAPI;
+  const [pagination, setPagination] = useState<Pagination>({page: 1, pageSize: 5});
 
   // Default completion data
   const defaultCompletion = {
@@ -91,23 +94,26 @@ const EventTable = () => {
     }
   }, [searchQuery, events]);
 
-  const handleFetchEvent = async (userId: string) => {
+  const handleFetchEvent = async (userId: string, pagination:Pagination) => {
     try {
       setIsLoading(true);
-      const eventListResponse = await getEventsByUser(userId);
-      const completionResponse = await getEventTaskCompletionRates(userId);
+      const eventListResponse = await getEventsByUser(userId, pagination);
+      const eventIds: string[] = eventListResponse.events.map(evnt => evnt._id!);
+      const completionResponse = await getEventTaskCompletionRates(userId, eventIds);
 
       if(eventListResponse.events && completionResponse){
         // Merge completion data with event data
-        const eventsWithCompletion = eventListResponse.events.map((event: { _id: Event; }) => {
+        const eventsWithCompletion = eventListResponse.events.map((event: Event) => {
           const completion = completionResponse.find((comp: { eventId: any; }) => comp.eventId === event._id) || { ...defaultCompletion, eventId: event._id };
           return {
             ...event,
             ...completion
           };
         }); 
-        setEvents(eventsWithCompletion);
-        setFilteredEvents(eventsWithCompletion);
+
+        setEvents(prevList => ([...prevList, ...eventsWithCompletion]));
+        setFilteredEvents(prevList => ([...prevList, ...eventsWithCompletion]));
+        setPagination(eventListResponse.pagination);
       }
       else{
         setEvents([]);
@@ -122,15 +128,20 @@ const EventTable = () => {
 
   useEffect(() => {
     if(userId && events.length === 0){
-      handleFetchEvent(userId);
+      handleFetchEvent(userId, pagination);
     }
     else{
       setIsLoading(false);
     }
   }, [userId]);
 
-  // console.log("events", events);
-
+  const handlePageChange = (newPage: number) =>{
+    const newPagination = {...pagination, page: newPage};
+    setPagination(newPagination);
+    if(userId){
+      handleFetchEvent(userId, newPagination);
+    }
+  }
   // handler for list button
   const handleList = () => {};
 
@@ -242,14 +253,10 @@ const EventTable = () => {
         </div>
       )}
       {isLoading && (
-        <div className='d-flex justify-content-center w-100 py-4'>
-          <div className='spinner-border text-primary' role='status'>
-            <span className='visually-hidden'>Loading...</span>
-          </div>
-        </div>
+        <LoaderPrimary />
       )}
 
-      {!isLoading && !errorMessage && (
+      {!errorMessage && (
         <>
           <div className='my-5'>
             <Table className='event-table' responsive>
@@ -346,6 +353,25 @@ const EventTable = () => {
                 <p className='text-warning'>{warningMessage}</p>
               </div>
             )}
+            {/* Load More Button */}
+            <div className="d-flex justify-content-center mt-3">
+              <button
+                className="btn btn-primary-outline d-flex align-items-center"
+                onClick={() => handlePageChange(pagination.page + 1)}
+              >
+                <span className="ms-2">
+                  {events.length} of {pagination.totalItems} Loaded.
+                </span> 
+               
+                <span className="ms-1">Load More... </span>
+                <span className="ms-1"><FontAwesomeIcon icon={faArrowDown} /></span>
+                <div className="ms-1">{isLoading && (<LoaderSm />)}</div>
+                
+              </button>
+            </div>
+            <div className="d-none">
+              <pre>{JSON.stringify(pagination, null, 2)}</pre>
+            </div>
           </div>
         </>
       )}

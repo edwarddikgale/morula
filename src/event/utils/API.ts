@@ -1,7 +1,14 @@
+import { Pagination } from 'common/types/list/Pagination';
+import { Event } from '../types/Event';
+
 export const API_URL = process.env.REACT_APP_API_BASE_URL;
 
 interface GetSprintsResponse {events: any[]};
 interface DeleteEventResponse {success: boolean};
+interface GetEventsByUser {
+  events: Event[],
+  pagination: Pagination,
+}
 
 export const eventsAPI = {
   async createEvent(formData: any) {
@@ -45,8 +52,8 @@ export const eventsAPI = {
     return response.json();
   },
 
-  async getEventsByUser(userId: string) {
-    const response = await fetch(`${API_URL}/events/user/${userId}`, {
+  async getEventsByUser(userId: string, {page, pageSize}: Pagination): Promise<GetEventsByUser> {
+    const response = await fetch(`${API_URL}/events/user/${userId}?page=${page}&pageSize=${pageSize}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });
@@ -98,10 +105,11 @@ export const eventsAPI = {
     return await response.json();    
   },
 
-  async getEventTaskCompletionRates(userId: string){
+  async getEventTaskCompletionRates(userId: string, eventIds: string[]){
     const response = await fetch(`${API_URL}/events/taskcompletion/${userId}`, {
-      method: "GET",
+      method: "POST",
       headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({eventIds: eventIds}),
     });
 
     if (!response.ok) {
