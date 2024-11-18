@@ -18,6 +18,7 @@ const ActionHypotheses = () => {
   const {list:obsList, loading: obsLoading} = useSelector((state: RootState) => state.observation);
   const { event, loading: eventLoading, error } = useEvent(eventId);
   const [hypothesisList, setHypothesisList] = useState<Hypothesis[]>([]);
+  const [selectedHypothesisList, setSelectedHypothesisList] = useState<Hypothesis[]>([]);
 
   useEffect(() => {
     if(obsList){
@@ -42,12 +43,12 @@ const ActionHypotheses = () => {
     {
       id: "tab1",
       label: "Actions",
-      content: <ActionListManager hypotheses={hypothesisList} />,
+      content: <ActionListManager hypotheses={selectedHypothesisList} />,
     },
     {
       id: "tab2",
       label: "Hypotheses",
-      content: <HypothesisList hypotheses={hypothesisList} />,
+      content: <HypothesisList hypotheses={hypothesisList} onSelectionChange={(selection) => setSelectedHypothesisList(selection)} />,
     }
   ];
 

@@ -37,10 +37,10 @@ const ActionListManager: React.FC<ActionListManagerProps> = ({hypotheses}: Actio
   const generateActions = async () => {
     setIsLoadingActions(true);
     const myEvent: Event = event as Event;
-    dispatch(fetchAiUserActions({limit: 1, event: event as Event, hypothesisList: hypotheses || []}));
+    dispatch(fetchAiUserActions({limit: 1, event: myEvent, hypothesisList: hypotheses || []}));
     setTimeout(() => setIsLoadingActions(false), 1000);
   }
-
+  
   useEffect(() => {
     if(userProfile && event && event._id){
       dispatch(fetchEventUserActions({userId: userProfile.userId, eventId: event._id}));

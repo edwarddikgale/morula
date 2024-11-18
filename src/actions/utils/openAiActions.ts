@@ -41,9 +41,7 @@ const openAiActions = {
     getActions: async (details: ActionGeneratorPayload): Promise<Action[]> => {
 
         // Create the AI prompt based on the provided details
-        const aiPrompt = `Give me recommended actions for a scrum team to improve a scrum event ${details.event.category} based on hypothesis generated from this event ${JSON.stringify(details.hypothesisList)}. Please format the response as JSON of pairs {title, description}. Make the description at least one sentence.`;
-
-        console.log(`AI prompt: ${aiPrompt}`);
+        const aiPrompt = `Give me recommended action list for a scrum team to improve a scrum event ${details.event.category} based on hypothesis generated from this event ${JSON.stringify(details.hypothesisList)}. Please format the response as JSON of pairs {title, description}. Make the description at least one sentence. Limit the list to max ${details.limit || 1} actions`;
 
         // Call the action generator
         const aiActions = (await actionGenerator(aiPrompt)).recommendedActions;

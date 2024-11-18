@@ -85,7 +85,6 @@ export const handleFetchEventUserActions = {
     },
     rejected: (state: UserActionState, action: PayloadAction<string | unknown>) => {
       state.loading = false;
-      state.list = <UserAction[]>[];
       state.error = action.payload?.toString() || "Sorry, seems like something went wrong";
       state.processingDone = false;
     }
