@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { delay } from "../../slices/profileSlice";
 import { actionAPI } from "actions/utils/actionAPI";
 
-interface DeleteUserActionProps{actionId: string | null, index: number};
+interface DeleteUserActionProps{actionId: string | null | undefined, index: number};
 export const deleteUserAction = createAsyncThunk(
     'action/deleteUserAction',
     async ({actionId, index}: DeleteUserActionProps, { rejectWithValue }) => {

@@ -40,7 +40,7 @@ const ActionListManager: React.FC<ActionListManagerProps> = ({hypotheses}: Actio
     dispatch(fetchAiUserActions({limit: 1, event: myEvent, hypothesisList: hypotheses || []}));
     setTimeout(() => setIsLoadingActions(false), 1000);
   }
-  
+
   useEffect(() => {
     if(userProfile && event && event._id){
       dispatch(fetchEventUserActions({userId: userProfile.userId, eventId: event._id}));
@@ -50,6 +50,7 @@ const ActionListManager: React.FC<ActionListManagerProps> = ({hypotheses}: Actio
   const filteredActionList = list.filter((action) => action.title.includes(searchQuery));
 
   const handleDeleteAction = async (index: number) => { 
+    if(!list[index].id) throw Error(`Delete is not possible without an action item's id`);
     dispatch(deleteUserAction({actionId: list[index].id, index: index}));
   };
 
@@ -62,6 +63,30 @@ const ActionListManager: React.FC<ActionListManagerProps> = ({hypotheses}: Actio
   const handleEditAction = (index: number, item: Action) => { 
     setIsEditOpen(true);
     dispatch(editUserAction(item as UserAction));
+  };
+
+  const handleCreateCustomAction = () =>{
+    if(!userProfile || !userProfile.userId) throw Error(`No user profile`);
+    const newAction: UserAction = {
+      userId: userProfile?.userId, eventId: eventId,
+      title: "",
+      description: "",
+      requirement: null,
+      frequency: null,
+      actionType: null,
+      piResource: null,
+      resourceUrl: null,
+      source: "User",
+      sdg: null
+    };
+    dispatch(editUserAction(newAction));
+    setIsEditOpen(prev => !prev);
+
+  }
+
+  const onCreateUserAction = (index: number | null, item: UserAction) => { 
+    dispatch(createUserAction({action: item, index: -1}));
+    setIsEditOpen(false);
   };
 
   const onUpdateUserAction = (index: number | null, item: UserAction) => { 
@@ -92,6 +117,7 @@ const ActionListManager: React.FC<ActionListManagerProps> = ({hypotheses}: Actio
             handleDeleteAction={handleDeleteAction}
             handleEditAction={handleEditAction}
             handleCreateAction={handleCreateAction}
+            handleCreateCustomAction={handleCreateCustomAction}
             generateActions={generateActions}
           />
 
@@ -107,11 +133,11 @@ const ActionListManager: React.FC<ActionListManagerProps> = ({hypotheses}: Actio
                               event={event}
                               data={data || {} as UserAction}
                               onCancel={() => setIsEditOpen(false)}
-                              onUpdate={onUpdateUserAction}
+                              onUpdate={data.id? onUpdateUserAction: onCreateUserAction}
                               onDelete={() => {}}
                               index={index}
                             />
-                        )}
+                          )}
                       </div>
                     }
             />

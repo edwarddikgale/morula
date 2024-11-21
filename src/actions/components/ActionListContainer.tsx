@@ -14,6 +14,7 @@ interface ActionListContainerProps {
   handleDeleteAction: (index: number) => void;
   handleEditAction: (index: number, item: Action) => void;
   handleCreateAction: (index: number, item: Action) => void;
+  handleCreateCustomAction: () => void;
   generateActions: () => void;
 }
 
@@ -27,8 +28,9 @@ const ActionListContainer: React.FC<ActionListContainerProps> = ({
   setSearchQuery, 
   handleDeleteAction, 
   handleEditAction, 
-  handleCreateAction }) => {
-  const createCustomAction = () => {}
+  handleCreateAction,
+  handleCreateCustomAction }) => {
+
   return (
     <div className='mb-2'>
       <div className='row'>
@@ -41,7 +43,7 @@ const ActionListContainer: React.FC<ActionListContainerProps> = ({
         <div className='col-4 d-flex justify-content-end'>
           <ActionButtons
             getActions={generateActions}
-            createCustomAction={createCustomAction}
+            createCustomAction={handleCreateCustomAction}
             isLoading={isLoadingActions}
             actionList={actionList}
             hideExport={true} />

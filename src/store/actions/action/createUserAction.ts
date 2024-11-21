@@ -8,6 +8,7 @@ export const createUserAction = createAsyncThunk(
     'action/createUserAction',
     async ({action, index}: CreateUserActionProps, { rejectWithValue }) => {
         try {
+            delete action.id;
             const response = await actionAPI.createUserAction(action);
             await delay(1000);
             return {response, index};

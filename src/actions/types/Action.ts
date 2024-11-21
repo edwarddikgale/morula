@@ -1,5 +1,5 @@
 export interface Action {
-    id: string | null,
+    id?: string | null,
     title: string;
     description: string;
     requirement: string | null,

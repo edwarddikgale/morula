@@ -107,6 +107,11 @@ export const handleCreateUserAction = {
         state.isCreating = false;
         state.data = userAction;
         state.list[index] = userAction;
+        if (index !== -1) {// If the action exists, replace it
+            state.list[index] = userAction;
+        } else {// If the action doesn't exist, add it to the list
+            state.list = [userAction,...state.list];
+        }
         state.error = null;
         state.processingDone = true;
         state.isProcessing = false;

@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Textbox } from '../../../common/components/ui/Textbox';
-import { Dropdown } from "../../../common/components/ui/Dropdown"; 
+import { Textbox } from 'common/components/ui/Textbox';
+import { Dropdown } from "common/components/ui/Dropdown"; 
 import { ActionTask } from "actions/types/task";
-import { LoaderSm } from "../../../common/components/Loader/Loader";
+import { LoaderSm } from "common/components/Loader/Loader";
+import AnimatedButton from "common/components/ui/AnimatedButton";
 
 interface TaskFormProps {
   taskTitle: string;
@@ -88,9 +89,12 @@ const TaskForm: React.FC<TaskFormProps> = ({
         <button type='button' className='btn btn-warning btn-sm ms-3' onClick={onCancel}>
           Cancel
         </button>
-        <button onClick={onSubmit} type='button' className='btn btn-primary btn-sm ms-3'>
+        <button onClick={onSubmit} type='button' className='d-none btn btn-primary btn-sm ms-3'>
           {submitButtonText}
         </button>
+        <AnimatedButton onClick={onSubmit} type="button" className="btn btn-primary btn-sm ms-3">
+          {submitButtonText}
+        </AnimatedButton>
       </div>
     </div>
   );
