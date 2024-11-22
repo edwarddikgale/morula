@@ -4,6 +4,7 @@ import { Checkbox, FormSectionContainer, TimeZoneSelect } from 'common/component
 import { Team } from '../types/Team'; // make sure to point to the correct model location
 
 import '../styles/team-form.css';
+import AnimatedButton from 'common/components/ui/AnimatedButton';
 
 interface TeamFormProps {
   team?: Team;
@@ -96,6 +97,7 @@ const TeamForm: React.FC<TeamFormProps> = ({ team, onSubmit, onDelete, onCancel 
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
+              required
             ></textarea>
             <label htmlFor="teamDescription">Description</label>
           </div>
@@ -170,9 +172,9 @@ const TeamForm: React.FC<TeamFormProps> = ({ team, onSubmit, onDelete, onCancel 
                 Cancel
             </button>  
           }
-          <button type="submit" className="btn btn-primary me-3">
+          <AnimatedButton type="submit" className="btn btn-primary me-3">
             Save Team
-          </button>
+          </AnimatedButton>
           {team && onDelete && (
             <button type="button" className="btn btn-danger" onClick={handleDelete}>
               Delete Team

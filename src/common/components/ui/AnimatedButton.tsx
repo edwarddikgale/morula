@@ -6,7 +6,7 @@ interface AnimatedButtonProps {
   className?: string; // Bootstrap class like btn-primary, btn-secondary, etc.
   isProcessing?: boolean; // Controls animation
   onClick?: () => void; // Handle button click
-  type?: 'button' | 'reset'; //| 'submit'
+  type?: 'button' | 'reset' | 'submit'; //| 'submit'
 }
 
 const AnimatedButton: React.FC<AnimatedButtonProps> = ({
