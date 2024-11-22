@@ -48,7 +48,7 @@ const ActionHypotheses = () => {
     {
       id: "tab2",
       label: "Hypotheses",
-      content: <HypothesisList hypotheses={hypothesisList} onSelectionChange={(selection) => setSelectedHypothesisList(selection)} />,
+      content: <HypothesisList hypotheses={hypothesisList} selectable={true} onSelectionChange={(selection) => setSelectedHypothesisList(selection)} />,
     }
   ];
 

@@ -11,8 +11,6 @@ const actionGenerator = async (aiPrompt: string): Promise<ActionGeneratorRespons
         dangerouslyAllowBrowser: true
     });
 
-    console.log(`Ai MODEL: ${process.env.REACT_APP_OPENAI_MODEL}`);
-
     try {
         // Call the OpenAI API
         const response = await openai.chat.completions.create({
@@ -30,7 +28,6 @@ const actionGenerator = async (aiPrompt: string): Promise<ActionGeneratorRespons
 
         // Parse the AI response as JSON
         const aiResponse = JSON.parse(response.choices[0].message.content as unknown as string);
-         console.log(`aiResponse : ${JSON.stringify(aiResponse)}`);
         return aiResponse;
 
     } catch (error: any) {
@@ -50,7 +47,8 @@ const openAiActions = {
         // Return the generated actions from OpenAI
         return aiActions.map((action) => ({
             ...action,
-            source: "ai"
+            source: "ai",
+            hypotheses: details.hypothesisList
         }));
     }
 };

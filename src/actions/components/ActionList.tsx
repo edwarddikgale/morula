@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Action } from '../types/Action';
 import { Button, Spinner } from 'react-bootstrap';
 import LimitedCharacters from 'common/components/ui/LimitedCharacters';
@@ -8,6 +8,9 @@ import { addCircleOutline, addCircleSharp, pencil } from 'ionicons/icons';
 import DeleteConfirmation from 'common/components/ui/DeleteConfirmation';
 
 import "./styles/action-list.css";
+import { HypothesisList } from './HypothesisList';
+import { Hypothesis } from 'observation/types/ScrumAnalysis';
+import RightOverlay from 'common/components/overlay/RightOverlay';
 
 interface ActionListProps {
   data: Action[];
@@ -18,6 +21,8 @@ interface ActionListProps {
 }
 
 const ActionList: React.FC<ActionListProps> = ({ data, onDeleteItem, onCreateItem, onEditItem, isCreating }) => {
+  const [showHypotheses, setShowHypotheses] = useState<boolean>(false);
+
   return (
     <div className="list-group my-3 ms-2">
       {data.map((item, index) => (
@@ -33,6 +38,26 @@ const ActionList: React.FC<ActionListProps> = ({ data, onDeleteItem, onCreateIte
             <div className='col-11 col-md-11'>
               <h5>{item.title}</h5>
               <LimitedCharacters text={item.description} limit={200} />
+              {item.hypotheses &&
+                <button type='button' className='btn btn-outline-secondary btn-sm ms-3' onClick={() => setShowHypotheses(prev => !prev)}>
+                  {item.hypotheses?.length || 0} Hypotheses
+                </button>
+              }
+              {showHypotheses && item.hypotheses && 
+                <RightOverlay 
+                        onClose={() => setShowHypotheses(false)}
+                        isOpen={showHypotheses}
+                        children={
+                          <div>
+                              {showHypotheses && (
+                                  <div className='p-4'>
+                                    <HypothesisList hypotheses={item.hypotheses} selectable={false} />
+                                  </div>
+                              )}
+                          </div>
+                        }
+                />
+              } 
               <div className=''>
                 <small className='ms-auto'>Created on: {item.createdAt? new Date(item.createdAt).toLocaleDateString(): 'Unknown'}</small>
               </div>

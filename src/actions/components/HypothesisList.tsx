@@ -8,12 +8,13 @@ import { Checkbox } from 'common/components/ui/Checkbox';
 
 interface HypothesisListProps {
     hypotheses?: Hypothesis[];
-    onSelectionChange: (selectedList: Hypothesis[]) => void;
+    selectable: boolean;
+    onSelectionChange?: (selectedList: Hypothesis[]) => void;
 }
 
-const HypothesisList: React.FC<HypothesisListProps> = ({ hypotheses, onSelectionChange }) => {
+const HypothesisList: React.FC<HypothesisListProps> = ({ hypotheses, selectable, onSelectionChange }) => {
     const [selected, setSelected] = useState<Hypothesis[]>([]);
-
+    
     const handleProbabilityChange = (index:number, value:number) =>{}
     const handleCheckChange = (checked: boolean, index: number) =>{
       let currentSelection = [...selected];
@@ -43,14 +44,16 @@ const HypothesisList: React.FC<HypothesisListProps> = ({ hypotheses, onSelection
                       <div className='w-75'>
                         <h5 className="hypothesis-title mb-2">{item.hypothesis}</h5>
                       </div>
-                      <div className='d-flex justify-content-end align-items-center w-25'>
-                        <Checkbox 
-                          label={''} 
-                          checked={false} 
-                          onChange={(checked) => handleCheckChange(checked, index)}
-                          borderStyle='dark-bordered'
-                          />
-                      </div>    
+                      {selectable &&
+                        <div className='d-flex justify-content-end align-items-center w-25'>
+                          <Checkbox 
+                            label={''} 
+                            checked={false} 
+                            onChange={(checked) => handleCheckChange(checked, index)}
+                            borderStyle='dark-bordered'
+                            />
+                        </div>
+                      }    
                     </div>
                     <p className="hypothesis-explanation text-muted">{item.explanation}</p>
                     <div className='probability'>

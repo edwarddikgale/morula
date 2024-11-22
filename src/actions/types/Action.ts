@@ -1,3 +1,5 @@
+import { Hypothesis } from "observation/types/ScrumAnalysis";
+
 export interface Action {
     id?: string | null,
     title: string;
@@ -8,6 +10,7 @@ export interface Action {
     piResource: string | null,
     resourceUrl: string | null,
     source: string | null,
+    hypotheses?: Hypothesis[]
     sdg: number | null,
     createdAt?: Date
 }
