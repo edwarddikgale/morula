@@ -21,7 +21,14 @@ interface ActionListProps {
 }
 
 const ActionList: React.FC<ActionListProps> = ({ data, onDeleteItem, onCreateItem, onEditItem, isCreating }) => {
-  const [showHypotheses, setShowHypotheses] = useState<boolean>(false);
+  const [hypothesisVisibility, setHypothesisVisibility] = useState<{[key:string]:boolean}>({});
+
+  const toggleHypotheses =  (id: string) =>{
+    setHypothesisVisibility(prevState =>({
+      ...prevState,
+      [id]: !prevState[id]
+    }))
+  };
 
   return (
     <div className="list-group my-3 ms-2">
@@ -39,17 +46,17 @@ const ActionList: React.FC<ActionListProps> = ({ data, onDeleteItem, onCreateIte
               <h5>{item.title}</h5>
               <LimitedCharacters text={item.description} limit={200} />
               {item.hypotheses &&
-                <button type='button' className='btn btn-outline-secondary btn-sm ms-3' onClick={() => setShowHypotheses(prev => !prev)}>
+                <button type='button' className='btn btn-outline-secondary btn-sm ms-3' onClick={() => toggleHypotheses(item.id || `key-${index}`)}>
                   {item.hypotheses?.length || 0} Hypotheses
                 </button>
               }
-              {showHypotheses && item.hypotheses && 
+              {hypothesisVisibility[item.id || `key-${index}`] && item.hypotheses && 
                 <RightOverlay 
-                        onClose={() => setShowHypotheses(false)}
-                        isOpen={showHypotheses}
+                        onClose={() => toggleHypotheses(item.id || `key-${index}`)}
+                        isOpen={hypothesisVisibility[item.id || `key-${index}`]}
                         children={
                           <div>
-                              {showHypotheses && (
+                              {hypothesisVisibility[item.id || `key-${index}`] && (
                                   <div className='p-4'>
                                     <HypothesisList hypotheses={item.hypotheses} selectable={false} />
                                   </div>

@@ -50,7 +50,6 @@ const ActionListManager: React.FC<ActionListManagerProps> = ({hypotheses}: Actio
   const filteredActionList = list.filter((action) => action.title.includes(searchQuery));
 
   const handleDeleteAction = async (index: number) => { 
-    if(!list[index].id) throw Error(`Delete is not possible without an action item's id`);
     dispatch(deleteUserAction({actionId: list[index].id, index: index}));
   };
 
