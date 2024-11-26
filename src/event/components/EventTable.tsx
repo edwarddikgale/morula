@@ -20,6 +20,7 @@ import DeleteConfirmation from "common/components/ui/DeleteConfirmation";
 import { Event } from '../types/Event';
 import { Pagination } from "common/types/list/Pagination";
 import { LoaderPrimary, LoaderSm } from "common/components/Loader/Loader";
+import EventTextIcon from "./common/EventTextIcon";
 
 type ValuePiece = Date | null;
 
@@ -284,7 +285,8 @@ const EventTable = () => {
                         </div>
                         <div className='d-flex align-items-center '>
                           <div className='mx-2'>
-                            <img className='event-Img' src={tImg} alt='Event' />
+                            {/*<img className='event-Img' src={tImg} alt='Event' />*/}
+                            <EventTextIcon title={event.category || 'Unknown'} size={80} />
                           </div>
                           <div>
                             <h6>{event.title}</h6>
