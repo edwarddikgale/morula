@@ -225,8 +225,8 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
     if(eventCategory === 'daily'){ //todo: convert this to an enum
       setEventStartTime(team.dailyStartTime);
       setEventEndTime(team.dailyEndTime);
-      setEventTimeZone(team.timeZone);
     }
+    setEventTimeZone(team.timeZone);
   }
   // form action
 
