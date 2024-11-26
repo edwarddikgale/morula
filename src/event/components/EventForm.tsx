@@ -815,22 +815,24 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
               </Link>
             </p>
 
-            {/* <div className='form-floating mb-3'>
+            <div className='form-floating mb-3'>
               <textarea
                 className='form-control'
                 id='evenDescription'
                 placeholder='Description'
                 required
-                value={eventDescription}
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setEventDescription(e.target.value)}
+                value={content}
+                style={{ minHeight: `${5   * 1.5}em` }}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setContent(e.target.value)}
               />
               <label htmlFor='evenDescription'>
                 Description <span className='text-danger'>*</span>
               </label>
-            </div> */}
-
+            </div> 
+            {/* 
             <Description content={content} setContent={setContent} />
-            {/* <TTT /> */}
+            <TTT /> 
+            */}
 
             <Link to='/suggest-description' className='text-decoration-none fw-bolder my-5 d-inline-block d-none  '>
               <FontAwesomeIcon icon={faBolt} /> Suggest Description
