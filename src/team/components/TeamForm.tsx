@@ -25,6 +25,10 @@ const TeamForm: React.FC<TeamFormProps> = ({ team, onSubmit, onDelete, onCancel 
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setTimeout(() => handleSubmit(), 750);
+  };
+
+  const handleSubmit = () =>{
     const updatedTeam: Team = {
       ...team,
       name: teamName,
@@ -40,8 +44,8 @@ const TeamForm: React.FC<TeamFormProps> = ({ team, onSubmit, onDelete, onCancel 
       updatedAt: new Date(),
       _id: team?._id || '',
     };
-    onSubmit(updatedTeam);
-  };
+    onSubmit(updatedTeam);    
+  }
 
   const handleDelete = () => {
     if (team && team._id && onDelete) {
@@ -172,9 +176,9 @@ const TeamForm: React.FC<TeamFormProps> = ({ team, onSubmit, onDelete, onCancel 
                 Cancel
             </button>  
           }
-          <AnimatedButton type="submit" className="btn btn-primary me-3">
+          <button type="submit" className="btn btn-primary me-3">
             Save Team
-          </AnimatedButton>
+          </button>
           {team && onDelete && (
             <button type="button" className="btn btn-danger" onClick={handleDelete}>
               Delete Team
