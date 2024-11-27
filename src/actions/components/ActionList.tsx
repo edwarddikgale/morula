@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Action } from '../types/Action';
-import { Button, Spinner } from 'react-bootstrap';
+import { ProgressBar, Spinner } from 'react-bootstrap';
 import LimitedCharacters from 'common/components/ui/LimitedCharacters';
 import RoundNumber from 'common/components/ui/RoundNumber';
 import { IonIcon } from '@ionic/react';
@@ -9,11 +9,12 @@ import DeleteConfirmation from 'common/components/ui/DeleteConfirmation';
 
 import "./styles/action-list.css";
 import { HypothesisList } from './HypothesisList';
-import { Hypothesis } from 'observation/types/ScrumAnalysis';
 import RightOverlay from 'common/components/overlay/RightOverlay';
+import { UserAction } from 'actions/types';
+import TimeAgo from 'react-timeago';
 
 interface ActionListProps {
-  data: Action[];
+  data: UserAction[];
   onDeleteItem: (index: number) => void;
   onEditItem: (index: number, item: Action) => void;
   onCreateItem: (index: number, item: Action) => void;
@@ -66,7 +67,14 @@ const ActionList: React.FC<ActionListProps> = ({ data, onDeleteItem, onCreateIte
                 />
               } 
               <div className=''>
-                <small className='ms-auto'>Created on: {item.createdAt? new Date(item.createdAt).toLocaleDateString(): 'Unknown'}</small>
+                <small className='ms-auto'>
+                  <i className='muted'>Created</i>: 
+                  <strong>{item.createdAt && <TimeAgo date={new Date(item.createdAt)} />} </strong> 
+                  on {item.createdAt? new Date(item.createdAt).toLocaleDateString(): 'Unknown'}</small>
+                <div className='mt-1' style={{minWidth: "200px", maxWidth: "400px"}}>
+                  Tasks: {item.taskCount} 
+                  <ProgressBar now={item.taskCompletion} />
+                </div>
               </div>
             </div>  
           </div>

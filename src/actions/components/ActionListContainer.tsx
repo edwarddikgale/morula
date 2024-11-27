@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Action } from '../types';
+import { Action, UserAction } from '../types';
 import SearchBox from 'common/components/search/SearchBox';
 import ActionList from "./ActionList";
 import ActionButtons from './ActionButtons';
 
 interface ActionListContainerProps {
-  actionList: Action[];
-  filteredActionList: Action[];
+  actionList: UserAction[];
+  filteredActionList: UserAction[];
   searchQuery: string;
   isLoadingActions: boolean;
   isCreating: boolean;

@@ -71,7 +71,11 @@ const EventReadOnly: React.FC<IProps> = ({ id, event }) => {
                                 preText={``}
                                 showSubDetails={true} />
                         }
-
+                        {
+                            !parentId
+                            &&
+                            <div className="text-warning font-weight-bold mb-2">This event has no parent</div>
+                        }
                     </div>
                     <div className="col-md-3">
                         <strong>Event Category</strong>
