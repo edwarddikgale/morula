@@ -37,12 +37,12 @@ const ActionList: React.FC<ActionListProps> = ({ data, onDeleteItem, onCreateIte
           
           <RoundNumber text={`${index + 1}`} />
           <div className='row g-1 mb-3'>
-            <div className='col-1 col-md-1'>
+            <div className='col-1 col-md-1' style={{ minWidth: '50px', maxWidth: '50px' }}>
               <p className='action-type vertical-text'>
                   {item.actionType || 'Unknown'}
               </p>
             </div>
-            <div className='col-11 col-md-11'>
+            <div className='col-11 col-md-11 text-start' style={{ width: '80%' }}>
               <h5>{item.title}</h5>
               <LimitedCharacters text={item.description} limit={200} />
               {item.hypotheses &&

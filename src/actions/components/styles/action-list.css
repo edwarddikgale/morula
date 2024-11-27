@@ -131,3 +131,7 @@
     transform-origin: left top; /* Set origin so text flows correctly */
     min-width: 95px;
   }
+
+  .action-type-col {
+     width: '50px'; 
+  }
