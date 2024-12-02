@@ -153,3 +153,15 @@
   color: gray;
   letter-spacing: 0.1rem;
 }
+
+/* Base style for the hyperlink */
+a.event-link {
+  text-decoration: none; /* Removes the underline */
+  color: #000; /* Default link color */
+  transition: color 0.2s ease-in-out; /* Smooth color change on hover */
+}
+
+/* Style for when the link is hovered */
+a.event-link:hover {
+  color: #0056b3; /* Slightly darker shade */
+}

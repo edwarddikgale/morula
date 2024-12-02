@@ -8,6 +8,7 @@ interface ScrumValueAnalysis {
     hypothesis: string;
     explanation: string;
     probability: number;
+    context?: string;
   }
   
   interface ScrumValuesAnalyses{

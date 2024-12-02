@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar, faList, faPlus, faArrowDown } from "@fortawesome/free-solid-svg-icons";
 import { ProgressBar, Table } from "react-bootstrap";
 import tImg from "../assets/t1.jpg";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Calendar from "react-calendar";
 import { eventsAPI } from "../utils/API";
 import { extractMonthAndDate, formatDateFull } from "./utils/utils";
@@ -289,7 +289,9 @@ const EventTable = () => {
                             <EventTextIcon title={event.category || 'Unknown'} size={80} />
                           </div>
                           <div>
-                            <h6>{event.title}</h6>
+                            <h6>
+                              <Link to={`/eventview/${event._id}`} className="event-link">{event.title}</Link>
+                            </h6>
                             <p className='mb-0 text-muted fs-14'>{event.summary}</p>
                             <p className='mb-0 text-muted fs-14'>{formatDateFull(event.endDate)}</p>
                           </div>

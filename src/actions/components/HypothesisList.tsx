@@ -43,6 +43,13 @@ const HypothesisList: React.FC<HypothesisListProps> = ({ hypotheses, selectable,
                     <div className='d-flex w-100'>
                       <div className='w-75'>
                         <h5 className="hypothesis-title mb-2">{item.hypothesis}</h5>
+                        {/*
+                        <small className='ms-auto'>
+                          <i className='muted'>Created</i>: 
+                          <strong>{item. && <TimeAgo date={new Date(item.createdAt)} />} </strong> 
+                          on {item.createdAt? new Date(item.createdAt).toLocaleDateString(): 'Unknown'}
+                        </small>
+                        */}
                       </div>
                       {selectable &&
                         <div className='d-flex justify-content-end align-items-center w-25'>

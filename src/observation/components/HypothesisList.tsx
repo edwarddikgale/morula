@@ -2,12 +2,7 @@ import React, { useState } from 'react';
 import { Form, Row, Col } from "react-bootstrap";
 import "../styles/hypothesis-list.css";
 import { ProbabilitySlider } from 'common/components/custom/ProbabilitySlider';
-
-interface Hypothesis {
-  hypothesis: string;
-  explanation: string;
-  probability: number;
-}
+import { Hypothesis } from 'observation/types/ScrumAnalysis';
 
 interface HypothesisListProps {
   hypotheses: Hypothesis[];
@@ -20,6 +15,14 @@ const HypothesisList: React.FC<HypothesisListProps> = ({ hypotheses, onUpdate })
   const handleProbabilityChange = (index: number, newProbability: number) => {
     const updatedHypotheses = hypothesisData.map((hypothesis, i) =>
       i === index ? { ...hypothesis, probability: newProbability } : hypothesis
+    );
+    setHypothesisData(updatedHypotheses);
+    onUpdate(index, updatedHypotheses[index]);
+  }
+
+  const handleContextChange = (index: number, newContext: string) => {
+    const updatedHypotheses = hypothesisData.map((hypothesis, i) =>
+      i === index ? { ...hypothesis, context: newContext } : hypothesis
     );
     setHypothesisData(updatedHypotheses);
     onUpdate(index, updatedHypotheses[index]);
@@ -40,6 +43,20 @@ const HypothesisList: React.FC<HypothesisListProps> = ({ hypotheses, onUpdate })
               onChange={(newVal: number) => handleProbabilityChange(index, newVal)}            
             />
           </div>
+          {/* Context */}
+          <div className='form-floating mb-3'>
+              <textarea
+                className='form-control'
+                id={`hypothesisContext-${index}`}
+                placeholder='Provide hypothesis context/explanation if needed'
+                value={item.context}
+                style={{ minHeight: `${2   * 1.5}em` }}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleContextChange(index, e.target.value)}
+              />
+              <label htmlFor={`hypothesisContext-${index}`}>
+                Further Context <span className='text-warning'> ? </span>
+              </label>
+            </div> 
         </div>
       ))}
     </div>

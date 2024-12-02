@@ -66,8 +66,8 @@ export const eventsAPI = {
   },
 
   
-  async getSprints(userId: string, teamId?: string): Promise<GetSprintsResponse> {
-    const response = await fetch(`${API_URL}/events/sprints/${userId}/${teamId || ''}`, {
+  async getSprints(userId: string, teamId: string): Promise<GetSprintsResponse> {
+    const response = await fetch(`${API_URL}/events/sprints/${userId}?teamId=${teamId}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" }
     });

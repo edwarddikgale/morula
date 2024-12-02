@@ -47,7 +47,7 @@ const ActionList: React.FC<ActionListProps> = ({ data, onDeleteItem, onCreateIte
               <h5>{item.title}</h5>
               <LimitedCharacters text={item.description} limit={200} />
               {item.hypotheses &&
-                <button type='button' className='btn btn-outline-secondary btn-sm ms-3' onClick={() => toggleHypotheses(item.id || `key-${index}`)}>
+                <button type='button' className='btn btn-outline-secondary btn-sm mb-1' onClick={() => toggleHypotheses(item.id || `key-${index}`)}>
                   {item.hypotheses?.length || 0} Hypotheses
                 </button>
               }
@@ -70,7 +70,8 @@ const ActionList: React.FC<ActionListProps> = ({ data, onDeleteItem, onCreateIte
                 <small className='ms-auto'>
                   <i className='muted'>Created</i>: 
                   <strong>{item.createdAt && <TimeAgo date={new Date(item.createdAt)} />} </strong> 
-                  on {item.createdAt? new Date(item.createdAt).toLocaleDateString(): 'Unknown'}</small>
+                  on {item.createdAt? new Date(item.createdAt).toLocaleDateString(): 'Unknown'}
+                </small>
                 <div className='mt-1' style={{minWidth: "200px", maxWidth: "400px"}}>
                   Tasks: {item.taskCount} 
                   <ProgressBar now={item.taskCompletion} />

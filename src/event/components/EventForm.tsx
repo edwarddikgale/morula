@@ -108,7 +108,7 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
   // description
   const [content, setContent] = useState<string>("");
 
-  const loadSprints = async (userId: string, teamId?: string) => { 
+  const loadSprints = async (userId: string, teamId: string) => { 
     const response =  await eventsAPI.getSprints(userId, teamId);
     setSprints(response.events.map(evt => evt as EventFormData));
   }
@@ -153,12 +153,17 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
       }
     }, [event]);
   
-    useEffect(()=>{
-      if(userId){
-        loadSprints(userId);
-        loadTeams(userId);
-      }
-    }, [userId])
+  useEffect(()=>{
+    if(userId){
+      loadTeams(userId);
+    }
+  }, [userId]);
+
+  useEffect(()=>{
+    if(userId && eventTeamId){
+      loadSprints(userId, eventTeamId);
+    }
+  }, [userId, eventTeamId])
 
   const handleStartCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
