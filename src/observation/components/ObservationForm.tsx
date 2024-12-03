@@ -23,6 +23,7 @@ import { ObservationList } from './ObservationList';
 import { splitScrumPatterns } from 'observation/utils/splitScrumPatterns';
 import SelectableButtonGroup from 'common/components/ui/SelectableButtonGroup';
 import capitaliseFirstLetter from 'common/utils/capitaliseFirstLetter';
+import AnimatedButton from '@components/ui/AnimatedButton';
 
 interface IProps{
     eventData: EventFormData
@@ -31,6 +32,7 @@ interface IProps{
 const tagOptions: NoteTag[] = noteTags;
 
 const ObservationForm: React.FC<IProps> = ({eventData}) => {
+  const [visible, setVisible] = useState<boolean>(true);
   const [notes, setNotes] = useState('');
   const [error, setError] = useState<string | null>('');
   const [analysis, setAnalysis] = useState<ScrumAnalysisResponse | null>(null);
@@ -57,6 +59,7 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
   }
 
   const handleObservationSelect = (observation: Observation) =>{
+    setVisible(false);
     setObservation(observation);
     setNotes(observation.notes);
     setNoteType(observation.type);
@@ -75,6 +78,8 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
       setScrumAntiPatterns([]);
       setScrumDesignPatterns([]);
     }
+
+    setTimeout(() => setVisible(true), 500);
   }
 
   const loadObservations = async (eventId: string) =>{
@@ -106,6 +111,7 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
         designPatterns: observation?.patterns?.filter(pattern => pattern.type === 'design-pattern')
       });
 
+      console.log(response);
       setAnalysis(response);
       setIsLoading(false);
 
@@ -187,7 +193,7 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
   };
 
   return (
-    <div className='container observation-form'>
+    <div className={`container observation-form animated-form-container ${visible ? 'visible' : 'hidden'}`}>
       <form onSubmit={handleSubmit}>
         <div className='event-header mb-4'>
             <h3 className='section-title'>{eventData.title} - {eventData.category}</h3>
@@ -361,6 +367,7 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
             {isLoading && <LoaderSm />}
           </button>
         </div>
+
       </form>
 
       <div>

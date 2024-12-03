@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { Form, Row, Col } from "react-bootstrap";
+import React, { useEffect, useState } from 'react';
 import "../styles/hypothesis-list.css";
 import { ProbabilitySlider } from 'common/components/custom/ProbabilitySlider';
 import { Hypothesis } from 'observation/types/ScrumAnalysis';
@@ -9,13 +8,26 @@ interface HypothesisListProps {
   onUpdate: (index:number, hypothesis: Hypothesis) => void
 }
 
+const cleanList = (list?: Hypothesis[]) =>{
+  return list?.filter(hyp => (hyp && hyp !== null)) || []
+}
+
 const HypothesisList: React.FC<HypothesisListProps> = ({ hypotheses, onUpdate }) => {
-  const [hypothesisData, setHypothesisData] = useState(hypotheses);
+  const [hypothesisData, setHypothesisData] = useState(cleanList(hypotheses));
   
+  console.log(hypothesisData);
+  // Synchronize hypothesisData with hypotheses prop
+  useEffect(() => {
+    if(hypotheses){
+      setHypothesisData(cleanList(hypotheses));
+    }
+  }, [hypotheses]);
+
   const handleProbabilityChange = (index: number, newProbability: number) => {
     const updatedHypotheses = hypothesisData.map((hypothesis, i) =>
       i === index ? { ...hypothesis, probability: newProbability } : hypothesis
     );
+    console.log(updatedHypotheses);
     setHypothesisData(updatedHypotheses);
     onUpdate(index, updatedHypotheses[index]);
   }
@@ -24,13 +36,14 @@ const HypothesisList: React.FC<HypothesisListProps> = ({ hypotheses, onUpdate })
     const updatedHypotheses = hypothesisData.map((hypothesis, i) =>
       i === index ? { ...hypothesis, context: newContext } : hypothesis
     );
+    console.log(updatedHypotheses);
     setHypothesisData(updatedHypotheses);
     onUpdate(index, updatedHypotheses[index]);
   }
 
   return (
     <div className="hypothesis-list container mt-4">
-      <h3 className="mb-4">Hypotheses</h3>
+      <h3 className="mb-4">Hypotheses ( {hypotheses?.length} )</h3>
       {hypothesisData.map((item, index) => (
         <div key={index} className="hypothesis-item mb-4 p-4 border rounded shadow-sm">
           <h5 className="hypothesis-title mb-2">{item.hypothesis}</h5>
@@ -59,6 +72,7 @@ const HypothesisList: React.FC<HypothesisListProps> = ({ hypotheses, onUpdate })
             </div> 
         </div>
       ))}
+      
     </div>
   );
 };

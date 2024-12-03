@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ProbabilitySlider } from 'common/components/custom/ProbabilitySlider';
 import RoundNumber from 'common/components/ui/RoundNumber';
 import { Hypothesis } from 'observation/types/ScrumAnalysis';
@@ -12,8 +12,20 @@ interface HypothesisListProps {
     onSelectionChange?: (selectedList: Hypothesis[]) => void;
 }
 
+const cleanList = (list?: Hypothesis[]) =>{
+  return list?.filter(hyp => (hyp && hyp !== null)) || []
+}
+
 const HypothesisList: React.FC<HypothesisListProps> = ({ hypotheses, selectable, onSelectionChange }) => {
     const [selected, setSelected] = useState<Hypothesis[]>([]);
+    const [hypothesisList, setHypothesisList] = useState<Hypothesis[]>(cleanList(hypotheses));
+
+
+    useEffect(() => {
+      if(hypotheses){
+        setHypothesisList(cleanList(hypotheses));
+      }
+    }, hypotheses)
     
     const handleProbabilityChange = (index:number, value:number) =>{}
     const handleCheckChange = (checked: boolean, index: number) =>{
@@ -36,7 +48,7 @@ const HypothesisList: React.FC<HypothesisListProps> = ({ hypotheses, selectable,
         <h3 className="mb-4">Hypotheses ({hypotheses?.length || 0})</h3>
         {hypotheses &&
         <div>
-            {hypotheses.map((item, index) => (
+            {hypothesisList.map((item, index) => (
               <div key={index} className="list-group-item mb-4 p-3 border rounded">
                   <RoundNumber text={`${index + 1}`} />
                   <div>
