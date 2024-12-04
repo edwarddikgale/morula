@@ -1,14 +1,13 @@
-export interface taskType {
-  id: string;
+export interface TaskType {
+  id?: string;
   title: string;
   status: string;
 }
 
-export interface ActionTask{
-  id: string;
-  title: string;
-  status: string;
+export interface ActionTask extends TaskType{
   actionId: string;
-  actionTitle: string;
-  sdg: number
+  actionTitle?: string;
+  assignedToId?: string;
+  createdById?: string;
+  sdg?: number
 }

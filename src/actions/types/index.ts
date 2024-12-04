@@ -1,7 +1,7 @@
-import {taskType, ActionTask} from './task';
+import {TaskType, ActionTask} from './task';
 import {UserAction} from './UserAction';
 import {Action} from './Action';
 
 export type {
-    taskType, ActionTask, Action, UserAction
+    TaskType, ActionTask, Action, UserAction
 }

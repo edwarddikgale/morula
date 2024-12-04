@@ -6,12 +6,12 @@ import { Link } from 'react-router-dom';
 import { pageNames } from 'config/pageNames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileCircleQuestion, faStar } from '@fortawesome/free-solid-svg-icons';
-import { taskType } from 'actions/types/task';
+import { TaskType } from 'actions/types/task';
 
 import '../styles/task-list.css';
 
 interface IProps{
-    taskList: taskType[];
+    taskList: TaskType[];
     selectedTaskId?: string;
     onOpenEvidence: (taskId: string) => void,
     onEdit: (taskId: string) => void,
@@ -26,7 +26,7 @@ const TaskList: React.FC<IProps> = ({taskList, onOpenEvidence, onEdit, onDelete,
             <div className='row my-3 align-items-center'>
               <div className='col-4'>
                 <div>
-                  <span onClick={() =>onOpenEvidence(task.id)}>
+                  <span onClick={() =>onOpenEvidence(task.id!)}>
                     <TaskIcon />
                     {(task.id === selectedTaskId) && <FontAwesomeIcon icon={faStar} color='green' size='lg' />}
                   </span>
@@ -48,7 +48,7 @@ const TaskList: React.FC<IProps> = ({taskList, onOpenEvidence, onEdit, onDelete,
               </div>
               <div className='col-2' style={{display: isReadonly? "none": ""}}>
                 <div className='d-flex'>
-                  <div className='ms-2 cursor-pointer' onClick={() => onEdit(task.id)}>
+                  <div className='ms-2 cursor-pointer' onClick={() => onEdit(task.id!)}>
                     <span>
                       <EditSmIcon />
                     </span>
@@ -62,7 +62,7 @@ const TaskList: React.FC<IProps> = ({taskList, onOpenEvidence, onEdit, onDelete,
                   </div>
                   <div
                     className='ms-2 cursor-pointer'
-                    onClick={() => { onDelete(task.id)}}
+                    onClick={() => { onDelete(task.id!)}}
                     >
                     <span>
                       <DeleteSmIcon />

@@ -49,12 +49,12 @@ const ActionBoardPage: React.FC = () => {
             const taskId = `task-${index + 1}`;
             acc[taskId] = {
                 id: taskId,
-                refId: task.id,
+                refId: task.id!,
                 content: task.title,
-                parentTitle: task.actionTitle,
+                parentTitle: task.actionTitle!,
                 parentId: task.actionId,
                 status: task.status,
-                sdg: task.sdg
+                sdg: task.sdg!
             };
             return acc;
         }, {} as { [key: string]: Task });

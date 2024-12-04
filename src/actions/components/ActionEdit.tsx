@@ -137,12 +137,12 @@ const ActionEdit: React.FC<ActionEditProps> = (props: ActionEditProps) => {
       return;
     }
 
-    const response: any = await actionTaskAPI.CreateActionTask({
-      actionId: data.id,
+    const response = await actionTaskAPI.CreateActionTask({
+      actionId: data.id!,
       title: taskTitle,
       status: selectedStatusValue,
-      assignedToId: data.id,
-      createdById: data.id
+      assignedToId: data.id || undefined,
+      createdById: data.id || undefined
     });
 
     const newTask = response.actionTask;
@@ -159,7 +159,7 @@ const ActionEdit: React.FC<ActionEditProps> = (props: ActionEditProps) => {
     setTaskList(updatedTaskList);
     setShowConfirmation(false);
     setDeleteId(undefined);
-    const response: any = await actionTaskAPI.DeleteActionTask(taskToDelete.id);
+    const response: any = await actionTaskAPI.DeleteActionTask(taskToDelete.id!);
   };
 
   const handleEditTask = async () => {
@@ -167,12 +167,12 @@ const ActionEdit: React.FC<ActionEditProps> = (props: ActionEditProps) => {
       return;
     }
 
-    const response: any = await actionTaskAPI.UpdateActionTask({
-      actionId: data.id,
+    const response = await actionTaskAPI.UpdateActionTask({
+      actionId: data.id!,
       title: taskTitle,
       status: selectedStatusValue,
-      assignedToId: data.id,
-      createdById: data.id
+      assignedToId: data.id || undefined,
+      createdById: data.id || undefined
     }, editId as string);
 
     const updatedTask = response.actionTask;
@@ -180,8 +180,8 @@ const ActionEdit: React.FC<ActionEditProps> = (props: ActionEditProps) => {
       if (task.id === editId) {
         return {
           ...task,
-          title: taskTitle,
-          status: selectedStatusValue,
+          title: updatedTask.title,
+          status: updatedTask.status,
         };
       }
       return task;
@@ -441,14 +441,17 @@ const ActionEdit: React.FC<ActionEditProps> = (props: ActionEditProps) => {
             />
 
             {editId ? (
-              <EditTask
-                taskTitle={taskTitle}
-                setTaskTitle={setTaskTitle}
-                selectedStatusValue={selectedStatusValue}
-                setSelectedStatusValue={setSelectedStatusValue}
-                handleEditTask={handleEditTask}
-                onCancel={() => setEditId(null)}
-              />
+              <>
+                <pre>{editId}</pre>
+                <EditTask
+                  taskTitle={taskTitle}
+                  setTaskTitle={setTaskTitle}
+                  selectedStatusValue={selectedStatusValue}
+                  setSelectedStatusValue={setSelectedStatusValue}
+                  handleEditTask={handleEditTask}
+                  onCancel={() => setEditId(null)}
+                />
+              </>
             ) : (
               <div className="">
                 {showTaskCreate &&

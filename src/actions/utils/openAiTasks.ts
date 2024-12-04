@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import { ActionTask, taskType } from "actions/types/task";
+import { ActionTask, TaskType } from "actions/types/task";
 import { Action } from "actions/types/Action";
 import { Event } from "event/types/Event";
 import { UserProfile } from "profile/types/profile";

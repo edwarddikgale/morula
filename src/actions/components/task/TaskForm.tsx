@@ -89,10 +89,10 @@ const TaskForm: React.FC<TaskFormProps> = ({
         <button type='button' className='btn btn-warning btn-sm ms-3' onClick={onCancel}>
           Cancel
         </button>
-        <button onClick={onSubmit} type='button' className='d-none btn btn-primary btn-sm ms-3'>
+        <button onClick={onSubmit} type='button' className='btn btn-primary btn-sm ms-3'>
           {submitButtonText}
         </button>
-        <AnimatedButton onClick={onSubmit} type="button" className="btn btn-primary btn-sm ms-3">
+        <AnimatedButton onClick={onSubmit} type="button" className="d-none btn btn-primary btn-sm ms-3">
           {submitButtonText}
         </AnimatedButton>
       </div>

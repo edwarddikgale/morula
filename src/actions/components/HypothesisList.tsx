@@ -22,9 +22,9 @@ const HypothesisList: React.FC<HypothesisListProps> = ({ hypotheses, selectable,
 
 
     useEffect(() => {
-      if(hypotheses){
+      //if(hypotheses){
         setHypothesisList(cleanList(hypotheses));
-      }
+      //}
     }, hypotheses)
     
     const handleProbabilityChange = (index:number, value:number) =>{}

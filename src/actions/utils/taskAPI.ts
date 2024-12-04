@@ -1,5 +1,9 @@
+import { ActionTask } from "actions/types";
+
 export const API_URL = process.env.REACT_APP_API_BASE_URL;
 const recordName = "action task";
+
+export interface UpdateActionTaskResponse{ actionTask: ActionTask}
 
 export const actionTaskAPI = {
   async CreateActionTask(formData: any) {
@@ -16,7 +20,7 @@ export const actionTaskAPI = {
     return response.json();
   },
 
-  async UpdateActionTask(formData: any, taskId: string) {
+  async UpdateActionTask(formData: ActionTask, taskId: string): Promise<UpdateActionTaskResponse> {
     const response = await fetch(`${API_URL}/ActionTasks/${taskId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
