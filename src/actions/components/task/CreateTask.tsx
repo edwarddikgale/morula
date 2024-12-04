@@ -11,6 +11,8 @@ interface IProps {
   action: Action;
   taskTitle: string;
   setTaskTitle: React.Dispatch<React.SetStateAction<string>>;
+  taskDescription: string;
+  setTaskDescription: React.Dispatch<React.SetStateAction<string>>;
   selectedStatusValue: string;
   setSelectedStatusValue: React.Dispatch<React.SetStateAction<string>>;
   onCreateTask: () => void;
@@ -24,6 +26,8 @@ const CreateTask: React.FC<IProps> = ({
   action,
   taskTitle,
   setTaskTitle,
+  taskDescription,
+  setTaskDescription,
   selectedStatusValue,
   setSelectedStatusValue,
   onCreateTask,
@@ -35,6 +39,8 @@ const CreateTask: React.FC<IProps> = ({
       <TaskForm
         taskTitle={taskTitle}
         setTaskTitle={setTaskTitle}
+        taskDescription={taskDescription}
+        setTaskDescription={setTaskDescription}
         selectedStatusValue={selectedStatusValue}
         setSelectedStatusValue={setSelectedStatusValue}
         onSubmit={onCreateTask}

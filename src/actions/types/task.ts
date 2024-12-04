@@ -2,6 +2,7 @@ export interface TaskType {
   id?: string;
   title: string;
   status: string;
+  description?: string;
 }
 
 export interface ActionTask extends TaskType{

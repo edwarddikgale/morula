@@ -8,6 +8,8 @@ import AnimatedButton from "common/components/ui/AnimatedButton";
 interface TaskFormProps {
   taskTitle: string;
   setTaskTitle: React.Dispatch<React.SetStateAction<string>>;
+  taskDescription: string;
+  setTaskDescription: React.Dispatch<React.SetStateAction<string>>;
   selectedStatusValue: string;
   setSelectedStatusValue: React.Dispatch<React.SetStateAction<string>>;
   onSubmit: () => void;
@@ -19,6 +21,8 @@ interface TaskFormProps {
 const TaskForm: React.FC<TaskFormProps> = ({
   taskTitle,
   setTaskTitle,
+  taskDescription,
+  setTaskDescription,
   selectedStatusValue,
   setSelectedStatusValue,
   onSubmit,
@@ -59,13 +63,13 @@ const TaskForm: React.FC<TaskFormProps> = ({
       {suggestionLoading && <LoaderSm />}  
       <Textbox 
         className="form-control"
-        id="taskDescription"
-        placeholder="Type your task here e.g. recommend public transport"
+        id="taskTitle"
+        placeholder="Type your task summary"
         required
         value={taskTitle}
         onChange={e => setTaskTitle(e.target.value)}
         isLoading={suggestionLoading}
-        labelText="Task description"
+        labelText="Task Summary"
       />
 
       <div className='my-3'>
@@ -79,6 +83,16 @@ const TaskForm: React.FC<TaskFormProps> = ({
         />
       </div>
 
+      <textarea 
+        className="form-control"
+        id="taskDescription"
+        placeholder="Type your task description or notes here"
+        required
+        value={taskDescription}
+        onChange={e => setTaskDescription(e.target.value)}
+        style={{ minHeight: `${5   * 1.5}em` }}
+      />
+
       <div className=''>
         {onSuggestTask && (
           <button type='button' className='btn btn-outline-secondary btn-round  btn-sm ms-3' onClick={handleGetSuggestion}>
@@ -89,10 +103,10 @@ const TaskForm: React.FC<TaskFormProps> = ({
         <button type='button' className='btn btn-warning btn-sm ms-3' onClick={onCancel}>
           Cancel
         </button>
-        <button onClick={onSubmit} type='button' className='btn btn-primary btn-sm ms-3'>
+        <button onClick={onSubmit} type='button' className='d-none btn btn-primary btn-sm ms-3'>
           {submitButtonText}
         </button>
-        <AnimatedButton onClick={onSubmit} type="button" className="d-none btn btn-primary btn-sm ms-3">
+        <AnimatedButton onClick={onSubmit} type="button" className="btn btn-primary btn-sm ms-3">
           {submitButtonText}
         </AnimatedButton>
       </div>

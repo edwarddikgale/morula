@@ -14,6 +14,7 @@ import TaskList from "./task/TaskList";
 import { UserProfile } from "profile/types/profile";
 import { Event } from "event/types/Event";
 import openAiTasks from "actions/utils/openAiTasks";
+import { LoaderPrimary } from "common/components/Loader/Loader";
 
 interface ActionEditProps {
   userProfile: UserProfile | null,
@@ -32,6 +33,7 @@ const ActionEdit: React.FC<ActionEditProps> = (props: ActionEditProps) => {
 
   // Task start
   const [taskTitle, setTaskTitle] = useState<string>("");
+  const [taskDescription, setTaskDescription] = useState<string>("");
   const [selectedStatusValue, setSelectedStatusValue] = useState<string>("new");
   const [editId, setEditId] = useState<string | null>(null);
   const [deleteId, setDeleteId] = useState<string>();
@@ -39,6 +41,7 @@ const ActionEdit: React.FC<ActionEditProps> = (props: ActionEditProps) => {
   const [isEvidenceOpen, SetIsEvidenceOpen] = useState(false); 
 
   const [taskList, setTaskList] = useState<ActionTask[]>([]);
+  const [tasksLoading, setTasksLoading] = useState<boolean>(false);
   const [taskId, setTaskId] = useState<string>("");
   const [showTaskCreate, setShowTaskCreate] = useState<boolean>(false);
   const [isTaskFormOpen, setIsTaskFormOpen] = useState<boolean>(false);
@@ -49,10 +52,12 @@ const ActionEdit: React.FC<ActionEditProps> = (props: ActionEditProps) => {
 
   //Fetch task list under this action
   const handleTasksFetch = async() => {
+    setTasksLoading(true);
     const response = await actionTaskAPI.getTasksByAction(data.id as string);
     if(response){
       setTaskList(response.records);
     }
+    setTimeout(() => setTasksLoading(false), 500);
   };
 
   const handleTaskDelete = (taskId: string) =>{
@@ -79,6 +84,7 @@ const ActionEdit: React.FC<ActionEditProps> = (props: ActionEditProps) => {
       const task = taskList.find((task) => task.id === editId);
       if (task) {
         setTaskTitle(task.title);
+        setTaskDescription(task.description || "");
         setSelectedStatusValue(task.status);
       }
     }
@@ -140,6 +146,7 @@ const ActionEdit: React.FC<ActionEditProps> = (props: ActionEditProps) => {
     const response = await actionTaskAPI.CreateActionTask({
       actionId: data.id!,
       title: taskTitle,
+      description: taskDescription,
       status: selectedStatusValue,
       assignedToId: data.id || undefined,
       createdById: data.id || undefined
@@ -170,6 +177,7 @@ const ActionEdit: React.FC<ActionEditProps> = (props: ActionEditProps) => {
     const response = await actionTaskAPI.UpdateActionTask({
       actionId: data.id!,
       title: taskTitle,
+      description: taskDescription,
       status: selectedStatusValue,
       assignedToId: data.id || undefined,
       createdById: data.id || undefined
@@ -181,6 +189,7 @@ const ActionEdit: React.FC<ActionEditProps> = (props: ActionEditProps) => {
         return {
           ...task,
           title: updatedTask.title,
+          description: updatedTask.description,
           status: updatedTask.status,
         };
       }
@@ -190,6 +199,7 @@ const ActionEdit: React.FC<ActionEditProps> = (props: ActionEditProps) => {
     setTaskList(updatedTaskList);
     setEditId(null);
     setTaskTitle("");
+    setTaskDescription("");
     setSelectedStatusValue("");
   };
 
@@ -431,8 +441,10 @@ const ActionEdit: React.FC<ActionEditProps> = (props: ActionEditProps) => {
                 </button>
             </p>
 
+            {tasksLoading && <LoaderPrimary />}
+
             {taskList && taskList.length > 0 && <ProgressBar now={(taskList.filter(t => t.status === "done").length /taskList.length)*100} />}
-           
+            
             <TaskList 
                 taskList = {taskList}
                 onOpenEvidence = {handleOpenEvidence}
@@ -446,6 +458,8 @@ const ActionEdit: React.FC<ActionEditProps> = (props: ActionEditProps) => {
                 <EditTask
                   taskTitle={taskTitle}
                   setTaskTitle={setTaskTitle}
+                  taskDescription={taskDescription}
+                  setTaskDescription={setTaskDescription}
                   selectedStatusValue={selectedStatusValue}
                   setSelectedStatusValue={setSelectedStatusValue}
                   handleEditTask={handleEditTask}
@@ -461,6 +475,8 @@ const ActionEdit: React.FC<ActionEditProps> = (props: ActionEditProps) => {
                     event={event}
                     taskTitle={taskTitle}
                     setTaskTitle={setTaskTitle}
+                    taskDescription={taskDescription}
+                    setTaskDescription={setTaskDescription}
                     selectedStatusValue={selectedStatusValue}
                     setSelectedStatusValue={setSelectedStatusValue}
                     onCreateTask={handleCreateTask}

@@ -4,6 +4,8 @@ import TaskForm from './TaskForm';
 interface IProps {
   taskTitle: string;
   setTaskTitle: React.Dispatch<React.SetStateAction<string>>;
+  taskDescription: string;
+  setTaskDescription: React.Dispatch<React.SetStateAction<string>>;
   selectedStatusValue: string;
   setSelectedStatusValue: React.Dispatch<React.SetStateAction<string>>;
   handleEditTask: () => void;
@@ -13,6 +15,8 @@ interface IProps {
 const EditTask: React.FC<IProps> = ({
   taskTitle,
   setTaskTitle,
+  taskDescription,
+  setTaskDescription,
   selectedStatusValue,
   setSelectedStatusValue,
   handleEditTask,
@@ -22,6 +26,8 @@ const EditTask: React.FC<IProps> = ({
     <TaskForm
       taskTitle={taskTitle}
       setTaskTitle={setTaskTitle}
+      taskDescription={taskDescription}
+      setTaskDescription={setTaskDescription}
       selectedStatusValue={selectedStatusValue}
       setSelectedStatusValue={setSelectedStatusValue}
       onSubmit={handleEditTask}
