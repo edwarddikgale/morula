@@ -16,16 +16,14 @@ const cleanList = (list?: Hypothesis[]) =>{
   return list?.filter(hyp => (hyp && hyp !== null)) || []
 }
 
-const HypothesisList: React.FC<HypothesisListProps> = ({ hypotheses, selectable, onSelectionChange }) => {
+const HypothesisList: React.FC<HypothesisListProps> = ({ hypotheses = [], selectable, onSelectionChange }) => {
     const [selected, setSelected] = useState<Hypothesis[]>([]);
     const [hypothesisList, setHypothesisList] = useState<Hypothesis[]>(cleanList(hypotheses));
 
 
     useEffect(() => {
-      //if(hypotheses){
-        setHypothesisList(cleanList(hypotheses));
-      //}
-    }, hypotheses)
+      setHypothesisList(cleanList(hypotheses));
+    }, [hypotheses])
     
     const handleProbabilityChange = (index:number, value:number) =>{}
     const handleCheckChange = (checked: boolean, index: number) =>{
