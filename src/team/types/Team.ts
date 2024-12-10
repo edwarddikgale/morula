@@ -1,6 +1,9 @@
 export interface Team {
     _id?: string;
     userId: string;
+    parentTeamId?: string;
+    parentName?: string;
+    organisationId?: string;
     name: string,
     description: string,
     code: string,

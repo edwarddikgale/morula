@@ -5,9 +5,10 @@ interface TeamSelectProps {
   teams: Team[];
   selectedTeamId: string | null;
   onSelectChange: (teamId: string) => void;
+  label?: string
 }
 
-const TeamSelect: React.FC<TeamSelectProps> = ({ teams, selectedTeamId, onSelectChange }) => {
+const TeamSelect: React.FC<TeamSelectProps> = ({ teams, selectedTeamId, onSelectChange, label = 'Team' }) => {
   
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     onSelectChange(event.target.value);
@@ -29,7 +30,7 @@ const TeamSelect: React.FC<TeamSelectProps> = ({ teams, selectedTeamId, onSelect
           </option>
         ))}
       </select>
-      <label htmlFor='TeamSelect'>Team</label>
+      <label htmlFor='TeamSelect'>{label}</label>
     </div>
   );
 };

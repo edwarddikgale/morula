@@ -5,16 +5,19 @@ import { Team } from '../types/Team'; // make sure to point to the correct model
 
 import '../styles/team-form.css';
 import AnimatedButton from 'common/components/ui/AnimatedButton';
+import TeamSelect from 'event/components/selections/TeamSelect';
 
 interface TeamFormProps {
   team?: Team;
+  teams?: Team[];
   onSubmit: (data: Team) => void;
   onDelete?: (id: string) => void;
   onCancel?: () => void;
 }
 
-const TeamForm: React.FC<TeamFormProps> = ({ team, onSubmit, onDelete, onCancel }) => {
+const TeamForm: React.FC<TeamFormProps> = ({ team, teams, onSubmit, onDelete, onCancel }) => {
   const [teamName, setTeamName] = useState(team?.name || '');
+  const [parentTeamId, setParentTeamId] = useState(team?.parentTeamId);
   const [description, setDescription] = useState(team?.description || '');
   const [code, setCode] = useState(team?.code || '');
   const [isActive, setIsActive] = useState<boolean>(team?.isActive || false);
@@ -32,6 +35,7 @@ const TeamForm: React.FC<TeamFormProps> = ({ team, onSubmit, onDelete, onCancel 
     const updatedTeam: Team = {
       ...team,
       name: teamName,
+      parentTeamId: parentTeamId,
       description,
       code,
       isActive,
@@ -53,6 +57,10 @@ const TeamForm: React.FC<TeamFormProps> = ({ team, onSubmit, onDelete, onCancel 
     }
   };
 
+  const handleParentTeamChange = (parentId: string | undefined) => {
+    setParentTeamId(parentId);
+  }
+
   return (
     <div className="container">
       <form onSubmit={handleFormSubmit}>
@@ -64,7 +72,17 @@ const TeamForm: React.FC<TeamFormProps> = ({ team, onSubmit, onDelete, onCancel 
           description="Provide basic information about the team."
         >
           <div className="row g-2 mb-3">
-            <div className="col-12 col-md-6">
+            <div className='col-12 col-md-4'>
+              <div className="form-floating">
+                <TeamSelect 
+                      teams={teams || []} 
+                      selectedTeamId={parentTeamId || null} 
+                      onSelectChange={handleParentTeamChange} 
+                      label='Parent Team'
+                      />
+              </div>    
+            </div>
+            <div className="col-12 col-md-4">
               <div className="form-floating">
                 <input
                   type="text"
@@ -78,7 +96,7 @@ const TeamForm: React.FC<TeamFormProps> = ({ team, onSubmit, onDelete, onCancel 
                 <label htmlFor="teamName">Team Name</label>
               </div>
             </div>
-            <div className="col-12 col-md-6">
+            <div className="col-12 col-md-4">
               <div className="form-floating">
                 <input
                   type="text"
@@ -88,7 +106,7 @@ const TeamForm: React.FC<TeamFormProps> = ({ team, onSubmit, onDelete, onCancel 
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
                 />
-                <label htmlFor="teamCode">Code</label>
+                <label htmlFor="teamCode">Code Name</label>
               </div>
             </div>
           </div>

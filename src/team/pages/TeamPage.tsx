@@ -102,6 +102,7 @@ const TeamPage: React.FC = () => {
                 ) : (
                     selectedTeam &&
                         <TeamForm
+                            teams={teams}
                             team={selectedTeam}
                             onSubmit={handleFormSubmit}
                             onCancel={() => setIsFormVisible(false)}

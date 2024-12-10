@@ -31,6 +31,7 @@ const TeamList: React.FC<TeamListProps> = ({ data, onDeleteItem, onEditItem, onV
             <LimitedCharacters text={team.description} limit={100} />
             <div className="team-details">
               <p className="mb-0">
+                <strong>Parent:</strong> {team.parentName} &nbsp; | &nbsp;
                 <strong>Code:</strong> {team.code} &nbsp; | &nbsp;
                 <strong>Status:</strong> {team.isActive ? 'Active' : 'Inactive'}
               </p>
