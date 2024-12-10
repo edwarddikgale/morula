@@ -259,6 +259,7 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
   const handleSelectMembers = (members: TeamMember[]) =>{
     const memberIds = members.map(member => member._id!);
     setTeamMemberIds([...memberIds]);
+    setEstimatedAttendees(members.length);
   }
 
   const handleSubmit = async (e: any) => {

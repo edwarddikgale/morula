@@ -91,7 +91,7 @@ const TeamMemberSelect: React.FC<TeamMemberSelectProps> = ({ teamMembers, select
             const isSelected = selectedMembers.has(member._id!); // Check if the member is selected
             
             return (
-              <div className="row list-group-item d-flex justify-content-between align-items-center mb-1 p-3 border rounded" key={index}>
+              <div className="row list-group-item d-flex justify-content-between align-items-center mb-1 p-3 border rounded" key={member._id || `key-${index}`}>
                 <div className="col-1">
                   <Checkbox
                     label=""
