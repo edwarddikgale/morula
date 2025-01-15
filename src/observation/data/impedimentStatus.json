@@ -1,0 +1,18 @@
+[
+    { "value": "new", "title": "New" },
+    { "value": "under_investigation", "title": "Under Investigation" },
+    { "value": "action_required", "title": "Action Required" },
+    { "value": "in_progress", "title": "In Progress" },
+    { "value": "escalated", "title": "Escalated" },
+    { "value": "blocked", "title": "Blocked" },
+    { "value": "pending_external_resolution", "title": "Pending External Resolution" },
+    { "value": "mitigated", "title": "Mitigated" },
+    { "value": "resolved", "title": "Resolved" },
+    { "value": "closed", "title": "Closed" },
+    { "value": "duplicate", "title": "Duplicate" },
+    { "value": "wont_fix", "title": "Won’t Fix" },
+    { "value": "deferred", "title": "Deferred" },
+    { "value": "monitoring", "title": "Monitoring" },
+    { "value": "rejected", "title": "Rejected" }
+  ]
+  

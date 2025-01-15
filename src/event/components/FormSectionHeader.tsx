@@ -9,9 +9,9 @@ interface IProps {
 const FormSectionHeader = (props: IProps) => {
   return (
     <div className='from-sec-header'>
-      <h2>{props.title}</h2>
+      <h3>{props.title}</h3>
       <h6>{props.subTitle}</h6>
-      <p className=''>{props.description}</p>
+      <p className='text-body'>{props.description}</p>
     </div>
   );
 };

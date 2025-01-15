@@ -24,6 +24,8 @@ import { splitScrumPatterns } from 'observation/utils/splitScrumPatterns';
 import SelectableButtonGroup from 'common/components/ui/SelectableButtonGroup';
 import capitaliseFirstLetter from 'common/utils/capitaliseFirstLetter';
 import AnimatedButton from '@components/ui/AnimatedButton';
+import ImpedimentList from './ImpedimentList';
+import { Impediment } from 'observation/types/Impediment';
 
 interface IProps{
     eventData: EventFormData
@@ -325,7 +327,7 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
               <p className='form-field-title d-none'>If a value has not been displayed, mark it as a 5 and decrease only those with lesser scores</p>
               <div className='text-end pb-4'>
                 <button type='button' className='btn btn-secondary py-2 px-4' onClick={evalNotes}>
-                  Evaluate Notes For Ratings
+                  Evaluate Notes For Ratings {" "}
                   {isLoading && <LoaderSm />}
                 </button>
               </div>
@@ -360,13 +362,23 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
         </FormSectionContainer>   
         }
 
-        {/* Submit Button */}
-        <div className='text-end pb-4'>
-          <button type='submit' className='btn btn-primary py-2 px-4'>
-            {observation?._id? 'Update': 'Create An'} Observation
-            {isLoading && <LoaderSm />}
-          </button>
-        </div>
+        {/* Impediments */}
+        {
+        <FormSectionContainer
+          isHr={true}
+          className='time-date'
+          icon={faTags}
+          title='Impediment List'
+          description='A list of impediments'
+        >
+          <ImpedimentList 
+            impediments={[]} 
+            eventData={eventData} 
+            onSelect={() => {}} onDelete={() => {} }                
+          />
+            
+        </FormSectionContainer>   
+        }
 
       </form>
 

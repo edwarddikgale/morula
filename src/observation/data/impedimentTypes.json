@@ -1,0 +1,19 @@
+[
+    { "code": "technical_blocker", "title": "Technical Blocker" },
+    { "code": "technical_dependency", "title": "Technical Dependency" },
+    { "code": "organisational", "title": "Organisational" },
+    { "code": "mindset", "title": "Mindset" },
+    { "code": "communicational", "title": "Communicational" },
+    { "code": "structural", "title": "Structural" },
+    { "code": "process_inefficiency", "title": "Process Inefficiency" },
+    { "code": "tools_issues", "title": "Tools/Technology Issues" },
+    { "code": "resource_constraint", "title": "Resource Constraint" },
+    { "code": "scope_ambiguity", "title": "Scope Ambiguity" },
+    { "code": "knowledge_gap", "title": "Knowledge Gap" },
+    { "code": "stakeholder_availability", "title": "Stakeholder Availability" },
+    { "code": "prioritization_conflict", "title": "Prioritization Conflict" },
+    { "code": "team_dynamics", "title": "Team Dynamics" },
+    { "code": "legal_or_compliance", "title": "Legal or Compliance Issue" },
+    { "code": "environmental", "title": "Environmental Issue" }
+  ]
+  
