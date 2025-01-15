@@ -5,6 +5,7 @@ export interface Impediment{
     title: string,
     notes: string,
     ownerId: string,
+    creatorId: string,
     source?: string,
     sourceId?: string,
     eventId: string,

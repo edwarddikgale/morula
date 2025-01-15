@@ -373,6 +373,7 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
         >
           <ImpedimentList 
             impediments={[]} 
+            eventId={eventData._id!}
             eventData={eventData} 
             onSelect={() => {}} onDelete={() => {} }                
           />

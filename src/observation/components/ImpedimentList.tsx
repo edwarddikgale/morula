@@ -8,6 +8,11 @@ import { EventFormData } from "event/components/types/eventForm";
 import "../styles/impediment-form.css";
 import LimitedCharacters from "common/components/ui/LimitedCharacters";
 import DeleteConfirmation from "common/components/alert/DeleteConfirmation";
+import { AppDispatch, RootState } from "store/store";
+import { useDispatch, useSelector } from "react-redux";
+import useUserProfile from "profile/hooks/useProfile";
+import { createImpediment, fetchEventImpediments } from "store/actions/impediment";
+import { LoaderPrimary } from "common/components/Loader/Loader";
 
 enum CrudMode {
   None = 'none',
@@ -17,21 +22,31 @@ enum CrudMode {
 }
 
 interface IProps{
+  eventId?: string,
   impediments: Impediment[],
   eventData: EventFormData,
   onSelect: (impediment: Impediment) => void,
   onDelete: (impediment: Impediment) => void
 }
 
-const ImpedimentList: React.FC<IProps> = ({impediments, eventData, onDelete, onSelect}: IProps) => {
+const ImpedimentList: React.FC<IProps> = ({eventId, impediments, eventData, onDelete, onSelect}: IProps) => {
   const [impedimentList, setImpedimentList] = useState<Impediment[]>(impediments || []);
   const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState<Impediment | undefined>();
   const [crudMode, setCrudMode] = useState<CrudMode>(CrudMode.None);
+  const dispatch = useDispatch<AppDispatch>();
+  const {data, list, loading: listLoading, isProcessing, isCreating} = useSelector((state: RootState) => state.impediment);
+  const {userProfile, loading: userProfileLoading, error: userProfileError } = useUserProfile();
+  
+  useEffect(() => {
+    if(userProfile && eventId){
+      dispatch(fetchEventImpediments(eventId));
+    }
+  }, [userProfile, dispatch]);
 
   useEffect(() => {
-    //setImpedimentList(impediments);
-  },[impediments])
+    setImpedimentList(list);
+  },[list])
 
   const handleDeleteClick = (item: Impediment) =>{
       setShowConfirmation(true);
@@ -49,6 +64,14 @@ const ImpedimentList: React.FC<IProps> = ({impediments, eventData, onDelete, onS
   const handleCreate = (newImpediment: Impediment) => {
     setImpedimentList([newImpediment, ...impedimentList]);
     setCrudMode(CrudMode.None);
+
+    
+    if(!userProfile || !userProfile.userId) throw Error(`No user profile`);
+    newImpediment.creatorId = userProfile._id!;
+    newImpediment.ownerId = userProfile._id!;
+    newImpediment.eventId = eventId!;
+      
+    dispatch(createImpediment(newImpediment));
   };
 
   const handleEdit = (imp: Impediment) => {
@@ -94,13 +117,14 @@ const ImpedimentList: React.FC<IProps> = ({impediments, eventData, onDelete, onS
           onCancel={() => setCrudMode(CrudMode.None)}
         />
       }
+      {listLoading && <LoaderPrimary />}
       {impedimentList.map((imp:Impediment, index:number) => (
         <div key={index} className='observation-entry mb-2' style={{ position: 'relative' }} onClick={() => handleEdit(imp)}>
             <RoundNumber text={`${index + 1}`} />
             <small>{imp.title}</small>
-            <p className='impediment-notes'>
+            <div className='impediment-notes'>
               <LimitedCharacters text={imp.notes} limit={150} />
-            </p>
+            </div>
             <small className="impediment-title">{imp.type}</small>
             <small className="impediment-status ms-1">{imp.status || "new"}</small>
             {/* Delete Icon */}

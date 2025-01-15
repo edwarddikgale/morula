@@ -6,9 +6,6 @@ import { Team } from '../types/Team';
 import { teamService } from '../services/teamService';
 import '../styles/team-page.css';
 import useAuthUserId from 'auth/hooks/useAuthUser';
-import TeamMemberList from 'team/components/TeamMemberList';
-import { TeamMember } from 'team/types/TeamMember';
-import { teamMemberService } from 'team/services/teamMemberService';
 import TeamMemberContainer from 'team/components/TeamMemberContainer';
 
 const TeamPage: React.FC = () => {

@@ -1,13 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { profileReducer } from "./slices/profileSlice";
 import { actionReducer } from "./slices/actionSlice";
+import { impedimentReducer } from "./slices/impedimentSlice";
 import { observationReducer } from "./slices/observationSlice";
 
 export const store = configureStore({
     reducer:{
         profile: profileReducer,
         action: actionReducer,
-        observation: observationReducer
+        observation: observationReducer,
+        impediment: impedimentReducer
     }
 });
 
