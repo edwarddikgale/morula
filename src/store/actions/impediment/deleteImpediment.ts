@@ -4,9 +4,10 @@ import { impedimentService } from "observation/services/impedimentService";
 
 export const deleteImpediment = createAsyncThunk(
     "impediment/deleteImpediment",
-    async (impediment: Impediment, { rejectWithValue }) => {
+    async (id: string, { rejectWithValue }) => {
         try {
-            return await impedimentService.updateImpediment(impediment._id!, impediment);
+            const response = await impedimentService.deleteImpediment(id);
+            return {response, id};
         } catch (error: any) {
             return rejectWithValue(error.message);
         }

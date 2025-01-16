@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import useUserProfile from "profile/hooks/useProfile";
 import { createImpediment, fetchEventImpediments } from "store/actions/impediment";
 import { LoaderPrimary } from "common/components/Loader/Loader";
+import { deleteImpediment } from "store/actions/impediment/deleteImpediment";
 
 enum CrudMode {
   None = 'none',
@@ -45,24 +46,30 @@ const ImpedimentList: React.FC<IProps> = ({eventId, impediments, eventData, onDe
   }, [userProfile, dispatch]);
 
   useEffect(() => {
-    setImpedimentList(list);
+    setImpedimentList(list.filter(item => item !== null));
   },[list])
 
   const handleDeleteClick = (item: Impediment) =>{
       setShowConfirmation(true);
       setSelectedItem(item);
+      setCrudMode(CrudMode.Delete);
   };
 
   const deleteItem = () => { 
       if(selectedItem){
-          onDelete(selectedItem) 
+          dispatch(deleteImpediment(selectedItem._id!))
+          if(onDelete){
+            onDelete(selectedItem);
+          } 
       }
+
       setShowConfirmation(false);
       setSelectedItem(undefined);
+      setCrudMode(CrudMode.None);
   }
 
   const handleCreate = (newImpediment: Impediment) => {
-    setImpedimentList([newImpediment, ...impedimentList]);
+    //setImpedimentList([newImpediment, ...impedimentList]);
     setCrudMode(CrudMode.None);
 
     
@@ -73,6 +80,11 @@ const ImpedimentList: React.FC<IProps> = ({eventId, impediments, eventData, onDe
       
     dispatch(createImpediment(newImpediment));
   };
+
+  const handleCancel = () =>{
+    setSelectedItem(undefined);
+    setCrudMode(CrudMode.None);
+  }
 
   const handleEdit = (imp: Impediment) => {
     setSelectedItem(imp);
@@ -89,36 +101,38 @@ const ImpedimentList: React.FC<IProps> = ({eventId, impediments, eventData, onDe
   return (
     <div className="container">
 
-      <h6 className='mb-4'>{impedimentList.length} Impediments
-        {
-          (crudMode !== CrudMode.Create) 
-          &&
-          <div className='ms-2'>
+      <div className="d-flex align-items-center mb-4">
+        <h6 className="mb-0">{impedimentList.length} Impediments</h6>
+        {crudMode !== CrudMode.Create && (
+          <div className="ms-2">
             <FontAwesomeIcon
-                icon={faPlusCircle}
-                size="2x"
-                onClick={() => setCrudMode(CrudMode.Create)} />
-          </div>  
-        }
-      </h6>
+              icon={faPlusCircle}
+              size="2x"
+              onClick={() => setCrudMode(CrudMode.Create)}
+            />
+          </div>
+        )}
+      </div>
+
       {
         (crudMode === CrudMode.Create) 
         && 
         <ImpedimentForm 
           onCreate={handleCreate} 
-          onCancel={() => setCrudMode(CrudMode.None)} 
+          onCancel={handleCancel} 
         />
       }
       { selectedItem && 
+        (crudMode === CrudMode.Edit) &&
         <ImpedimentForm
           key={""}
           impediment={selectedItem}
           onUpdate={(updated) => handleUpdate(1, updated)} 
-          onCancel={() => setCrudMode(CrudMode.None)}
+          onCancel={handleCancel}
         />
       }
       {listLoading && <LoaderPrimary />}
-      {impedimentList.map((imp:Impediment, index:number) => (
+      {impedimentList && impedimentList.map((imp:Impediment, index:number) => (
         <div key={index} className='observation-entry mb-2' style={{ position: 'relative' }} onClick={() => handleEdit(imp)}>
             <RoundNumber text={`${index + 1}`} />
             <small>{imp.title}</small>
@@ -143,7 +157,7 @@ const ImpedimentList: React.FC<IProps> = ({eventId, impediments, eventData, onDe
             setShowConfirmation={setShowConfirmation}
             handleDelete={deleteItem}
             label=''
-            item={""}
+            item={{name: selectedItem?.title}}
         />
       )}
     </div>

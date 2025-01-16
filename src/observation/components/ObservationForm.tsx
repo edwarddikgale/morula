@@ -375,11 +375,20 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
             impediments={[]} 
             eventId={eventData._id!}
             eventData={eventData} 
-            onSelect={() => {}} onDelete={() => {} }                
+            onSelect={() => {}} 
+            onDelete={() => {} }                
           />
             
         </FormSectionContainer>   
         }
+
+        {/* Submit Button */}
+        <div className='text-end pb-4'>
+          <button type='submit' className='btn btn-primary py-2 px-4'>
+            {observation?._id? 'Update': 'Create An'} Observation
+            {isLoading && <LoaderSm />}
+          </button>
+        </div>  
 
       </form>
 
@@ -391,6 +400,7 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
           onDelete={handleObservationDelete}
           />
       </div>
+
     </div>
   );
 };

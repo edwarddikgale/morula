@@ -29,7 +29,7 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({
             <Modal.Title>Confirm Delete</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            Are you sure you want to {deleteLabel} {itemName}?
+            Are you sure you want to {deleteLabel} <i>{itemName}</i>?
           </Modal.Body>
           <Modal.Footer>
             <Button variant='outline-danger' onClick={() => handleDelete()}>

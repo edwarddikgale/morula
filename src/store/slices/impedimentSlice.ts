@@ -4,12 +4,14 @@ import {
     fetchImpediment,
     fetchEventImpediments,
     createImpediment,
+    deleteImpediment,
     updateImpediment,
 } from "../actions/impediment";
 import {
     handleFetchImpediment,
     handleFetchImpediments,
     handleCreateImpediment,
+    handleDeleteImpediment,
     handleUpdateImpediment,
 } from "../handlers/impedimentHandlers";
 
@@ -38,7 +40,10 @@ const impedimentSlice = createSlice({
             .addCase(fetchEventImpediments.rejected, handleFetchImpediments.rejected)
             .addCase(createImpediment.pending, handleCreateImpediment.pending)
             .addCase(createImpediment.fulfilled, handleCreateImpediment.fulfilled)
-            .addCase(createImpediment.rejected, handleCreateImpediment.rejected)
+            .addCase(createImpediment.rejected, handleCreateImpediment.rejected)        
+            .addCase(deleteImpediment.pending, handleDeleteImpediment.pending)
+            .addCase(deleteImpediment.fulfilled, handleDeleteImpediment.fulfilled)
+            .addCase(deleteImpediment.rejected, handleDeleteImpediment.rejected)
             .addCase(updateImpediment.pending, handleUpdateImpediment.pending)
             .addCase(updateImpediment.fulfilled, handleUpdateImpediment.fulfilled)
             .addCase(updateImpediment.rejected, handleUpdateImpediment.rejected);

@@ -18,7 +18,7 @@ const EventAttendees: React.FC<IEventAttendeesProps> = ({ onSelectMembers, selec
   
     const fetchMembers = async (teamId: string) => {
       const response = await teamMemberService.getTeamMembers(teamId);
-      setTeamMembers(response.teamMembers); // Fetch and set the team members
+      setTeamMembers(response.teamMembers?.filter(tm => tm.isActive)); // Fetch and set the team members
       setSelectedMembers([...response.teamMembers.filter(member => selectedMemberIds.has(member._id!))]);
     };
   

@@ -1,5 +1,6 @@
 import { ImpedimentState } from "../states/ImpedimentState";
 import { PayloadAction } from "@reduxjs/toolkit";
+import { DeleteImpedimentResponse } from "observation/services/impedimentService";
 import { Impediment } from "observation/types";
 
 // Fetch Single Impediment
@@ -49,6 +50,25 @@ export const handleCreateImpediment = {
     rejected: (state: ImpedimentState, action: PayloadAction<string | unknown>) => {
         state.isCreating = false;
         state.error = action.payload?.toString() || "Failed to create impediment";
+    },
+};
+
+// Update Impediment
+export const handleDeleteImpediment = {
+    pending: (state: ImpedimentState) => {
+        state.isProcessing = true;
+    },
+    fulfilled: (state: ImpedimentState, action: PayloadAction<{response: DeleteImpedimentResponse, id: string}>) => {
+        const {id} = action.payload;
+        const {success} = action.payload.response;
+
+        state.isProcessing = false;
+        const index = state.list.findIndex((item) => item._id === id);
+        if (success && index >= 0) state.list.splice(index,1);
+    },
+    rejected: (state: ImpedimentState, action: PayloadAction<string | unknown>) => {
+        state.isProcessing = false;
+        state.error = action.payload?.toString() || "Failed to delete an impediment";
     },
 };
 

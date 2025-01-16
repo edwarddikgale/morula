@@ -6,9 +6,7 @@ export const createImpediment = createAsyncThunk(
     "impediment/createImpediment",
     async (impediment: Impediment, { rejectWithValue }) => {
         try {
-            console.log(`calling impedimentService.createImpediment with ${JSON.stringify(impediment)}`);
             const response = await impedimentService.createImpediment(impediment);
-            console.log(`response ${JSON.stringify(response)}`);
             return response;
         } catch (error: any) {
             return rejectWithValue(error.message);

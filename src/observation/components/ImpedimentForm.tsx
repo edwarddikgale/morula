@@ -20,9 +20,8 @@ const ImpedimentCreate: React.FC<ImpedimentCreateProps> = ({ onCreate, onCancel,
 
 
   const handleSubmit = () => {
-    console.log(`Handling submit`);
+ 
     if (onCreate && title && type) {
-      console.log(`Calling onCreate`);
       onCreate({
           title, notes, type, status, createdAt: new Date(), updatedAt: new Date(), eventId: "",
           ownerId: "", creatorId: ""
@@ -32,7 +31,7 @@ const ImpedimentCreate: React.FC<ImpedimentCreateProps> = ({ onCreate, onCancel,
       setType("");
       setStatus("")
     }
-    console.log(`Exiting submit handler`);
+  
   };
 
   return (
@@ -67,7 +66,7 @@ const ImpedimentCreate: React.FC<ImpedimentCreateProps> = ({ onCreate, onCancel,
       </div>
       <div className="mb-3">
         <select className="form-select" value={status} onChange={(e) => setStatus(e.target.value)}>
-          <option value="new">Select Status</option>
+          <option value="">Select Status</option>
           {impedimentStatus.map((status:any) => (
             <option key={status.value} value={status.value}>
               {status.title}
@@ -76,7 +75,7 @@ const ImpedimentCreate: React.FC<ImpedimentCreateProps> = ({ onCreate, onCancel,
         </select>
       </div>
       <div className='text-end pb-4'>
-        <button className="btn btn-secondary py-2 px-4" onClick={onCancel}>
+        <button className="btn btn-secondary py-2 px-4" type="button" onClick={onCancel}>
             Cancel
         </button>
         {onCreate &&

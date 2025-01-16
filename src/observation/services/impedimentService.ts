@@ -15,7 +15,7 @@ export interface UpdateImpedimentResponse {
     impediment: Impediment;
 }
 export interface DeleteImpedimentResponse {
-    impediment: Impediment;
+    success: boolean
 }
 
 export const impedimentService = {
