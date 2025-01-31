@@ -30,6 +30,7 @@ import PrinciplesSelectorPage from "principles/pages/PrinciplesSelectorPage";
 import PrinciplesSelectedPage from "principles/pages/PrinciplesSelectedPage";
 import EventReport from "event/pages/EventReport";
 import TeamPage from "team/pages/TeamPage";
+import MeetingSummary from "event/pages/MeetingSummaryPage";
 import CustomFormRenderer from "survey/pages/Form";
 
 function App() {
@@ -62,6 +63,7 @@ function App() {
             <Route path='/logout' element={<LogoutPage />} />
             <Route path='/register' element={<RegisterPage />} />
             <Route path='/reset-password' element={<ResetPasswordPage />} />
+            <Route path='/meeting-summary' element={<MeetingSummary />} />
             <Route path='*' element={<NotFound />} />
           </Routes>
         </Layout>

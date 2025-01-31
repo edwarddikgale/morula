@@ -205,24 +205,23 @@ const EventReadOnly: React.FC<IProps> = ({ id, event }) => {
             }
 
             <div className='text-end pb-4 my-4'>
-                
-                <button type='button' className='btn btn-outline-secondary py-2 px-4' onClick={handleOpenObservationModal}>
-                    <FontAwesomeIcon icon={faEyeLowVision} /> Observation(s)
-                </button>
                                
-                <Link to={`${pageNames.EVENT_EDIT}/${id}`}>
-                    <button type='submit' className='btn btn-outline-secondary py-2 px-4 ms-4'>
-                        <FontAwesomeIcon icon={faEdit} /> Edit Event
-                    </button>
-                </Link>
-                <Link to={`${pageNames.EVENT_REPORT}/${id}`}>
+                <Link to={`${pageNames.EVENT_REPORT}/${id}`} className="d-none">
                     <button type='submit' className='btn btn-outline-warning py-2 px-4 ms-4'>
                         <FontAwesomeIcon icon={faFileAlt} /> See Event Report
                     </button>
                 </Link>
                 <Link to={`${pageNames.ACTIONS}?eventId=${id}`}>
                     <button type='submit' className='btn btn-outline-primary py-2 px-4 ms-4'>
-                        <FontAwesomeIcon icon={faListDots} /> See Event Actions
+                        <FontAwesomeIcon icon={faListDots} /> Event Actions
+                    </button>
+                </Link>
+                <button type='button' className='btn btn-outline-secondary py-2 px-4 ms-4' onClick={handleOpenObservationModal}>
+                    <FontAwesomeIcon icon={faEyeLowVision} /> Observation(s)
+                </button>
+                <Link to={`${pageNames.EVENT_EDIT}/${id}`}>
+                    <button type='submit' className='btn btn-outline-secondary py-2 px-4 ms-4'>
+                        <FontAwesomeIcon icon={faEdit} /> Edit Event
                     </button>
                 </Link>
             </div>
