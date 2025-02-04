@@ -23,6 +23,7 @@
     "react-beautiful-dnd": "^13.1.1",
     "react-bootstrap": "^2.7.4",
     "react-calendar": "^4.6.1",
+    "react-countdown": "^2.3.6",
     "react-datepicker": "^4.21.0",
     "react-doc-viewer": "^0.1.13",
     "react-dom": "^18.2.0",

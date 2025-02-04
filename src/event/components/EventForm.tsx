@@ -397,7 +397,7 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
                 value={eventTitle}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEventTitle(e.target.value)}
               />
-              <label htmlFor='evenTitle'>
+              <label htmlFor='evenTitle' className="form-label">
                 Event Title <span className='text-danger'>*</span>
               </label>
               {eventTitle.length == evenTitleLimit && (

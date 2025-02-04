@@ -5,26 +5,55 @@
     background-color: #007bff;
     color: white;
     border: none;
-    border-radius: 50px;
-    padding: 12px 20px;
-    font-size: 16px;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 14px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .record-button:hover {
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.record-button:hover {
     background-color: #0056b3;
-  }
-  
-  .record-button.recording {
+    transform: scale(1.05);
+}
+
+.record-button.recording {
     background-color: #dc3545;
-  }
-  
-  .record-button.recording:hover {
+}
+
+.record-button.recording:hover {
     background-color: #b52a3c;
-  }
-  
-  .record-button svg {
-    font-size: 20px;
-  }
-  
+    transform: scale(1.05);
+}
+
+.record-button svg {
+    font-size: 16px;
+}
+
+.record-button.recording svg {
+    font-size: 18px;
+}
+
+.timer-display {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #b16970;
+}
+
+.recording-controls {
+    margin-top: 20px;
+}
+
+.recording-controls .form-label {
+    font-size: 1rem;
+    text-align: center;
+}
+
+.recording-controls .form-control {
+    border-radius: 8px;
+    max-width: 100px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
