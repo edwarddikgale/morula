@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import useSpeechToText, { SpeechToTextResult } from 'react-hook-speech-to-text';
+import SpeechRecognition, { useSpeechRecognition} from 'react-speech-recognition';
 import Countdown, { zeroPad } from 'react-countdown';
-import RecordingControls from './RecordingControls'; // Import the new component
+import RecordingControls from './RecordingControls';
 
 import './styles/meeting-summary.css';
 
@@ -24,92 +24,49 @@ interface ScrumEventSummaryResponse {
   impediments: Impediment[];
 }
 
-interface MeetingSummaryProps {
+interface MeetingTranscriptProps {
   onStop?: (transcribedText: string) => void;
-  onSummarize?: (summaryPoints: SummaryPoint[], impediments: Impediment[]) => void; 
+  onSummarize?: (summaryPoints: SummaryPoint[], impediments: Impediment[]) => void;
 }
 
-const MeetingSummary = ({ onStop, onSummarize }: MeetingSummaryProps) => {
-  const [transcribedText, setTranscribedText] = useState<string>('');
+const MeetingTranscript = ({ onStop, onSummarize }: MeetingTranscriptProps) => {
   const [summary, setSummary] = useState<SummaryPoint[]>([]);
   const [impediments, setImpediments] = useState<Impediment[]>([]);
   const [loadingSummary, setLoadingSummary] = useState(false);
-  const [timerStartTime, setTimerStartTime] = useState<number | null>(null);
   const [durationInMinutes, setDurationInMinutes] = useState<number>(5); // Default duration
-  const [restartRecording, setRestartRecording] = useState<boolean>(false);
-  const [pendingRestart, setPendingRestart] = useState<boolean>(false);
+  const [timerStartTime, setTimerStartTime] = useState<number | null>(null);
 
   const {
-    error,
-    interimResult,
-    isRecording,
-    results,
-    startSpeechToText,
-    stopSpeechToText,
-  } = useSpeechToText({
-    continuous: true,
-    crossBrowser: true,
-    googleApiKey: '',
-    useLegacyResults: false,
-  });
+    transcript,
+    listening: isRecording,
+    resetTranscript,
+    browserSupportsSpeechRecognition,
+  } = useSpeechRecognition();
 
   const MAX_RECORDING_TIME_MS = durationInMinutes * 60 * 1000;
 
-  // Set timer when recording starts
   useEffect(() => {
     if (isRecording) {
       setTimerStartTime(Date.now() + MAX_RECORDING_TIME_MS);
     }
   }, [isRecording, MAX_RECORDING_TIME_MS]);
 
-// Handle recording stop and automatic restart
-useEffect(() => {
-  if (!isRecording) {
-    if (pendingRestart) {
-      // Avoid multiple restarts by clearing the flag
-      setPendingRestart(false);
-    }
-
-    // Automatically restart if recording time hasn't elapsed
-    if (timerStartTime && Date.now() < timerStartTime) {
-      if (!pendingRestart) {
-        setPendingRestart(true); // Set the flag to prevent multiple restarts
-        setTimeout(() => {
-          // Ensure no other recording session is active
-          if (!isRecording) {
-            startSpeechToText();
-          }
-        }, 1000); // Delay to ensure the previous session fully stops
-      }
-    }
-
-    // Process and set transcribed text if recording has stopped
-    if (results.length > 0) {
-      const finalText = results.map((result) => result.transcript).join(' ');
-      setTranscribedText(finalText);
-      if (onStop) onStop(finalText);
-    }
-  }
-}, [isRecording, results, onStop, timerStartTime, startSpeechToText, pendingRestart]);
-
-  // Handle stopping and restarting recording manually
   const handleRecordingToggle = () => {
     if (isRecording) {
-      stopSpeechToText();
-      //setRestartRecording(true); // Allow restart if needed
+      SpeechRecognition.stopListening();
     } else {
-      startSpeechToText();
+      resetTranscript();
+      SpeechRecognition.startListening({ continuous: true });
     }
   };
 
-  // Fetch summary from the API
   const fetchSummary = async () => {
     setLoadingSummary(true);
     try {
       const response = await fetch(`${API_URL}/scrum/summarise-event`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ notes: transcribedText, eventType: 'daily' }),
+        body: JSON.stringify({ notes: transcript, eventType: 'daily' }),
       });
 
       if (!response.ok) {
@@ -119,10 +76,9 @@ useEffect(() => {
       const data: ScrumEventSummaryResponse = await response.json();
       setSummary(data.summary);
       setImpediments(data.impediments);
-      if(onSummarize){
+      if (onSummarize) {
         onSummarize(data.summary, data.impediments);
       }
-
     } catch (error) {
       console.error('Error fetching summary:', error);
     } finally {
@@ -130,10 +86,9 @@ useEffect(() => {
     }
   };
 
-  // Countdown renderer function
   const countdownRenderer = ({ minutes, seconds, completed }: { minutes: number; seconds: number; completed: boolean }) => {
     if (completed) {
-      stopSpeechToText(); // Stop recording when timer reaches 0
+      //SpeechRecognition.stopListening(); // Stop recording when timer reaches 0
       return <h4 className="text-danger">Time's up!</h4>;
     }
 
@@ -144,11 +99,13 @@ useEffect(() => {
     );
   };
 
-  if (error) return <p>Web Speech API is not available in this browser 🤷‍</p>;
+  if (!browserSupportsSpeechRecognition) {
+    return <p>Browser doesn't support speech recognition.</p>;
+  }
 
   return (
     <div className="container text-center mt-4">
-      <h3 className="mb-4">Meeting Summariser</h3>
+      <h3 className="mb-4">Meeting Transcript Recorder</h3>
 
       <RecordingControls
         durationInMinutes={durationInMinutes}
@@ -160,18 +117,13 @@ useEffect(() => {
       />
 
       <ul className="mt-4 list-unstyled">
-        {results.map((result: SpeechToTextResult) => (
-          <li key={result.timestamp} className="text-muted">
-            {result.transcript}
-          </li>
-        ))}
-        {interimResult && <li className="text-warning">{interimResult}</li>}
+        {transcript && <li className="text-muted">{transcript}</li>}
       </ul>
 
       <button
         className="btn btn-primary mt-4 py-2"
         onClick={fetchSummary}
-        disabled={!transcribedText || loadingSummary}
+        disabled={!transcript || loadingSummary}
       >
         {loadingSummary ? 'Generating Summary...' : 'Summarize'}
       </button>
@@ -207,6 +159,6 @@ useEffect(() => {
       )}
     </div>
   );
-}
+};
 
-export default MeetingSummary;
+export default MeetingTranscript;

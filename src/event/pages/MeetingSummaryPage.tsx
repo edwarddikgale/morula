@@ -1,10 +1,11 @@
 import MeetingSummary from 'event/components/MeetingSummary';
+import MeetingTranscript from 'event/components/MeetingTranscript';
 import React, { useEffect, useState } from 'react';
 
 export default function MeetingSummaryPage() {
     return (
         <div>
-            <MeetingSummary />
+            <MeetingTranscript />
         </div>
   );
 }
