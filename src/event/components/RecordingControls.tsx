@@ -3,6 +3,15 @@ import Countdown from 'react-countdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMicrophone, faStop } from '@fortawesome/free-solid-svg-icons';
 
+interface IProps{
+    durationInMinutes?: number,
+    setDurationInMinutes?: (duration: number) => void,
+    isRecording: boolean,
+    handleRecordingToggle: () => void,
+    timerStartTime: number | null,
+    countdownRenderer: any,
+}
+
 const RecordingControls = ({
   durationInMinutes,
   setDurationInMinutes,
@@ -10,10 +19,12 @@ const RecordingControls = ({
   handleRecordingToggle,
   timerStartTime,
   countdownRenderer,
-}: any) => {
+}: IProps) => {
   return (
+    
     <div className="row align-items-center g-3 recording-controls">
       {/* Duration input */}
+      {(durationInMinutes && setDurationInMinutes) &&   
       <div className="col-12 col-md-4 d-flex flex-column align-items-center">
         <input
           id="duration-input"
@@ -25,15 +36,15 @@ const RecordingControls = ({
           max={60}
         />
       </div>
-
+      }  
       {/* Record button */}
-      <div className="col-12 col-md-4 text-center">
+      <div className="col-12 col-md-4 align-items-center text-center">
         <button
           className={`record-button btn ${isRecording ? 'recording btn-danger' : 'btn-primary'} px-2 py-1`}
           onClick={handleRecordingToggle}
         >
           <FontAwesomeIcon icon={isRecording ? faStop : faMicrophone} />
-          {!isRecording && <span className="ms-2 fw-bold">Rec</span>}
+          {!isRecording && <span className="ms-2 fw-bold"></span>}
         </button>
       </div>
 

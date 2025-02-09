@@ -4,29 +4,14 @@ import Countdown, { zeroPad } from 'react-countdown';
 import RecordingControls from './RecordingControls';
 
 import './styles/meeting-summary.css';
+import { Impediment } from './types';
+import { ScrumEventSummaryResponse, SummaryPoint } from './types/SummaryPoint';
 
 export const API_URL = process.env.REACT_APP_API_BASE_URL;
 
-interface Impediment {
-  type: string;
-  title: string;
-  description: string;
-  status: string;
-}
-
-interface SummaryPoint {
-  title: string;
-  points: string[];
-}
-
-interface ScrumEventSummaryResponse {
-  summary: SummaryPoint[];
-  impediments: Impediment[];
-}
-
 interface MeetingTranscriptProps {
   onStop?: (transcribedText: string) => void;
-  onSummarize?: (summaryPoints: SummaryPoint[], impediments: Impediment[]) => void;
+  onSummarize?: (data: ScrumEventSummaryResponse) => void;
 }
 
 const MeetingTranscript = ({ onStop, onSummarize }: MeetingTranscriptProps) => {
@@ -54,6 +39,9 @@ const MeetingTranscript = ({ onStop, onSummarize }: MeetingTranscriptProps) => {
   const handleRecordingToggle = () => {
     if (isRecording) {
       SpeechRecognition.stopListening();
+      if(onStop){
+        onStop(transcript);
+      }
     } else {
       resetTranscript();
       SpeechRecognition.startListening({ continuous: true });
@@ -74,11 +62,15 @@ const MeetingTranscript = ({ onStop, onSummarize }: MeetingTranscriptProps) => {
       }
 
       const data: ScrumEventSummaryResponse = await response.json();
-      setSummary(data.summary);
-      setImpediments(data.impediments);
-      if (onSummarize) {
-        onSummarize(data.summary, data.impediments);
+      if(data){
+        setSummary(data.summary);
+        setImpediments(data.impediments);
+
+        if (onSummarize) {
+            onSummarize(data);
+        }
       }
+
     } catch (error) {
       console.error('Error fetching summary:', error);
     } finally {
@@ -105,11 +97,9 @@ const MeetingTranscript = ({ onStop, onSummarize }: MeetingTranscriptProps) => {
 
   return (
     <div className="container text-center mt-4">
-      <h3 className="mb-4">Meeting Transcript Recorder</h3>
+      <h3 className="mb-4">Meeting Transcriptor</h3>
 
       <RecordingControls
-        durationInMinutes={durationInMinutes}
-        setDurationInMinutes={setDurationInMinutes}
         isRecording={isRecording}
         handleRecordingToggle={handleRecordingToggle}
         timerStartTime={timerStartTime}
@@ -130,7 +120,7 @@ const MeetingTranscript = ({ onStop, onSummarize }: MeetingTranscriptProps) => {
 
       {summary.length > 0 && (
         <div className="mt-5 text-start">
-          <h4>Summary</h4>
+          <h4 className='mb-2'>Meeting Notes Summary</h4>
           {summary.map((point, index) => (
             <div key={index} className="mb-3">
               <h5>{point.title}</h5>

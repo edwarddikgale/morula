@@ -11,6 +11,7 @@ import ObservationForm from "observation/components/ObservationForm";
 import RightOverlay from "common/components/overlay/RightOverlay";
 import EventDetails from "./EventDetails";
 import { EventAttendees } from "./EventAttendees";
+import { HtmlRenderer } from "common/components/ui";
 
 interface IProps {
     event: EventFormData;
@@ -181,7 +182,7 @@ const EventReadOnly: React.FC<IProps> = ({ id, event }) => {
             <FormSectionContainer className="description pt-5" icon={faTextWidth} title="Description" description="">
                 <div className="row">
                     <div className="col-md-12">
-                        <p>{description}</p>
+                        <HtmlRenderer htmlContent={description || ''} />
                     </div>
                 </div>
             </FormSectionContainer>
@@ -216,6 +217,7 @@ const EventReadOnly: React.FC<IProps> = ({ id, event }) => {
                         <FontAwesomeIcon icon={faListDots} /> Event Actions
                     </button>
                 </Link>
+
                 <button type='button' className='btn btn-outline-secondary py-2 px-4 ms-4' onClick={handleOpenObservationModal}>
                     <FontAwesomeIcon icon={faEyeLowVision} /> Observation(s)
                 </button>
@@ -239,6 +241,7 @@ const EventReadOnly: React.FC<IProps> = ({ id, event }) => {
                 </div>
                 }
             />
+
         </div>
     );
 };

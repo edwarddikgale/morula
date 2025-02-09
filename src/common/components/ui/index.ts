@@ -5,3 +5,4 @@ export { Textarea } from './Textarea';
 export { FormSectionContainer } from './FormSectionContainer';
 export { FormSectionHeader } from './FormSectionHeader';
 export { TimeZoneSelect } from './TimeZoneSelect';
+export {HtmlRenderer} from './dom/HtmlRenderer';

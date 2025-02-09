@@ -35,7 +35,7 @@ const Description: React.FC<ExampleProps> = ({ placeholder, content, setContent 
   }, [placeholder]);
 
   const handleBlur = (newContent: string) => {
-    const content = removePTags(newContent);
+    const content = newContent; //removePTags(newContent);
     setContent(content);
   };
 

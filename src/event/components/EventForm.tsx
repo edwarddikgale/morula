@@ -3,8 +3,12 @@ import { useState } from "react";
 import {
   faBolt,
   faCalendarDays,
+  faCommentDots,
+  faEyeLowVision,
+  faFileLines,
   faImage,
   faMap,
+  faMicrophoneLines,
   faTengeSign,
   faTextSlash,
   faTextWidth,
@@ -39,6 +43,10 @@ import { teamService } from "team/services/teamService";
 import { Team } from "team/types/Team";
 import { EventAttendees } from "./EventAttendees";
 import { TeamMember } from "team/types/TeamMember";
+import { formatEventSummary } from "./utils/formatEventSummary";
+import { ScrumEventSummaryResponse } from "./types";
+import RightOverlay from "common/components/overlay/RightOverlay";
+import MeetingTranscript from "./MeetingTranscript";
 
 const tagOptions: EventTag[] = eventTags;
 const categories: EventCategory[] = eventCategories;
@@ -107,6 +115,10 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
 
   // description
   const [content, setContent] = useState<string>("");
+
+  //modals
+  const [isTranscriptionOpen, setTranscriptionOpen] = useState<boolean>(false);
+  const [newDescription, setNewDescription] = useState<string | null>(null);
 
   const loadSprints = async (userId: string, teamId: string) => { 
     const response =  await eventsAPI.getSprints(userId, teamId);
@@ -260,6 +272,18 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
     const memberIds = members.map(member => member._id!);
     setTeamMemberIds([...memberIds]);
     setEstimatedAttendees(members.length);
+  }
+
+  const handleOpenTranscriptionModal = () =>{
+    setTranscriptionOpen(true);
+  }
+
+  const handleCloseTranscriptionModal = () =>{
+      setTranscriptionOpen(false);
+  }
+
+  const handleTranscriptSummary = (data: ScrumEventSummaryResponse) => {
+    setContent(formatEventSummary(data));
   }
 
   const handleSubmit = async (e: any) => {
@@ -821,25 +845,8 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
               </Link>
             </p>
 
-            <div className='form-floating mb-3'>
-              <textarea
-                className='form-control'
-                id='evenDescription'
-                placeholder='Description'
-                required
-                value={content}
-                style={{ minHeight: `${5   * 1.5}em` }}
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setContent(e.target.value)}
-              />
-              <label htmlFor='evenDescription'>
-                Description <span className='text-danger'>*</span>
-              </label>
-            </div> 
-            {/* 
             <Description content={content} setContent={setContent} />
-            <TTT /> 
-            */}
-
+            
             <Link to='/suggest-description' className='text-decoration-none fw-bolder my-5 d-inline-block d-none  '>
               <FontAwesomeIcon icon={faBolt} /> Suggest Description
             </Link>
@@ -897,11 +904,28 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
         </FormSectionContainer>
 
         <div className='text-end pb-4 my-4'>
-          <button type='submit' className='btn btn-primary py-3 px-4'>
+          <button type='button' className='btn btn-outline-secondary py-3 px-4 ms-4' onClick={handleOpenTranscriptionModal}>
+              <FontAwesomeIcon icon={faCommentDots} /> Transcribe Meeting 
+          </button>
+          <button type='submit' className='btn btn-primary py-3 px-4 ms-2'>
             {id? `Update Event`: `Create Event`} {isLoading && <LoaderSm />}
           </button>
         </div>
       </form>
+
+      <RightOverlay 
+        onClose={handleCloseTranscriptionModal}
+        isOpen={isTranscriptionOpen}
+        children={
+        <div>
+            {isTranscriptionOpen && (
+                <MeetingTranscript
+                    onSummarize={handleTranscriptSummary}
+                />
+            )}
+        </div>
+        }
+    />
     </div>
   );
 };
