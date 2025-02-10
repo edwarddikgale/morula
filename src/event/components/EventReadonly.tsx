@@ -13,6 +13,8 @@ import EventDetails from "./EventDetails";
 import { EventAttendees } from "./EventAttendees";
 import { HtmlRenderer } from "common/components/ui";
 
+import './styles/event-readonly.css';
+
 interface IProps {
     event: EventFormData;
     id: string;
@@ -181,7 +183,7 @@ const EventReadOnly: React.FC<IProps> = ({ id, event }) => {
             {/* Description */}
             <FormSectionContainer className="description pt-5" icon={faTextWidth} title="Description" description="">
                 <div className="row">
-                    <div className="col-md-12">
+                    <div className="col-md-12 list-group-item d-flex mb-1 p-3 border rounded description">
                         <HtmlRenderer htmlContent={description || ''} />
                     </div>
                 </div>
