@@ -11,9 +11,8 @@ import DeleteConfirmation from "common/components/alert/DeleteConfirmation";
 import { AppDispatch, RootState } from "store/store";
 import { useDispatch, useSelector } from "react-redux";
 import useUserProfile from "profile/hooks/useProfile";
-import { createImpediment, fetchEventImpediments } from "store/actions/impediment";
+import { deleteImpediment, createImpediment, fetchEventImpediments, updateImpediment } from "store/actions/impediment";
 import { LoaderPrimary } from "common/components/Loader/Loader";
-import { deleteImpediment } from "store/actions/impediment/deleteImpediment";
 
 enum CrudMode {
   None = 'none',
@@ -92,10 +91,8 @@ const ImpedimentList: React.FC<IProps> = ({eventId, impediments, eventData, onDe
     onSelect(imp);
   }
 
-  const handleUpdate = (index: number, updatedImpediment: Impediment) => {
-    const updatedList = [...impedimentList];
-    updatedList[index] = updatedImpediment;
-    setImpedimentList(updatedList);
+  const handleUpdate = (index: number, impediment: Impediment) => {
+    dispatch(updateImpediment(impediment));
   };
 
   return (

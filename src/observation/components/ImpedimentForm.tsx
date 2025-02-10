@@ -12,6 +12,7 @@ interface ImpedimentCreateProps {
 }
 
 const ImpedimentCreate: React.FC<ImpedimentCreateProps> = ({ onCreate, onCancel, onUpdate, impediment }) => {
+  const [id, setId] = useState(impediment?._id || undefined);
   const [title, setTitle] = useState(impediment?.title || "");
   const [notes, setNotes] = useState(impediment?.notes || "");
   const [type, setType] = useState(impediment?.type || "");
@@ -20,8 +21,11 @@ const ImpedimentCreate: React.FC<ImpedimentCreateProps> = ({ onCreate, onCancel,
 
 
   const handleSubmit = () => {
- 
-    if (onCreate && title && type) {
+    if(id && onUpdate && impediment){
+      onUpdate({...impediment, title, notes, type, status, updatedAt: new Date()});
+    }
+
+    if (!id && onCreate && title && type) {
       onCreate({
           title, notes, type, status, createdAt: new Date(), updatedAt: new Date(), eventId: "",
           ownerId: "", creatorId: ""
