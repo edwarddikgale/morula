@@ -1,4 +1,3 @@
-import MeetingSummary from 'event/components/MeetingSummary';
 import MeetingTranscript from 'event/components/MeetingTranscript';
 import React, { useEffect, useState } from 'react';
 

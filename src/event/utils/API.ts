@@ -143,5 +143,19 @@ export const eventsAPI = {
     }
 
     return await response.json();  
+  },
+
+  async extractEventImpediments(notes: string, eventType: string){
+    const response = await fetch(`${API_URL}/scrum/extract-impediments`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({notes, eventType})
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to extract impediments event with type ${eventType}!`);
+    }
+
+    return await response.json();  
   }
 };

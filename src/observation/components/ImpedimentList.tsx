@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Impediment } from "../types/Impediment";
+import { convertToImpediment, IGenericImpediment, Impediment } from "../types/Impediment";
 import ImpedimentForm from "./ImpedimentForm";
 import RoundNumber from "common/components/ui/RoundNumber";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlusCircle, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faArrowAltCircleDown, faPlusCircle, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { EventFormData } from "event/components/types/eventForm";
 import "../styles/impediment-form.css";
 import LimitedCharacters from "common/components/ui/LimitedCharacters";
@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import useUserProfile from "profile/hooks/useProfile";
 import { deleteImpediment, createImpediment, fetchEventImpediments, updateImpediment } from "store/actions/impediment";
 import { LoaderPrimary } from "common/components/Loader/Loader";
+import { impedimentService } from "observation/services/impedimentService";
 
 enum CrudMode {
   None = 'none',
@@ -95,6 +96,21 @@ const ImpedimentList: React.FC<IProps> = ({eventId, impediments, eventData, onDe
     dispatch(updateImpediment(impediment));
   };
 
+  //todo: refactor code to be cleaner! handle all of these in a dispatch instead of here
+  const extractImpediments = async () => {
+    if(userProfile && eventData && eventData.description){
+        const eventCategory = eventData.category || "daily";
+        const response = await impedimentService.extractEventImpediments(eventData.description, eventCategory);
+        if(response && response.impediments){
+          response.impediments.forEach((genericImp: IGenericImpediment)  => {
+            const impediment = convertToImpediment(genericImp, eventData._id!, userProfile._id!, userProfile._id!, genericImp.description || `extracted from ${eventCategory}`);
+            dispatch(createImpediment(impediment))
+          });
+        }
+
+    }
+  }
+
   return (
     <div className="container">
 
@@ -109,6 +125,10 @@ const ImpedimentList: React.FC<IProps> = ({eventId, impediments, eventData, onDe
             />
           </div>
         )}
+        
+        <button type='button' className='btn btn-outline-secondary py-2 px-4 ms-4' onClick={extractImpediments}>
+          <FontAwesomeIcon icon={faArrowAltCircleDown} /> Extract Impediment(s)
+        </button>
       </div>
 
       {

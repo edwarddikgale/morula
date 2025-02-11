@@ -1,8 +1,12 @@
-export interface Impediment{
-    _id?: string,
+export interface IGenericImpediment {
     type: string,
-    status?: string,
     title: string,
+    description?: string,
+    status?: string
+}
+
+export interface Impediment extends IGenericImpediment{
+    _id?: string,
     notes: string,
     ownerId: string,
     creatorId: string,
@@ -14,4 +18,24 @@ export interface Impediment{
     createdById?: string,
     createdAt: Date,
     updatedAt: Date,
+}
+
+export function convertToImpediment(
+    genericImpediment: IGenericImpediment,
+    eventId: string,
+    ownerId: string,
+    creatorId: string,
+    notes: string,
+): Impediment {
+    const now = new Date();
+
+    return {
+        ...genericImpediment,
+        notes: notes,                   // Default notes field, you can modify as needed
+        ownerId: ownerId,
+        creatorId: creatorId,
+        eventId: eventId,
+        createdAt: now,
+        updatedAt: now,
+    };
 }

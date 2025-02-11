@@ -14,6 +14,7 @@ import { EventAttendees } from "./EventAttendees";
 import { HtmlRenderer } from "common/components/ui";
 
 import './styles/event-readonly.css';
+import { eventsAPI } from "event/utils/API";
 
 interface IProps {
     event: EventFormData;
