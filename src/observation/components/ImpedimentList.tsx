@@ -12,7 +12,7 @@ import { AppDispatch, RootState } from "store/store";
 import { useDispatch, useSelector } from "react-redux";
 import useUserProfile from "profile/hooks/useProfile";
 import { deleteImpediment, createImpediment, fetchEventImpediments, updateImpediment } from "store/actions/impediment";
-import { LoaderPrimary } from "common/components/Loader/Loader";
+import { LoaderPrimary, LoaderSm } from "common/components/Loader/Loader";
 import { impedimentService } from "observation/services/impedimentService";
 
 enum CrudMode {
@@ -38,6 +38,7 @@ const ImpedimentList: React.FC<IProps> = ({eventId, impediments, eventData, onDe
   const dispatch = useDispatch<AppDispatch>();
   const {data, list, loading: listLoading, isProcessing, isCreating} = useSelector((state: RootState) => state.impediment);
   const {userProfile, loading: userProfileLoading, error: userProfileError } = useUserProfile();
+  const [extractingImpediments, setExtractingImpediments] = useState<boolean>(false);
   
   useEffect(() => {
     if(userProfile && eventId){
@@ -100,6 +101,7 @@ const ImpedimentList: React.FC<IProps> = ({eventId, impediments, eventData, onDe
   const extractImpediments = async () => {
     if(userProfile && eventData && eventData.description){
         const eventCategory = eventData.category || "daily";
+        setExtractingImpediments(true);
         const response = await impedimentService.extractEventImpediments(eventData.description, eventCategory);
         if(response && response.impediments){
           response.impediments.forEach((genericImp: IGenericImpediment)  => {
@@ -107,7 +109,8 @@ const ImpedimentList: React.FC<IProps> = ({eventId, impediments, eventData, onDe
             dispatch(createImpediment(impediment))
           });
         }
-
+        
+        setTimeout(() => setExtractingImpediments(false), 1000);
     }
   }
 
@@ -128,6 +131,7 @@ const ImpedimentList: React.FC<IProps> = ({eventId, impediments, eventData, onDe
         
         <button type='button' className='btn btn-outline-secondary py-2 px-4 ms-4' onClick={extractImpediments}>
           <FontAwesomeIcon icon={faArrowAltCircleDown} /> Extract Impediment(s)
+          {extractingImpediments && <LoaderSm />}
         </button>
       </div>
 

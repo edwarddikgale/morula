@@ -113,7 +113,6 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
         designPatterns: observation?.patterns?.filter(pattern => pattern.type === 'design-pattern')
       });
 
-      console.log(response);
       setAnalysis(response);
       setIsLoading(false);
 
@@ -163,6 +162,8 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
 
       const unalteredList = observations.filter(obs => obs._id !== observation?._id);
       setObservations([response, ...unalteredList]);
+      setObservation(response);
+      
       setIsLoading(false);
 
 
