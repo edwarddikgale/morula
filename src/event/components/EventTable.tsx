@@ -72,7 +72,7 @@ const EventTable = () => {
   const [warningMessage, setWarningMessage] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { getEventsByUser, getEventTaskCompletionRates } = eventsAPI;
-  const [pagination, setPagination] = useState<Pagination>({page: 1, pageSize: 5});
+  const [pagination, setPagination] = useState<Pagination>({page: 1, pageSize: 10});
 
   // Default completion data
   const defaultCompletion = {

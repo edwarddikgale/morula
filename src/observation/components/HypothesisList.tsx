@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import "../styles/hypothesis-list.css";
 import { ProbabilitySlider } from 'common/components/custom/ProbabilitySlider';
 import { Hypothesis } from 'observation/types/ScrumAnalysis';
+import TimeAgo from 'react-timeago';
 
 interface HypothesisListProps {
   hypotheses: Hypothesis[];
@@ -48,6 +49,7 @@ const HypothesisList: React.FC<HypothesisListProps> = ({ hypotheses, onUpdate })
         <div key={index} className="hypothesis-item mb-4 p-4 border rounded shadow-sm">
           <h5 className="hypothesis-title mb-2">{item.hypothesis}</h5>
           <p className="hypothesis-explanation text-muted">{item.explanation}</p>
+          {/* <p><small><strong>{item.createdAt && <TimeAgo date={new Date(item.createdAt)} />}</strong></small></p>*/}
           <div>
             <ProbabilitySlider 
               labelText={'Likelyhood'} 

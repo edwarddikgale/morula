@@ -14,6 +14,7 @@ import useUserProfile from "profile/hooks/useProfile";
 import { deleteImpediment, createImpediment, fetchEventImpediments, updateImpediment } from "store/actions/impediment";
 import { LoaderPrimary, LoaderSm } from "common/components/Loader/Loader";
 import { impedimentService } from "observation/services/impedimentService";
+import TimeAgo from 'react-timeago';
 
 enum CrudMode {
   None = 'none',
@@ -156,14 +157,15 @@ const ImpedimentList: React.FC<IProps> = ({eventId, impediments, eventData, onDe
       {impedimentList && impedimentList.map((imp:Impediment, index:number) => (
         <div key={index} className='observation-entry mb-2' style={{ position: 'relative' }} onClick={() => handleEdit(imp)}>
             <RoundNumber text={`${index + 1}`} />
-            <small>{imp.title}</small>
+            <h6>{imp.title}</h6>
             <div className='impediment-notes'>
               <LimitedCharacters text={imp.notes} limit={150} />
             </div>
+            <p><small><strong>{imp.createdAt && <TimeAgo date={new Date(imp.createdAt)} />}</strong></small></p>
             <small className="impediment-title">{imp.type}</small>
             <small className="impediment-status ms-1">{imp.status || "new"}</small>
             {/* Delete Icon */}
-                <div className='ms-2'>
+                <div className='ms-2'>  
                     <FontAwesomeIcon
                         icon={faTrash}
                         style={{ position: 'absolute', bottom: '10px', right: '10px', cursor: 'pointer', color: '#dc3545' }}

@@ -12,7 +12,7 @@ export interface DeleteObservationResponse {success: boolean}
 
 export interface FetchEventObservationsResponse {observations: Observation[]}
 
-export interface AnalyseScrumEventPayload {notes: string, eventType: string, antiPatterns?: ScrumPattern[], designPatterns?: ScrumPattern[]}
+export interface AnalyseScrumEventPayload {description?: string, notes: string, eventType: string, antiPatterns?: ScrumPattern[], designPatterns?: ScrumPattern[]}
 export const scrumEventObservationAPI = {
 
   async analyseScrumEvent(details: AnalyseScrumEventPayload): Promise<ScrumAnalysisResponse> {
