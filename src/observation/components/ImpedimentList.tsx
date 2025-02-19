@@ -3,7 +3,7 @@ import { convertToImpediment, IGenericImpediment, Impediment } from "../types/Im
 import ImpedimentForm from "./ImpedimentForm";
 import RoundNumber from "common/components/ui/RoundNumber";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowAltCircleDown, faPlusCircle, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faArrowAltCircleDown, faEdit, faPlusCircle, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { EventFormData } from "event/components/types/eventForm";
 import "../styles/impediment-form.css";
 import LimitedCharacters from "common/components/ui/LimitedCharacters";
@@ -135,7 +135,6 @@ const ImpedimentList: React.FC<IProps> = ({eventId, impediments, eventData, onDe
           {extractingImpediments && <LoaderSm />}
         </button>
       </div>
-
       {
         (crudMode === CrudMode.Create) 
         && 
@@ -155,7 +154,7 @@ const ImpedimentList: React.FC<IProps> = ({eventId, impediments, eventData, onDe
       }
       {listLoading && <LoaderPrimary />}
       {impedimentList && impedimentList.map((imp:Impediment, index:number) => (
-        <div key={index} className='observation-entry mb-2' style={{ position: 'relative' }} onClick={() => handleEdit(imp)}>
+        <div key={index} className='observation-entry mb-2' style={{ position: 'relative' }}>
             <RoundNumber text={`${index + 1}`} />
             <h6>{imp.title}</h6>
             <div className='impediment-notes'>
@@ -165,12 +164,19 @@ const ImpedimentList: React.FC<IProps> = ({eventId, impediments, eventData, onDe
             <small className="impediment-title">{imp.type}</small>
             <small className="impediment-status ms-1">{imp.status || "new"}</small>
             {/* Delete Icon */}
-                <div className='ms-2'>  
-                    <FontAwesomeIcon
-                        icon={faTrash}
-                        style={{ position: 'absolute', bottom: '10px', right: '10px', cursor: 'pointer', color: '#dc3545' }}
-                        onClick={() => handleDeleteClick(imp)} />
-                </div>        
+            <div className='ms-2'>  
+                <FontAwesomeIcon
+                    icon={faTrash}
+                    style={{ position: 'absolute', bottom: '10px', right: '5px', cursor: 'pointer', color: '#e05260' }}
+                    onClick={() => handleDeleteClick(imp)} />
+            </div> 
+            {/* Edit Icon */}
+            <div className='ms-2'>  
+                <FontAwesomeIcon
+                    icon={faEdit}
+                    style={{ position: 'absolute', bottom: '10px', right: '40px', cursor: 'pointer', color: '#6666ff' }}
+                    onClick={() => handleEdit(imp)} />
+            </div>         
         </div>
       ))}
       {/* Delete Confirmation */}

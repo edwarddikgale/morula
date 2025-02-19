@@ -9,6 +9,8 @@ interface ScrumValueAnalysis {
     explanation: string;
     probability: number;
     context?: string;
+    createAt?: Date;
+    updatedAt?: Date;
   }
   
   interface ScrumValuesAnalyses{
