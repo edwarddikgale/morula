@@ -3,6 +3,9 @@ import { Impediment } from 'observation/types/Impediment'; // adjust the import 
 import RoundNumber from 'common/components/ui/RoundNumber';
 import { Checkbox } from 'common/components/ui/Checkbox';
 import TimeAgo from 'react-timeago';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import DeleteConfirmation from 'common/components/alert/DeleteConfirmation';
 //import './styles/impediment-list.css';
 
 interface ImpedimentListProps {
@@ -19,6 +22,8 @@ const cleanList = (list?: Impediment[]) => {
 const ImpedimentList: React.FC<ImpedimentListProps> = ({ impediments = [], selectable, onSelectionChange }) => {
   const [selected, setSelected] = useState<Impediment[]>([]);
   const [impedimentList, setImpedimentList] = useState<Impediment[]>(cleanList(impediments));
+  const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
+  const [selectedItem, setSelectedItem] = useState<Impediment | undefined>();
 
   useEffect(() => {
     setImpedimentList(cleanList(impediments));
@@ -38,6 +43,24 @@ const ImpedimentList: React.FC<ImpedimentListProps> = ({ impediments = [], selec
     if (onSelectionChange) {
       onSelectionChange(currentSelection);
     }
+  };
+
+  const handleDeleteClick = (item: Impediment) => {
+    setShowConfirmation(true);
+    setSelectedItem(item);
+  };
+
+  const deleteItem = () => {
+    if (selectedItem) {
+      //onDelete(selectedItem);
+    }
+    setShowConfirmation(false);
+    setSelectedItem(undefined);
+  };
+
+  const handleEditClick = (imp: Impediment) => {
+    setSelectedItem(imp);
+    //onSelect(imp);
   };
 
   return (
@@ -79,7 +102,46 @@ const ImpedimentList: React.FC<ImpedimentListProps> = ({ impediments = [], selec
                     on {imp.createdAt? new Date(imp.createdAt).toLocaleDateString(): 'Unknown'}
                 </small>
             </div>
+            <div>
+              {/* Delete Icon */}
+              <div className="ms-2">
+                <FontAwesomeIcon
+                  icon={faTrash}
+                  style={{
+                    position: 'absolute',
+                    bottom: '10px',
+                    right: '5px',
+                    cursor: 'pointer',
+                    color: '#e05260',
+                  }}
+                  onClick={() => handleDeleteClick(imp)}
+                />
+              </div>
+              {/* Edit Icon */}
+              <div className="ms-2">
+                <FontAwesomeIcon
+                  icon={faEdit}
+                  style={{
+                    position: 'absolute',
+                    bottom: '10px',
+                    right: '40px',
+                    cursor: 'pointer',
+                    color: '#6666ff',
+                  }}
+                  onClick={() => handleEditClick(imp)}
+                />
+              </div>
+            </div>  
           </div>
+            {showConfirmation && selectedItem && (
+              <DeleteConfirmation
+                showConfirmation={showConfirmation}
+                setShowConfirmation={setShowConfirmation}
+                handleDelete={deleteItem}
+                label=""
+                item={{ name: selectedItem.title }}
+              />
+          )}
         </div>
       ))}
     </div>

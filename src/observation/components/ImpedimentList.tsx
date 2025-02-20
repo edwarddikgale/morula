@@ -33,6 +33,7 @@ const ImpedimentList: React.FC<ImpedimentListProps> = ({
   const handleDeleteClick = (item: Impediment) => {
     setShowConfirmation(true);
     setSelectedItem(item);
+    onSelect(item);
   };
 
   const deleteItem = () => {

@@ -16,6 +16,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle, faArrowAltCircleDown, faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { impedimentService } from 'observation/services/impedimentService';
 import useUserProfile from 'profile/hooks/useProfile';
+import { EventFormData } from 'event/components/types/eventForm';
 
 enum CrudMode {
   None = 'none',
@@ -25,13 +26,13 @@ enum CrudMode {
 }
 
 interface ImpedimentsManagerProps {
-  eventId?: string;
-  eventData: any; // Replace with your EventFormData type if available
+  eventData: EventFormData; // Replace with your EventFormData type if available
 }
 
-const ImpedimentsManager: React.FC<ImpedimentsManagerProps> = ({ eventId, eventData }) => {
+const ImpedimentsManager: React.FC<ImpedimentsManagerProps> = ({ eventData }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { userProfile } = useUserProfile();
+  const eventId = eventData._id!;
   const { list, loading: listLoading } = useSelector((state: RootState) => state.impediment);
   const [crudMode, setCrudMode] = useState<CrudMode>(CrudMode.None);
   const [selectedItem, setSelectedItem] = useState<Impediment | undefined>(undefined);
@@ -144,8 +145,8 @@ const ImpedimentsManager: React.FC<ImpedimentsManagerProps> = ({ eventId, eventD
         eventId={eventId}
         impediments={list}
         eventData={eventData}
-        onDelete={(imp) => {}}
-        onSelect={(imp) => {}}
+        onDelete={handleDelete}
+        onSelect={(imp) => {setSelectedItem(imp)}}
       />
     </div>
   );

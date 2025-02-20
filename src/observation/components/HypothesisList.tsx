@@ -6,7 +6,9 @@ import TimeAgo from 'react-timeago';
 
 interface HypothesisListProps {
   hypotheses: Hypothesis[];
-  onUpdate: (index:number, hypothesis: Hypothesis) => void
+  onUpdate: (index:number, hypothesis: Hypothesis) => void;
+  selectable?: boolean;
+  onSelectionChange?: (selectedList: Hypothesis[]) => void;
 }
 
 const cleanList = (list?: Hypothesis[]) =>{
