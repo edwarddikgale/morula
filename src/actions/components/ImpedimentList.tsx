@@ -180,7 +180,7 @@ const ImpedimentList: React.FC<ImpedimentListProps> = ({ impediments = [], selec
               onClose={() => setIsEditOpen(false)}
               isOpen={isEditOpen}
               children={
-                <div>
+                <div className='impediment-form'>
                     {isEditOpen && (
                       <ImpedimentForm 
                         onCancel={() => setIsEditOpen(false)}  
