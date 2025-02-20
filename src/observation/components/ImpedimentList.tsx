@@ -8,6 +8,8 @@ import LimitedCharacters from 'common/components/ui/LimitedCharacters';
 import DeleteConfirmation from 'common/components/alert/DeleteConfirmation';
 import TimeAgo from 'react-timeago';
 
+import '../styles/impediment-list.css';
+
 interface ImpedimentListProps {
   eventId?: string;
   impediments: Impediment[];

@@ -1,0 +1,31 @@
+.impediment-notes {
+    font-size: 1rem; /* Standard font size for main text */
+    color: #333; /* Darker text for readability */
+    margin-bottom: 0.5rem; /* Space between the notes and the smaller details */
+  }
+  
+  .impediment-entry small {
+    font-size: 0.8rem; /* Smaller font size for less important information */
+    color: #666; /* Lighter text color to differentiate from main text */
+  }
+
+  .impediment-title {
+    border: 1px solid #696666; /* Slight border to distinguish entries */
+    border-radius: 15px; /* Rounded corners for a softer look */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    min-height: 15px;
+    padding: 5px;
+  }
+
+  .impediment-status {
+    border: 1px solid #c48787; /* Slight border to distinguish entries */
+    border-radius: 15px; /* Rounded corners for a softer look */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    min-height: 15px;
+    min-width: 100px;
+    padding: 5px;
+  }

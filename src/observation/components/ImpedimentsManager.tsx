@@ -17,13 +17,8 @@ import { faPlusCircle, faArrowAltCircleDown, faTrash, faEdit } from '@fortawesom
 import { impedimentService } from 'observation/services/impedimentService';
 import useUserProfile from 'profile/hooks/useProfile';
 import { EventFormData } from 'event/components/types/eventForm';
+import { CrudMode } from 'common/enums/crud-mode';
 
-enum CrudMode {
-  None = 'none',
-  Create = 'create',
-  Edit = 'edit',
-  Delete = 'delete',
-}
 
 interface ImpedimentsManagerProps {
   eventData: EventFormData; // Replace with your EventFormData type if available

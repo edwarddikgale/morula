@@ -1,12 +1,24 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from 'store/store';
 import { Impediment } from 'observation/types/Impediment'; // adjust the import path as needed
 import RoundNumber from 'common/components/ui/RoundNumber';
 import { Checkbox } from 'common/components/ui/Checkbox';
 import TimeAgo from 'react-timeago';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarCheck, faCalendarPlus, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import DeleteConfirmation from 'common/components/alert/DeleteConfirmation';
-//import './styles/impediment-list.css';
+import LimitedCharacters from 'common/components/ui/LimitedCharacters';
+import './styles/impediment-list.css';
+import { CrudMode } from 'common/enums/crud-mode';
+import RightOverlay from 'common/components/overlay/RightOverlay';
+import ImpedimentForm from 'observation/components/ImpedimentForm';
+import { 
+  fetchEventImpediments, 
+  createImpediment, 
+  updateImpediment, 
+  deleteImpediment 
+} from 'store/actions/impediment';
 
 interface ImpedimentListProps {
   impediments?: Impediment[];
@@ -20,10 +32,13 @@ const cleanList = (list?: Impediment[]) => {
 };
 
 const ImpedimentList: React.FC<ImpedimentListProps> = ({ impediments = [], selectable, onSelectionChange }) => {
+  const dispatch = useDispatch<AppDispatch>();
   const [selected, setSelected] = useState<Impediment[]>([]);
   const [impedimentList, setImpedimentList] = useState<Impediment[]>(cleanList(impediments));
   const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState<Impediment | undefined>();
+  const [crudMode, setCrudMode] = useState<CrudMode>(CrudMode.None);
+  const [isEditOpen, setIsEditOpen] = useState<boolean>(false);
 
   useEffect(() => {
     setImpedimentList(cleanList(impediments));
@@ -60,8 +75,15 @@ const ImpedimentList: React.FC<ImpedimentListProps> = ({ impediments = [], selec
 
   const handleEditClick = (imp: Impediment) => {
     setSelectedItem(imp);
+    setIsEditOpen(true);
     //onSelect(imp);
   };
+
+  const handleUpdate = (imp: Impediment) =>{
+    dispatch(updateImpediment(imp));
+    setCrudMode(CrudMode.None);
+    setSelectedItem(undefined);
+  }
 
   return (
     <div className="impediment-list">
@@ -91,16 +113,27 @@ const ImpedimentList: React.FC<ImpedimentListProps> = ({ impediments = [], selec
                 )}
             </div>
             <div className="impediment-notes">
-                <p>{imp.notes}</p>
+                <div><LimitedCharacters text={imp.notes} limit={250} /></div>
                 <div className='mb-4'>
                     <small className="impediment-title">{imp.type}</small>
                     <small className="impediment-status ms-1">{imp.status || "new"}</small>
                 </div>    
-                <small className='ms-auto'>
-                    <i className='muted'>Created</i>: 
-                    <strong>{imp.createdAt && <TimeAgo date={new Date(imp.createdAt)} />} </strong> 
-                    on {imp.createdAt? new Date(imp.createdAt).toLocaleDateString(): 'Unknown'}
-                </small>
+                <div>
+                  <small className='ms-auto'>
+                      <FontAwesomeIcon icon={faCalendarPlus} className="me-1" />
+                      <i className='muted'>Created</i>: 
+                      <strong>{imp.createdAt && <TimeAgo date={new Date(imp.createdAt)} />} </strong> 
+                      on {imp.createdAt? new Date(imp.createdAt).toLocaleDateString(): 'Unknown'}
+                  </small>
+                </div>
+                <div>
+                  <small className='ms-auto'>
+                      <FontAwesomeIcon icon={faCalendarCheck} className="me-1" />
+                      <i className='muted'>Updated</i>: 
+                      <strong>{imp.updatedAt && <TimeAgo date={new Date(imp.updatedAt)} />} </strong> 
+                      on {imp.updatedAt? new Date(imp.updatedAt).toLocaleDateString(): 'Unknown'}
+                  </small>
+                </div>  
             </div>
             <div>
               {/* Delete Icon */}
@@ -133,7 +166,7 @@ const ImpedimentList: React.FC<ImpedimentListProps> = ({ impediments = [], selec
               </div>
             </div>  
           </div>
-            {showConfirmation && selectedItem && (
+          {showConfirmation && selectedItem && (
               <DeleteConfirmation
                 showConfirmation={showConfirmation}
                 setShowConfirmation={setShowConfirmation}
@@ -142,6 +175,23 @@ const ImpedimentList: React.FC<ImpedimentListProps> = ({ impediments = [], selec
                 item={{ name: selectedItem.title }}
               />
           )}
+          {isEditOpen && selectedItem && 
+            <RightOverlay 
+              onClose={() => setIsEditOpen(false)}
+              isOpen={isEditOpen}
+              children={
+                <div>
+                    {isEditOpen && (
+                      <ImpedimentForm 
+                        onCancel={() => setIsEditOpen(false)}  
+                        impediment={selectedItem}
+                        onUpdate={handleUpdate}
+                      />
+                    )}
+                </div>
+              }
+            />
+          } 
         </div>
       ))}
     </div>
