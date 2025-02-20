@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import * as XLSX from 'xlsx';
-import { Action } from '../types/Action';
+import { Action } from '../../types/Action';
 
 interface ExportToExcelProps {
   data: Action[];

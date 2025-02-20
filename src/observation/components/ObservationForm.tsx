@@ -24,8 +24,9 @@ import { splitScrumPatterns } from 'observation/utils/splitScrumPatterns';
 import SelectableButtonGroup from 'common/components/ui/SelectableButtonGroup';
 import capitaliseFirstLetter from 'common/utils/capitaliseFirstLetter';
 import AnimatedButton from '@components/ui/AnimatedButton';
-import ImpedimentList from './ImpedimentList';
+import ImpedimentList from './ImpedimentsManager';
 import { Impediment } from 'observation/types/Impediment';
+import ImpedimentsManager from './ImpedimentsManager';
 
 interface IProps{
     eventData: EventFormData
@@ -373,12 +374,8 @@ const ObservationForm: React.FC<IProps> = ({eventData}) => {
           title='Impediment List'
           description='A list of impediments'
         >
-          <ImpedimentList 
-            impediments={[]} 
-            eventId={eventData._id!}
-            eventData={eventData} 
-            onSelect={() => {}} 
-            onDelete={() => {} }                
+          <ImpedimentsManager 
+            eventData={eventData}              
           />
             
         </FormSectionContainer>   

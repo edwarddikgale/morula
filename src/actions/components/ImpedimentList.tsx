@@ -58,12 +58,12 @@ const ImpedimentList: React.FC<ImpedimentListProps> = ({ impediments = [], selec
                 </div>        
                 {selectable && (
                     <div className="d-flex justify-content-end align-items-center w-25">
-                    <Checkbox 
-                        label="" 
-                        checked={false} 
-                        onChange={(checked) => handleCheckChange(checked, index)}
-                        borderStyle="dark-bordered"
-                    />
+                        <Checkbox 
+                            label="" 
+                            checked={false} 
+                            onChange={(checked) => handleCheckChange(checked, index)}
+                            borderStyle="dark-bordered"
+                        />
                     </div>
                 )}
             </div>

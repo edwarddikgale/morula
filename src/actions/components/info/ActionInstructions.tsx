@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Col, Container, Row, Button } from 'react-bootstrap';
-import './styles/action-intro.css';
-import instructionsImage from '../assets/images/instructions-1.png';
+import '../styles/action-intro.css';
+import instructionsImage from '../../assets/images/instructions-1.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileCircleQuestion} from '@fortawesome/free-solid-svg-icons';
 import { pageNames } from 'config/pageNames';
