@@ -7,7 +7,7 @@ export function formatToTimeString(date: Date): string {
   return date.toTimeString().substring(0, 5);
 }
 
-export const formatDateFull = (dateString: string): string => {
+export const formatDateFull = (dateString: string, timeZone?:string): string => {
   const originalDate = new Date(dateString);
   const formattedDate = originalDate.toLocaleString("en-US", {
     weekday: "long",
@@ -17,10 +17,10 @@ export const formatDateFull = (dateString: string): string => {
     hour: "numeric",
     minute: "numeric",
     hour12: true,
-    timeZone: "GMT",
+    timeZone: timeZone || "CET",
   });
 
-  return formattedDate + " GMT";
+  return formattedDate + (timeZone || " CET");
 };
 
 export const extractMonthAndDate = (dateString: string, type: string): string => {

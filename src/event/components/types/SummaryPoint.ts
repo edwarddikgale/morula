@@ -8,4 +8,5 @@ export interface SummaryPoint {
 export interface ScrumEventSummaryResponse {
     summary: SummaryPoint[];
     impediments: Impediment[];
+    transcriptionId?: string;
 }

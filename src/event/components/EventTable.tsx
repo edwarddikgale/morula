@@ -21,6 +21,8 @@ import { Event } from '../types/Event';
 import { Pagination } from "common/types/list/Pagination";
 import { LoaderPrimary, LoaderSm } from "common/components/Loader/Loader";
 import EventTextIcon from "./common/EventTextIcon";
+import EventStartEndDate from "./common/EventStartEndDate";
+import LimitedCharacters from "common/components/ui/LimitedCharacters";
 
 type ValuePiece = Date | null;
 
@@ -292,8 +294,14 @@ const EventTable = () => {
                             <h6>
                               <Link to={`/eventview/${event._id}`} className="event-link">{event.title}</Link>
                             </h6>
-                            <p className='mb-0 text-muted fs-14'>{event.summary}</p>
-                            <p className='mb-0 text-muted fs-14'>{formatDateFull(event.endDate)}</p>
+                            <p className='mb-2 text-muted fs-14'>{event.summary}</p>
+                            <p className='mb-0 text-muted fs-14 d-none'>{formatDateFull(event.endDate)}</p>
+                            <div className="py-1">
+                              <EventStartEndDate 
+                                startDate={event.startDate}
+                                startTime={event.startTime}
+                                />
+                            </div>
                           </div>
                         </div>
                       </div>

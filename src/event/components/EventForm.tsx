@@ -921,6 +921,7 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
             {isTranscriptionOpen && (
                 <MeetingTranscript
                     onSummarize={handleTranscriptSummary}
+                    eventId={event?._id!}
                 />
             )}
         </div>

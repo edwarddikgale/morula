@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 export default function MeetingSummaryPage() {
     return (
         <div>
-            <MeetingTranscript />
+            <MeetingTranscript eventId='123' />
         </div>
   );
 }

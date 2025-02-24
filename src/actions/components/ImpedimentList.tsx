@@ -13,6 +13,9 @@ import './styles/impediment-list.css';
 import { CrudMode } from 'common/enums/crud-mode';
 import RightOverlay from 'common/components/overlay/RightOverlay';
 import ImpedimentForm from 'observation/components/ImpedimentForm';
+import { impedimentTypeDict } from 'observation/utils/buildImpedimentTypeDict';
+import { impedimentStatusDict } from 'observation/utils/buildImpedimentStatusDict';
+
 import { 
   fetchEventImpediments, 
   createImpediment, 
@@ -115,8 +118,8 @@ const ImpedimentList: React.FC<ImpedimentListProps> = ({ impediments = [], selec
             <div className="impediment-notes">
                 <div><LimitedCharacters text={imp.notes} limit={250} /></div>
                 <div className='mb-4'>
-                    <small className="impediment-title">{imp.type}</small>
-                    <small className="impediment-status ms-1">{imp.status || "new"}</small>
+                    <small className="impediment-title">{impedimentTypeDict[imp.type || "unknwon"]}</small>
+                    <small className="impediment-status ms-1">{impedimentStatusDict[imp.status || "new"]}</small>
                 </div>    
                 <div>
                   <small className='ms-auto'>

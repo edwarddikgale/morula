@@ -14,6 +14,7 @@
     { "code": "prioritization_conflict", "title": "Prioritization Conflict" },
     { "code": "team_dynamics", "title": "Team Dynamics" },
     { "code": "legal_or_compliance", "title": "Legal or Compliance Issue" },
-    { "code": "environmental", "title": "Environmental Issue" }
+    { "code": "environmental", "title": "Environmental Issue" },
+    { "code": "unknown", "title": "Unknown" }
   ]
   

@@ -6,20 +6,28 @@ import RecordingControls from './RecordingControls';
 import './styles/meeting-summary.css';
 import { Impediment } from './types';
 import { ScrumEventSummaryResponse, SummaryPoint } from './types/SummaryPoint';
+import { Transcription } from 'event/types/Transcription';
+import { transcriptionService } from 'event/services/transcriptionService';
+import Description from './Description';
 
 export const API_URL = process.env.REACT_APP_API_BASE_URL;
+const DISPLAY_CHAR_LIMIT = 75;
 
 interface MeetingTranscriptProps {
   onStop?: (transcribedText: string) => void;
   onSummarize?: (data: ScrumEventSummaryResponse) => void;
+  eventId?: string;
 }
 
-const MeetingTranscript = ({ onStop, onSummarize }: MeetingTranscriptProps) => {
+const MeetingTranscript = ({ eventId, onStop, onSummarize }: MeetingTranscriptProps) => {
   const [summary, setSummary] = useState<SummaryPoint[]>([]);
   const [impediments, setImpediments] = useState<Impediment[]>([]);
   const [loadingSummary, setLoadingSummary] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [durationInMinutes, setDurationInMinutes] = useState<number>(5); // Default duration
   const [timerStartTime, setTimerStartTime] = useState<number | null>(null);
+  const [transcription, setTranscription] = useState<Transcription | null>(null);
+  const [transcriptRaw, setTranscriptRaw] = useState<string | undefined>();
 
   const {
     transcript,
@@ -30,6 +38,9 @@ const MeetingTranscript = ({ onStop, onSummarize }: MeetingTranscriptProps) => {
 
   const MAX_RECORDING_TIME_MS = durationInMinutes * 60 * 1000;
 
+  useEffect(() => {
+    setTranscriptRaw(transcript);
+  }, [transcript])
   useEffect(() => {
     if (isRecording) {
       setTimerStartTime(Date.now() + MAX_RECORDING_TIME_MS);
@@ -78,6 +89,26 @@ const MeetingTranscript = ({ onStop, onSummarize }: MeetingTranscriptProps) => {
     }
   };
 
+  const saveTranscript = async () => {
+    const record = transcription? transcription: {
+      eventId: eventId,
+      timeZone: 'CET',
+      language: 'en',
+      title: `transcripton for event ${eventId}`,
+      raw: transcript,
+    }
+    setIsSaving(true);
+    if(!transcription?._id){
+      const response = await transcriptionService.createTranscription(record);
+      setIsSaving(false);
+    }
+    else{
+      const response = await transcriptionService.updateTranscription(transcription?._id, record);
+      setIsSaving(false);
+    }
+
+  }
+
   const countdownRenderer = ({ minutes, seconds, completed }: { minutes: number; seconds: number; completed: boolean }) => {
     if (completed) {
       //SpeechRecognition.stopListening(); // Stop recording when timer reaches 0
@@ -107,8 +138,18 @@ const MeetingTranscript = ({ onStop, onSummarize }: MeetingTranscriptProps) => {
       />
 
       <ul className="mt-4 list-unstyled">
-        {transcript && <li className="text-muted">{transcript}</li>}
+        {transcript && (
+          <li className="text-muted">
+            {transcript.length > DISPLAY_CHAR_LIMIT
+              ? transcript.slice(-DISPLAY_CHAR_LIMIT)
+              : transcript}
+          </li>
+        )}
       </ul>
+
+      {!isRecording && transcriptRaw && 
+        <Description content={transcriptRaw} setContent={setTranscriptRaw} />
+      }
 
       <button
         className="btn btn-primary mt-4 py-2"
@@ -116,6 +157,14 @@ const MeetingTranscript = ({ onStop, onSummarize }: MeetingTranscriptProps) => {
         disabled={!transcript || loadingSummary}
       >
         {loadingSummary ? 'Generating Summary...' : 'Summarize'}
+      </button>
+
+      <button
+        className="btn btn-primary mt-4 py-2 ms-2"
+        onClick={saveTranscript}
+        disabled={!transcript || loadingSummary || isSaving}
+      >
+        {isSaving ? 'Saving Transcript...' : 'Save'}
       </button>
 
       {summary.length > 0 && (

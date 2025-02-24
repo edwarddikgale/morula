@@ -39,3 +39,13 @@ export function convertToImpediment(
         updatedAt: now,
     };
 }
+
+export interface ImpedimentType {
+    code: string;
+    title: string;
+}
+
+export interface ImpedimentStatus {
+    value: string;
+    title: string;
+}
