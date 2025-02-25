@@ -9,6 +9,7 @@ import { ScrumEventSummaryResponse, SummaryPoint } from './types/SummaryPoint';
 import { Transcription } from 'event/types/Transcription';
 import { transcriptionService } from 'event/services/transcriptionService';
 import Description from './Description';
+import TranscriptionList from './TranscriptionList';
 
 export const API_URL = process.env.REACT_APP_API_BASE_URL;
 const DISPLAY_CHAR_LIMIT = 75;
@@ -40,7 +41,14 @@ const MeetingTranscript = ({ eventId, onStop, onSummarize }: MeetingTranscriptPr
 
   useEffect(() => {
     setTranscriptRaw(transcript);
-  }, [transcript])
+  }, [transcript]);
+
+  useEffect(() => {
+    if(transcription){
+      setTranscriptRaw(transcription?.raw);
+    }
+  }, [transcription]);
+
   useEffect(() => {
     if (isRecording) {
       setTimerStartTime(Date.now() + MAX_RECORDING_TIME_MS);
@@ -78,7 +86,9 @@ const MeetingTranscript = ({ eventId, onStop, onSummarize }: MeetingTranscriptPr
         setImpediments(data.impediments);
 
         if (onSummarize) {
-            onSummarize(data);
+            const summaryData = transcription? {...data, transcriptionId: transcription?._id!}: data;
+            console.log(`summary:: ${JSON.stringify(summaryData)}`);
+            onSummarize(summaryData);
         }
       }
 
@@ -100,13 +110,20 @@ const MeetingTranscript = ({ eventId, onStop, onSummarize }: MeetingTranscriptPr
     setIsSaving(true);
     if(!transcription?._id){
       const response = await transcriptionService.createTranscription(record);
+      setTranscription(response);
       setIsSaving(false);
     }
     else{
       const response = await transcriptionService.updateTranscription(transcription?._id, record);
+      setTranscription(response);
       setIsSaving(false);
     }
 
+  }
+
+  const handleTranscriptionSelect = (transcription: Transcription) =>{
+    console.log(`Handling trans select`);
+    setTranscription(transcription);
   }
 
   const countdownRenderer = ({ minutes, seconds, completed }: { minutes: number; seconds: number; completed: boolean }) => {
@@ -166,7 +183,7 @@ const MeetingTranscript = ({ eventId, onStop, onSummarize }: MeetingTranscriptPr
       >
         {isSaving ? 'Saving Transcript...' : 'Save'}
       </button>
-
+      
       {summary.length > 0 && (
         <div className="mt-5 text-start">
           <h4 className='mb-2'>Meeting Notes Summary</h4>
@@ -196,6 +213,11 @@ const MeetingTranscript = ({ eventId, onStop, onSummarize }: MeetingTranscriptPr
           ))}
         </div>
       )}
+
+      {!isRecording && eventId && 
+        <TranscriptionList eventId={eventId} onSelect={handleTranscriptionSelect} />
+      }
+
     </div>
   );
 };

@@ -1,17 +1,20 @@
 import { Pagination } from 'common/types/list/Pagination';
 import { Event } from '../types/Event';
+import { EventFormData } from 'event/components/types/eventForm';
 
 export const API_URL = process.env.REACT_APP_API_BASE_URL;
 
 interface GetSprintsResponse {events: any[]};
 interface DeleteEventResponse {success: boolean};
+interface UpdateEventResponse extends EventFormData {};
+interface CreateEventResponse extends EventFormData {};
 interface GetEventsByUser {
   events: Event[],
   pagination: Pagination,
 }
 
 export const eventsAPI = {
-  async createEvent(formData: any) {
+  async createEvent(formData: any): Promise<CreateEventResponse> {
     const response = await fetch(`${API_URL}/events/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -38,7 +41,7 @@ export const eventsAPI = {
     return response.json();
   },
 
-  async updateEvent(formData: any, id: string) {
+  async updateEvent(formData: any, id: string): Promise<UpdateEventResponse> {
     const response = await fetch(`${API_URL}/events/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },

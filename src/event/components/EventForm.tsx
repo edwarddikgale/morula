@@ -4,11 +4,8 @@ import {
   faBolt,
   faCalendarDays,
   faCommentDots,
-  faEyeLowVision,
-  faFileLines,
   faImage,
   faMap,
-  faMicrophoneLines,
   faTengeSign,
   faTextSlash,
   faTextWidth,
@@ -37,7 +34,6 @@ import { EventCategory } from "./types/EventCategory";
 import eventTags from '../data/eventTags.json';
 import eventCategories from '../data/eventCategory.json';
 import { findEventCatByVal } from "event/utils/findEventCategory";
-import EventDetails from "./EventDetails";
 import TeamSelect from "./selections/TeamSelect";
 import { teamService } from "team/services/teamService";
 import { Team } from "team/types/Team";
@@ -47,6 +43,7 @@ import { formatEventSummary } from "./utils/formatEventSummary";
 import { ScrumEventSummaryResponse } from "./types";
 import RightOverlay from "common/components/overlay/RightOverlay";
 import MeetingTranscript from "./MeetingTranscript";
+import { transcriptionService } from "event/services/transcriptionService";
 
 const tagOptions: EventTag[] = eventTags;
 const categories: EventCategory[] = eventCategories;
@@ -66,7 +63,6 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
 
   // demo data
   const userId = useAuthUserId();
-  const attendee_estimate = 200;
   const supplier_estimate = 20;
   // demo data
 
@@ -115,6 +111,9 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
 
   // description
   const [content, setContent] = useState<string>("");
+
+  // transcription
+  const [transId, setTransId] = useState<string | null>();
 
   //modals
   const [isTranscriptionOpen, setTranscriptionOpen] = useState<boolean>(false);
@@ -284,6 +283,7 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
 
   const handleTranscriptSummary = (data: ScrumEventSummaryResponse) => {
     setContent(formatEventSummary(data));
+    setTransId(data.transcriptionId);
   }
 
   const handleSubmit = async (e: any) => {
@@ -321,6 +321,10 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
     setIsLoading(true);
     try {
       const res = id? await eventsAPI.updateEvent(eventData, id) : await eventsAPI.createEvent(eventData);
+      if(transId){
+        const transResponse = await transcriptionService.linkTransToEvent(transId, res._id!);
+      }  
+
       if (res) {
         Swal.fire({
           position: "center",
