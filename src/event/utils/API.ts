@@ -4,6 +4,13 @@ import { EventFormData } from 'event/components/types/eventForm';
 
 export const API_URL = process.env.REACT_APP_API_BASE_URL;
 
+interface GetEventsByUserPayload {
+  userId: string, 
+  pagination: Pagination,
+  searchText?: string,
+  category?: string
+}
+
 interface GetSprintsResponse {events: any[]};
 interface DeleteEventResponse {success: boolean};
 interface UpdateEventResponse extends EventFormData {};
@@ -55,19 +62,32 @@ export const eventsAPI = {
     return response.json();
   },
 
-  async getEventsByUser(userId: string, {page, pageSize}: Pagination): Promise<GetEventsByUser> {
-    const response = await fetch(`${API_URL}/events/user/${userId}?page=${page}&pageSize=${pageSize}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
+  async getEventsByUser(payload: GetEventsByUserPayload): Promise<GetEventsByUser> {
+    const { page, pageSize } = payload.pagination;
+    const { userId, category, searchText } = payload;
+  
+    const queryParams = new URLSearchParams({
+      page: String(page),
+      pageSize: String(pageSize),
     });
 
+    if (category) { queryParams.append("category", category);}
+    if (searchText) { queryParams.append("searchText", searchText); }
+  
+    const response = await fetch(
+      `${API_URL}/events/user/${userId}?${queryParams.toString()}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  
     if (!response.ok) {
       throw new Error("Failed to fetch events!");
     }
-
+  
     return await response.json();
   },
-
   
   async getSprints(userId: string, teamId: string): Promise<GetSprintsResponse> {
     const response = await fetch(`${API_URL}/events/sprints/${userId}?teamId=${teamId}`, {

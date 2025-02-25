@@ -52,29 +52,27 @@ const EventTable = () => {
   const [openAction, setOpenDropdown] = useState<number | null>(null);
 
   // for filter
-  const [selectedFilterValue, setSelectedFilterValue] = useState<string>("0");
+  const [selectedFilterValue, setSelectedFilterValue] = useState<string | undefined>(undefined);
 
   // calender state
   const [calenderOpen, setCalenderOpen] = useState<boolean>(false);
   const [value, onChange] = useState<Value>(new Date());
 
   // Event handler to update the selected value
-  const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const filterStatus = event.target.value;
+  const handleFilterChange = async (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const filterStatus = event.target.value === 'all'? undefined: event.target.value;
     setSelectedFilterValue(filterStatus);
-    const filtered = events.filter(event => 
-      event.category.toLowerCase() === filterStatus || filterStatus === "all"
-    );
-    setFilteredEvents(filtered);
+    setEvents([]);
+    await handleFetchEvents(userId!, defaultPagination, searchQuery, filterStatus);
   };
 
+  const defaultPagination: Pagination = {page: 1, pageSize: 10};
   const [events, setEvents] = useState<Record<string, any>[]>([]);
-  const [filteredEvents, setFilteredEvents] = useState<Record<string, any>[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [warningMessage, setWarningMessage] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { getEventsByUser, getEventTaskCompletionRates } = eventsAPI;
-  const [pagination, setPagination] = useState<Pagination>({page: 1, pageSize: 10});
+  const [pagination, setPagination] = useState<Pagination>(defaultPagination);
 
   // Default completion data
   const defaultCompletion = {
@@ -85,22 +83,23 @@ const EventTable = () => {
   };
 
   useEffect(() => {
-    if (searchQuery) {
-      const lowercasedQuery = searchQuery.toLowerCase();
-      const filtered = events.filter(event => 
-        event.title.toLowerCase().includes(lowercasedQuery) || 
-        event.description.toLowerCase().includes(lowercasedQuery)
-      );
-      setFilteredEvents(filtered);
+    if (searchQuery && searchQuery.length >= 3) {
+      setEvents([]);
+      handleFetchEvents(userId!, defaultPagination, searchQuery, selectedFilterValue);
     } else {
-      setFilteredEvents(events); // Reset to all events if searchQuery is empty
+      setEvents([]);
+      handleFetchEvents(userId!, defaultPagination, undefined, selectedFilterValue);
     }
-  }, [searchQuery, events]);
+  }, [searchQuery]);
 
-  const handleFetchEvent = async (userId: string, pagination:Pagination) => {
+  const handleFetchEvents = async (
+      userId: string, 
+      pagination:Pagination, 
+      searchText?: string, 
+      category?: string) => {
     try {
       setIsLoading(true);
-      const eventListResponse = await getEventsByUser(userId, pagination);
+      const eventListResponse = await getEventsByUser({userId, pagination, searchText, category});
       const eventIds: string[] = eventListResponse.events.map(evnt => evnt._id!);
       const completionResponse = await getEventTaskCompletionRates(userId, eventIds);
 
@@ -115,7 +114,6 @@ const EventTable = () => {
         }); 
 
         setEvents(prevList => ([...prevList, ...eventsWithCompletion]));
-        setFilteredEvents(prevList => ([...prevList, ...eventsWithCompletion]));
         setPagination(eventListResponse.pagination);
       }
       else{
@@ -131,7 +129,7 @@ const EventTable = () => {
 
   useEffect(() => {
     if(userId && events.length === 0){
-      handleFetchEvent(userId, pagination);
+      handleFetchEvents(userId!, pagination, searchQuery, selectedFilterValue);
     }
     else{
       setIsLoading(false);
@@ -142,7 +140,7 @@ const EventTable = () => {
     const newPagination = {...pagination, page: newPage};
     setPagination(newPagination);
     if(userId){
-      handleFetchEvent(userId, newPagination);
+      handleFetchEvents(userId!, pagination, searchQuery, selectedFilterValue);
     }
   }
   // handler for list button
@@ -163,7 +161,6 @@ const EventTable = () => {
     const response = await eventsAPI.deleteEvent(id);
     if (response.success) { // Ensure the delete request was successful
       setEvents((prevEvents) => prevEvents.filter((_, i) => i !== index));
-      setFilteredEvents(prevList => prevList.filter((_, i) => i !== index));
     }
   }
 
@@ -199,7 +196,7 @@ const EventTable = () => {
                 <span className='me-2'>
                   <FontAwesomeIcon icon={faList} />
                 </span>
-                List of ( {filteredEvents.length} )
+                List of ( {events.length} )
               </button>
 
               {/* calender */}
@@ -231,7 +228,10 @@ const EventTable = () => {
                 onChange={handleFilterChange}
               >
                 {categories.map((category) =>(
-                      <option key={category.value} value={category.value} selected={selectedFilterValue === category.value}>
+                      <option
+                        key={category.value} 
+                        value={category.value} 
+                        defaultValue={selectedFilterValue}>
                         {category.label}
                       </option>
                 ))}
@@ -275,7 +275,7 @@ const EventTable = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredEvents.map((event, index) => (
+                {events.map((event, index) => (
                   <tr key={event._id}>
                     <td>
                       <div className='d-flex align-items-center'>
