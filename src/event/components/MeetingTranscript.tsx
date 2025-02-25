@@ -73,7 +73,7 @@ const MeetingTranscript = ({ eventId, onStop, onSummarize }: MeetingTranscriptPr
       const response = await fetch(`${API_URL}/scrum/summarise-event`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ notes: transcript, eventType: 'daily' }),
+        body: JSON.stringify({ notes: transcriptRaw, eventType: 'daily' }),
       });
 
       if (!response.ok) {
@@ -87,7 +87,6 @@ const MeetingTranscript = ({ eventId, onStop, onSummarize }: MeetingTranscriptPr
 
         if (onSummarize) {
             const summaryData = transcription? {...data, transcriptionId: transcription?._id!}: data;
-            console.log(`summary:: ${JSON.stringify(summaryData)}`);
             onSummarize(summaryData);
         }
       }
@@ -100,12 +99,14 @@ const MeetingTranscript = ({ eventId, onStop, onSummarize }: MeetingTranscriptPr
   };
 
   const saveTranscript = async () => {
-    const record = transcription? transcription: {
+    const record = transcription? 
+    {...transcription, raw: transcriptRaw}: 
+    {
       eventId: eventId,
       timeZone: 'CET',
       language: 'en',
       title: `transcripton for event ${eventId}`,
-      raw: transcript,
+      raw: transcriptRaw,
     }
     setIsSaving(true);
     if(!transcription?._id){
@@ -122,7 +123,6 @@ const MeetingTranscript = ({ eventId, onStop, onSummarize }: MeetingTranscriptPr
   }
 
   const handleTranscriptionSelect = (transcription: Transcription) =>{
-    console.log(`Handling trans select`);
     setTranscription(transcription);
   }
 
@@ -171,7 +171,7 @@ const MeetingTranscript = ({ eventId, onStop, onSummarize }: MeetingTranscriptPr
       <button
         className="btn btn-primary mt-4 py-2"
         onClick={fetchSummary}
-        disabled={!transcript || loadingSummary}
+        disabled={(!transcript && !transcription) || loadingSummary || isSaving}
       >
         {loadingSummary ? 'Generating Summary...' : 'Summarize'}
       </button>
@@ -179,7 +179,7 @@ const MeetingTranscript = ({ eventId, onStop, onSummarize }: MeetingTranscriptPr
       <button
         className="btn btn-primary mt-4 py-2 ms-2"
         onClick={saveTranscript}
-        disabled={!transcript || loadingSummary || isSaving}
+        disabled={(!transcript && !transcription) || loadingSummary || isSaving}
       >
         {isSaving ? 'Saving Transcript...' : 'Save'}
       </button>
