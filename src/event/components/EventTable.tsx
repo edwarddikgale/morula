@@ -23,6 +23,7 @@ import { LoaderPrimary, LoaderSm } from "common/components/Loader/Loader";
 import EventTextIcon from "./common/EventTextIcon";
 import EventStartEndDate from "./common/EventStartEndDate";
 import LimitedCharacters from "common/components/ui/LimitedCharacters";
+import SearchInput from "./common/SearchInput";
 
 type ValuePiece = Date | null;
 
@@ -181,14 +182,8 @@ const EventTable = () => {
                   <SearchIcon />
                 </span>
               )}
-              <input
-                value={searchQuery}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
-                type='text'
-                className='form-control search-field'
-                id='search'
-                placeholder='Search events'
-              />
+              {/* Use the SearchInput component and update searchQuery in the parent */}
+              <SearchInput onSearch={(query) => setSearchQuery(query)} />
             </div>
             <div className='bt-grp d-flex align-items-center' style={{marginTop: "-10px"}}>
               {/* list button */}
