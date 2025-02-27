@@ -40,6 +40,12 @@ const ImpedimentsManager: React.FC<ImpedimentsManagerProps> = ({ eventData }) =>
     }
   }, [userProfile, eventId, dispatch]);
 
+  useEffect(() => {
+    if(selectedItem){
+      setCrudMode(selectedItem._id? CrudMode.Edit: CrudMode.Create);
+    }
+  }, [selectedItem])
+
   const handleDelete = () => {
     if (selectedItem && selectedItem._id) {
       dispatch(deleteImpediment(selectedItem._id));
@@ -136,13 +142,15 @@ const ImpedimentsManager: React.FC<ImpedimentsManagerProps> = ({ eventData }) =>
       )}
 
       {listLoading && <LoaderPrimary />}
-      <ImpedimentList
-        eventId={eventId}
-        impediments={list}
-        eventData={eventData}
-        onDelete={handleDelete}
-        onSelect={(imp) => {setSelectedItem(imp)}}
-      />
+      { (crudMode === CrudMode.None) && 
+        <ImpedimentList
+          eventId={eventId}
+          impediments={list}
+          eventData={eventData}
+          onDelete={handleDelete}
+          onSelect={setSelectedItem}
+        />
+      }
     </div>
   );
 };
