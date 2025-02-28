@@ -23,7 +23,7 @@ import { LoaderPrimary, LoaderSm } from "common/components/Loader/Loader";
 import EventTextIcon from "./common/EventTextIcon";
 import EventStartEndDate from "./common/EventStartEndDate";
 import LimitedCharacters from "common/components/ui/LimitedCharacters";
-import SearchInput from "./common/SearchInput";
+import SearchInput from "common/components/search/SearchInput";
 
 type ValuePiece = Date | null;
 

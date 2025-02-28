@@ -3,6 +3,7 @@ import impedimentTypes from "../data/impedimentTypes.json";
 import impedimentStatus from "../data/impedimentStatus.json";
 import { Impediment } from "../types/Impediment";
 import { LoaderSm } from "common/components/Loader/Loader";
+import { TeamMemberSearch } from "team/components/TeamMemberSearch";
 
 interface ImpedimentCreateProps {
   onCreate?: (impediment: Impediment) => void;
@@ -77,6 +78,9 @@ const ImpedimentCreate: React.FC<ImpedimentCreateProps> = ({ onCreate, onCancel,
             </option>
           ))}
         </select>
+      </div>
+      <div className="mb-3 d-none">
+        <TeamMemberSearch placeholder="Select Impediment Owner" />
       </div>
       <div className='text-end pb-4'>
         <button className="btn btn-secondary py-2 px-4" type="button" onClick={onCancel}>
