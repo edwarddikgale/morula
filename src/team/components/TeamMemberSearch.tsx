@@ -1,29 +1,34 @@
 import React, { useState, useEffect, useCallback } from "react";
 import SearchInput from "common/components/search/SearchInput";
-import { TeamMember } from 'team/types/TeamMember';
+import { TeamMember, TeamMemberBase } from 'team/types/TeamMember';
 import debounce from "lodash.debounce";
 import '../styles/team-member-search.css';
+import useAuthUserId from "auth/hooks/useAuthUser";
+import { teamMemberService } from "team/services/teamMemberService";
 
 interface TeamMemberSearchProps{
-    placeholder?: string
+    placeholder?: string,
+    onSelectChange?: (member: TeamMember | null) => void,
+    selectedMember?: TeamMemberBase
 }
 
-const TeamMemberSearch: React.FC<TeamMemberSearchProps> = ({placeholder}) => {
+const TeamMemberSearch: React.FC<TeamMemberSearchProps> = ({placeholder, onSelectChange}) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<TeamMember[]>([]);
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
+  const userId = useAuthUserId();
 
   // Fetch team members based on search query
   const fetchTeamMembers = useCallback(
-    debounce(async (query: string) => {
+    debounce(async (userId: string, query: string) => {
       if (!query) {
         setSearchResults([]);
         return;
       }
 
       try {
-        const response = await fetch(`/team/member/find?query=${query}`);
-        const data: TeamMember[] = await response.json();
+        const response = await teamMemberService.getPossibleTeamMembers(userId, query);
+        const data: TeamMember[] = response.teamMembers;
         setSearchResults(data.slice(0, 5)); // Limit to 5 results
       } catch (error) {
         console.error("Error fetching team members:", error);
@@ -33,15 +38,24 @@ const TeamMemberSearch: React.FC<TeamMemberSearchProps> = ({placeholder}) => {
   );
 
   useEffect(() => {
-    fetchTeamMembers(searchQuery);
-  }, [searchQuery, fetchTeamMembers]);
+    if(userId){
+        fetchTeamMembers(userId, searchQuery);
+    }
+  }, [userId, searchQuery, fetchTeamMembers]);
+
+  const handleMemberSelect = (member: TeamMember | null) => {
+    setSelectedMember(member);
+    if(onSelectChange){
+        onSelectChange(member);
+    }
+  }
 
   return (
     <div className="team-member-search">
       {selectedMember ? (
         <div className="selected-member">
           <p>
-            Selected: {selectedMember.firstName} {selectedMember.lastName}
+            Owner: {selectedMember.firstName} {selectedMember.lastName}
           </p>
           <button onClick={() => setSelectedMember(null)}>Cancel</button>
         </div>

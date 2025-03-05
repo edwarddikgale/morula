@@ -9,6 +9,19 @@ export interface UpdateTeamMemberResponse {teamMember: TeamMember};
 export interface DeleteTeamMemberResponse {teamMember: TeamMember};
 
 export const teamMemberService = {
+    // Fetch all team members for this team
+    async getPossibleTeamMembers(userId: string, query: string): Promise<GetTeamMembersResponse> {
+      const response = await fetch(`${API_URL}/teammembers/like/${userId}?searchText=${query}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to fetch team members!");
+      }
+  
+      return response.json();
+    },
   // Fetch all team members for this team
   async getTeamMembers(teamId: string): Promise<GetTeamMembersResponse> {
     const response = await fetch(`${API_URL}/teammembers/team/${teamId}`, {

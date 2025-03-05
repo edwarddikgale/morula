@@ -79,7 +79,7 @@ const ImpedimentCreate: React.FC<ImpedimentCreateProps> = ({ onCreate, onCancel,
           ))}
         </select>
       </div>
-      <div className="mb-3 d-none">
+      <div className="mb-3">
         <TeamMemberSearch placeholder="Select Impediment Owner" />
       </div>
       <div className='text-end pb-4'>
