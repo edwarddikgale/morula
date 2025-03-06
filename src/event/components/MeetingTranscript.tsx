@@ -25,7 +25,7 @@ const MeetingTranscript = ({ eventId, onStop, onSummarize }: MeetingTranscriptPr
   const [impediments, setImpediments] = useState<Impediment[]>([]);
   const [loadingSummary, setLoadingSummary] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [durationInMinutes, setDurationInMinutes] = useState<number>(5); // Default duration
+  const [durationInMinutes, setDurationInMinutes] = useState<number>(15); // Default duration
   const [timerStartTime, setTimerStartTime] = useState<number | null>(null);
   const [transcription, setTranscription] = useState<Transcription | null>(null);
   const [transcriptRaw, setTranscriptRaw] = useState<string | undefined>();
@@ -37,7 +37,7 @@ const MeetingTranscript = ({ eventId, onStop, onSummarize }: MeetingTranscriptPr
     browserSupportsSpeechRecognition,
   } = useSpeechRecognition();
 
-  const MAX_RECORDING_TIME_MS = durationInMinutes * 60 * 1000;
+  const MAX_RECORDING_TIME_MS = durationInMinutes * 60 * 1000; //15 min
 
   useEffect(() => {
     setTranscriptRaw(transcript);
@@ -171,7 +171,7 @@ const MeetingTranscript = ({ eventId, onStop, onSummarize }: MeetingTranscriptPr
       <button
         className="btn btn-primary mt-4 py-2"
         onClick={fetchSummary}
-        disabled={(!transcript && !transcription) || loadingSummary || isSaving}
+        disabled={(!transcription) || loadingSummary || isSaving}
       >
         {loadingSummary ? 'Generating Summary...' : 'Summarize'}
       </button>
