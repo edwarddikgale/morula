@@ -1,11 +1,8 @@
-export interface TeamMemberBase{
+export interface TeamMember {
     _id?: string;
     firstName: string,
     lastName: string,
     nickName: string,   
-}
-
-export interface TeamMember extends TeamMemberBase {
     teamIds: string[];
     jobTitle: string,
     description: string,
@@ -17,3 +14,4 @@ export interface TeamMember extends TeamMemberBase {
     createdAt: Date,
     updatedAt: Date
 }
+

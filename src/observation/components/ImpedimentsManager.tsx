@@ -59,7 +59,6 @@ const ImpedimentsManager: React.FC<ImpedimentsManagerProps> = ({ eventData }) =>
       throw new Error("No user profile");
     }
     newImpediment.creatorId = userProfile._id!;
-    newImpediment.ownerId = userProfile._id!;
     newImpediment.eventId = eventId!;
     dispatch(createImpediment(newImpediment));
     setCrudMode(CrudMode.None);

@@ -8,7 +8,7 @@ export interface IGenericImpediment {
 export interface Impediment extends IGenericImpediment{
     _id?: string,
     notes: string,
-    ownerId: string,
+    ownerId?: string,
     creatorId: string,
     source?: string,
     sourceId?: string,
@@ -48,4 +48,11 @@ export interface ImpedimentType {
 export interface ImpedimentStatus {
     value: string;
     title: string;
+}
+
+export interface ImpedimentOwner {
+    _id: string,
+    firstName: string,
+    lastName: string,
+    nickName?: string
 }

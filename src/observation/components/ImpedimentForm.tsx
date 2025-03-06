@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import impedimentTypes from "../data/impedimentTypes.json";
 import impedimentStatus from "../data/impedimentStatus.json";
 import { Impediment } from "../types/Impediment";
 import { LoaderSm } from "common/components/Loader/Loader";
 import { TeamMemberSearch } from "team/components/TeamMemberSearch";
+import { TeamMember } from "team/types";
+import { teamMemberService } from "team/services/teamMemberService";
 
 interface ImpedimentCreateProps {
   onCreate?: (impediment: Impediment) => void;
@@ -18,18 +20,30 @@ const ImpedimentCreate: React.FC<ImpedimentCreateProps> = ({ onCreate, onCancel,
   const [notes, setNotes] = useState(impediment?.notes || "");
   const [type, setType] = useState(impediment?.type || "");
   const [status, setStatus] = useState(impediment?.status || "");
+  const [ownerId, setOwnerId] = useState(impediment?.ownerId || "");
+  const [owner, setOwner] = useState<TeamMember | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const fetchOwner = async (ownerId: string) => {
+    const response = await teamMemberService.getTeamMember(ownerId);
+    setOwner(response.teamMember);
+  }
+
+  useEffect(() => {
+    if(impediment && impediment.ownerId && impediment.ownerId.length > 0){
+      fetchOwner(impediment.ownerId);
+    }
+  }, [impediment])
 
   const handleSubmit = () => {
     if(id && onUpdate && impediment){
-      onUpdate({...impediment, title, notes, type, status, updatedAt: new Date()});
+      onUpdate({...impediment, title, notes, type, status, ownerId, updatedAt: new Date()});
     }
 
     if (!id && onCreate && title && type) {
       onCreate({
           title, notes, type, status, createdAt: new Date(), updatedAt: new Date(), eventId: "",
-          ownerId: "", creatorId: ""
+          ownerId: ownerId, creatorId: ""
       });
       setTitle("");
       setNotes("");
@@ -38,6 +52,10 @@ const ImpedimentCreate: React.FC<ImpedimentCreateProps> = ({ onCreate, onCancel,
     }
   
   };
+
+  const handleImpedimentOwnerChange = (member: TeamMember | null) => {
+    setOwnerId(member?._id || "");
+  }
 
   return (
     <div className="impediment-create mb-4 p-3 border rounded">
@@ -80,7 +98,11 @@ const ImpedimentCreate: React.FC<ImpedimentCreateProps> = ({ onCreate, onCancel,
         </select>
       </div>
       <div className="mb-3">
-        <TeamMemberSearch placeholder="Select Impediment Owner" />
+        <TeamMemberSearch 
+          placeholder="Select Impediment Owner" 
+          selectedMember={owner}
+          onSelectChange={handleImpedimentOwnerChange}
+          />
       </div>
       <div className='text-end pb-4'>
         <button className="btn btn-secondary py-2 px-4" type="button" onClick={onCancel}>

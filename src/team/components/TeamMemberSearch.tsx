@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import SearchInput from "common/components/search/SearchInput";
-import { TeamMember, TeamMemberBase } from 'team/types/TeamMember';
+import { TeamMember } from 'team/types/TeamMember';
 import debounce from "lodash.debounce";
 import '../styles/team-member-search.css';
 import useAuthUserId from "auth/hooks/useAuthUser";
@@ -9,7 +9,7 @@ import { teamMemberService } from "team/services/teamMemberService";
 interface TeamMemberSearchProps{
     placeholder?: string,
     onSelectChange?: (member: TeamMember | null) => void,
-    selectedMember?: TeamMemberBase
+    selectedMember?: TeamMember
 }
 
 const TeamMemberSearch: React.FC<TeamMemberSearchProps> = ({placeholder, onSelectChange}) => {
