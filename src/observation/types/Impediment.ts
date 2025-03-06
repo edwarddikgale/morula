@@ -23,7 +23,6 @@ export interface Impediment extends IGenericImpediment{
 export function convertToImpediment(
     genericImpediment: IGenericImpediment,
     eventId: string,
-    ownerId: string,
     creatorId: string,
     notes: string,
 ): Impediment {
@@ -32,7 +31,6 @@ export function convertToImpediment(
     return {
         ...genericImpediment,
         notes: notes,                   // Default notes field, you can modify as needed
-        ownerId: ownerId,
         creatorId: creatorId,
         eventId: eventId,
         createdAt: now,

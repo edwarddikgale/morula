@@ -25,8 +25,11 @@ const ImpedimentCreate: React.FC<ImpedimentCreateProps> = ({ onCreate, onCancel,
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const fetchOwner = async (ownerId: string) => {
-    const response = await teamMemberService.getTeamMember(ownerId);
-    setOwner(response.teamMember);
+    try{
+      const response = await teamMemberService.getTeamMember(ownerId);
+      setOwner(response.teamMember);
+    }
+    catch(e){}
   }
 
   useEffect(() => {
@@ -54,6 +57,7 @@ const ImpedimentCreate: React.FC<ImpedimentCreateProps> = ({ onCreate, onCancel,
   };
 
   const handleImpedimentOwnerChange = (member: TeamMember | null) => {
+    console.log(`(member?._id || "" : ${member?._id || ""} `);
     setOwnerId(member?._id || "");
   }
 
@@ -100,7 +104,7 @@ const ImpedimentCreate: React.FC<ImpedimentCreateProps> = ({ onCreate, onCancel,
       <div className="mb-3">
         <TeamMemberSearch 
           placeholder="Select Impediment Owner" 
-          selectedMember={owner}
+          selected={owner}
           onSelectChange={handleImpedimentOwnerChange}
           />
       </div>

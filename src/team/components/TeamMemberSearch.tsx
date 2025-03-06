@@ -9,15 +9,19 @@ import { teamMemberService } from "team/services/teamMemberService";
 interface TeamMemberSearchProps{
     placeholder?: string,
     onSelectChange?: (member: TeamMember | null) => void,
-    selectedMember?: TeamMember
+    selected?: TeamMember
 }
 
-const TeamMemberSearch: React.FC<TeamMemberSearchProps> = ({placeholder, onSelectChange}) => {
+const TeamMemberSearch: React.FC<TeamMemberSearchProps> = ({placeholder, selected, onSelectChange}) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<TeamMember[]>([]);
-  const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
+  const [selectedMember, setSelectedMember] = useState<TeamMember | null>();
   const userId = useAuthUserId();
 
+  useEffect(() => {
+    setSelectedMember(selected || null);
+  }, [selected]);
+  
   // Fetch team members based on search query
   const fetchTeamMembers = useCallback(
     debounce(async (userId: string, query: string) => {
@@ -68,7 +72,7 @@ const TeamMemberSearch: React.FC<TeamMemberSearchProps> = ({placeholder, onSelec
           {searchResults.length > 0 && (
             <ul className="search-results">
               {searchResults.map((member) => (
-                <li key={member._id} onClick={() => setSelectedMember(member)}>
+                <li key={member._id} onClick={() => handleMemberSelect(member)}>
                   {member.firstName} {member.lastName} ({member.nickName}) - {member.jobTitle}
                 </li>
               ))}

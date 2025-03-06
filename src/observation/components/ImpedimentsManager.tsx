@@ -46,9 +46,9 @@ const ImpedimentsManager: React.FC<ImpedimentsManagerProps> = ({ eventData }) =>
     }
   }, [selectedItem])
 
-  const handleDelete = () => {
-    if (selectedItem && selectedItem._id) {
-      dispatch(deleteImpediment(selectedItem._id));
+  const handleDelete = (item: Impediment) => {
+    if (item) {
+      dispatch(deleteImpediment(item._id!));
     }
     setCrudMode(CrudMode.None);
     setSelectedItem(undefined);
@@ -90,7 +90,6 @@ const ImpedimentsManager: React.FC<ImpedimentsManagerProps> = ({ eventData }) =>
           const impediment = convertToImpediment(
             genericImp, 
             eventData._id!, 
-            userProfile._id!, 
             userProfile._id!, 
             genericImp.description || `extracted from ${eventCategory}`
           );
