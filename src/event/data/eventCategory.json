@@ -7,6 +7,7 @@
     {"value": "daily-nexus", "label": "Daily Scrum (Nexus)", "title": "Cross Team Daily alignment & planning", "summary": "two or more teams get together to plan their work with reps from each team, for the day towards sprint goal"},
     {"value": "discovery", "label": "Discovery", "title": "", "summary": ""},
     {"value": "impromptu", "label": "Impromptu", "title": "", "summary": ""},
+    {"value": "incident", "label": "Incident", "title": "Production incident", "summary": "An incident has happened on production environment"},
     {"value": "knowledge_sharing", "label": "Knowledge Sharing", "title": "", "summary": ""},
     {"value": "networking", "label": "Networking", "title": "", "summary": ""},
     {"value": "parking_lot", "label": "Parking Lot", "title": "", "summary": ""},
