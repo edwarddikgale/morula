@@ -3,7 +3,9 @@ import { useState } from "react";
 import {
   faBolt,
   faCalendarDays,
+  faCancel,
   faCommentDots,
+  faEdit,
   faImage,
   faMap,
   faTengeSign,
@@ -908,8 +910,13 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
         </FormSectionContainer>
 
         <div className='text-end pb-4 my-4'>
-          <button type='button' className='btn btn-outline-secondary py-3 px-4 ms-4' onClick={handleOpenTranscriptionModal}>
-              <FontAwesomeIcon icon={faCommentDots} /> Transcribe Meeting 
+          <Link to={`${pageNames.EVENT_READONLY}/${id}`}>
+              <button type='submit' className='btn btn-outline-secondary py-3 px-4'>
+                  <FontAwesomeIcon icon={faCancel} /> Cancel
+              </button>
+          </Link>
+          <button type='button' className='btn btn-outline-secondary py-3 px-4 ms-2' onClick={handleOpenTranscriptionModal}>
+              <FontAwesomeIcon icon={faCommentDots} /> Transcribe 
           </button>
           <button type='submit' className='btn btn-primary py-3 px-4 ms-2'>
             {id? `Update Event`: `Create Event`} {isLoading && <LoaderSm />}

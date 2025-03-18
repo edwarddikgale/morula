@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { CustomIcon, SearchIcon } from "../../utils/CustomIcon";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendar, faList, faPlus, faArrowDown } from "@fortawesome/free-solid-svg-icons";
+import { faCalendar, faList, faPlus, faArrowDown, faPeopleGroup } from "@fortawesome/free-solid-svg-icons";
 import { ProgressBar, Table } from "react-bootstrap";
 import tImg from "../assets/t1.jpg";
 import { Link, useNavigate } from "react-router-dom";
@@ -84,13 +84,13 @@ const EventTable = () => {
   };
 
   useEffect(() => {
-    if (searchQuery && searchQuery.length >= 3) {
-      setEvents([]);
-      handleFetchEvents(userId!, defaultPagination, searchQuery, selectedFilterValue);
-    } else {
-      setEvents([]);
-      handleFetchEvents(userId!, defaultPagination, undefined, selectedFilterValue);
-    }
+      if (searchQuery && searchQuery.length >= 3) {
+        setEvents([]);
+        handleFetchEvents(userId!, defaultPagination, searchQuery, selectedFilterValue);
+      } else {
+        setEvents([]);
+        handleFetchEvents(userId!, defaultPagination, undefined, selectedFilterValue);
+      }
   }, [searchQuery]);
 
   const handleFetchEvents = async (
@@ -102,7 +102,7 @@ const EventTable = () => {
       setIsLoading(true);
       const eventListResponse = await getEventsByUser({userId, pagination, searchText, category});
       const eventIds: string[] = eventListResponse.events.map(evnt => evnt._id!);
-      const completionResponse = await getEventTaskCompletionRates(userId, eventIds);
+      const completionResponse = eventIds && eventIds.length > 0? await getEventTaskCompletionRates(userId, eventIds): [];
 
       if(eventListResponse.events && completionResponse){
         // Merge completion data with event data
@@ -141,7 +141,7 @@ const EventTable = () => {
     const newPagination = {...pagination, page: newPage};
     setPagination(newPagination);
     if(userId){
-      handleFetchEvents(userId!, pagination, searchQuery, selectedFilterValue);
+      handleFetchEvents(userId!, newPagination, searchQuery, selectedFilterValue);
     }
   }
   // handler for list button
@@ -261,8 +261,9 @@ const EventTable = () => {
               <thead>
                 <tr>
                   <th>Event</th>
+                  <th>Impediments</th>
                   <th>Actions</th>
-                  <th>Est. Attendees</th>
+                  <th><FontAwesomeIcon icon={faPeopleGroup} /></th>
                   <th>Category</th>
                   <th>Team</th>
                   <th></th>
@@ -300,6 +301,9 @@ const EventTable = () => {
                           </div>
                         </div>
                       </div>
+                    </td>
+                    <td>
+                      <p className='mb-0 text-muted'> {event.impedimentCount} </p>
                     </td>
                     <td>
                       <div>

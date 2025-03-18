@@ -16,6 +16,7 @@
     {"value": "research", "label": "Research", "title": "", "summary": ""},
     {"value": "retrospective", "label": "Retrospective", "title": "", "summary": ""},
     {"value": "social", "label": "Social", "title": "", "summary": ""},
+    {"value": "delivery-planning", "label": "Delivery Planning (Kanban)", "title": "Session for team to prioritise for delivery ", "summary": "A kanban team clarifying, refining and prioritising for next delivery"},
     {"value": "sprint-planning", "label": "Sprint Planning (1)", "title": "", "summary": ""},
     {"value": "sprint-planning-technical", "label": "Sprint Planning (2)", "title": "", "summary": ""},
     {"value": "sprint", "label": "Sprint", "title": "", "summary": ""},
