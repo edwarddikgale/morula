@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { faUser, faClock, faGlobe } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faClock } from '@fortawesome/free-solid-svg-icons';
 import { Checkbox, FormSectionContainer, TimeZoneSelect } from 'common/components/ui'; // assuming you have this component for sections
 import { TeamMember } from '../types/TeamMember'; // make sure to point to the correct model location
 
@@ -55,6 +55,15 @@ const TeamMemberForm: React.FC<TeamMemberFormProps> = ({ member, onSubmit, onDel
   return (
     <div className="container">
       <form onSubmit={handleFormSubmit}>
+        <FormSectionContainer
+          isHr={true}
+          className="basic-info"
+          icon={faUser}
+          title="Team(s)"
+          description="Teams this member belongs to and or will be added to"
+        >
+          Teams: <pre>{member?.teamIds.join(" , ")}</pre>
+        </FormSectionContainer>  
         <FormSectionContainer
           isHr={true}
           className="basic-info"

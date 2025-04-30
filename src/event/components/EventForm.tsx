@@ -46,10 +46,11 @@ import { ScrumEventSummaryResponse } from "./types";
 import RightOverlay from "common/components/overlay/RightOverlay";
 import MeetingTranscript from "./MeetingTranscript";
 import { transcriptionService } from "event/services/transcriptionService";
+import MeetingTranscriber from "./MeetingTranscriber";
 
 const tagOptions: EventTag[] = eventTags;
 const categories: EventCategory[] = eventCategories;
-
+const transcriberV1 = false;
 
 interface IProps {
   event?: EventFormData;
@@ -929,8 +930,14 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
         isOpen={isTranscriptionOpen}
         children={
         <div>
-            {isTranscriptionOpen && (
+            {isTranscriptionOpen && transcriberV1 && (
                 <MeetingTranscript
+                    onSummarize={handleTranscriptSummary}
+                    eventId={event?._id!}
+                />
+            )}
+            {isTranscriptionOpen && !transcriberV1 && (
+                <MeetingTranscriber
                     onSummarize={handleTranscriptSummary}
                     eventId={event?._id!}
                 />

@@ -9,6 +9,7 @@ import { pencil } from 'ionicons/icons';
 
 import '../styles/team-member-list.css';
 import { Team } from 'team/types/Team';
+import { TeamMemberSearch } from './TeamMemberSearch';
 
 interface TeamMemberListProps {
   data: TeamMember[];
@@ -19,10 +20,28 @@ interface TeamMemberListProps {
 }
 
 const TeamMemberList: React.FC<TeamMemberListProps> = ({ data, team, onDeleteItem, onEditItem, isLoading }) => {
+  const handleTeamMemberAdd = (member: TeamMember | null) =>{
+    if(member && team._id) { 
+        //add this team, to this member's teams if not already included
+        if(!member.teamIds.includes(team._id)){
+            member.teamIds.push(team._id);
+        }
+        onEditItem(-1, member) 
+    }
+  } 
+
   return (
     <>
         <div>
             <h5 className='mb-4'>( {data?.length} ) Team Members for team :: {team.name}</h5>
+        </div>
+        <div>
+            <div className="mb-3">
+                <TeamMemberSearch 
+                    placeholder="Find team member to add to this team...    " 
+                    onSelectChange={handleTeamMemberAdd}
+                />
+            </div>
         </div>
         <div className="list-group my-3 ms-2">
             {(!data || data.length === 0) &&
