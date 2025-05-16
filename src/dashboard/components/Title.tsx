@@ -9,7 +9,7 @@ const Title = () => {
 
       <GreetUser prefixMessage="Welcome back" />
       <p className='mt-3 text-muted'> 
-        Welcome to Morula v1.0
+        Welcome to Morula v1.1
       </p>
     </div>
   );
