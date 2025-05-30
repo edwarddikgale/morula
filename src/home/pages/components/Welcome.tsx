@@ -10,7 +10,7 @@ const Welcome: React.FC = () => {
         <div className="welcome-message">
           <h3>MORULA <i>E</i>mperik</h3>
             <p>
-              Welcome to Morula Emperik – Your Intelligent Assistant for Scrum Mastery
+              Welcome to Morula Emperik – Your Intelligent Assistant for Scrum Mastery & Product Management
             </p>
             <p>
               As a Scrum Master or Agile Coach, you know that effective guidance comes from keen observation and insightful analysis. But capturing every detail during scrum events, tracking team dynamics, and identifying areas for continuous improvement can be overwhelming – especially without the right support.
