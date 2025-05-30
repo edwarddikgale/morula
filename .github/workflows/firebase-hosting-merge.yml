@@ -21,7 +21,9 @@ jobs:
         run: npx update-browserslist-db@latest --no-update-notifier --no-git-handle
 
       - name: Build project (ignore warnings)
-        run: CI=false npm run build
+        run: npm run build
+        env:
+          CI: false
 
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
