@@ -12,8 +12,14 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Ensure Firebase config exists
+        run: |
+          test -f firebase.json && echo "✅ firebase.json found" || (echo "❌ firebase.json missing!" && exit 1)
+          test -f .firebaserc && echo "✅ .firebaserc found" || (echo "❌ .firebaserc missing!" && exit 1)
+
       - name: Install dependencies
         run: npm install
 
@@ -24,6 +30,14 @@ jobs:
         run: npm run build
         env:
           CI: false
+
+      - name: Debug - List build directory contents
+        run: |
+          echo "📂 Listing contents of build directory:"
+          ls -la build
+          echo ""
+          echo "📂 Listing contents of build/static directory:"
+          ls -la build/static || echo "⚠️ build/static not found"
 
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
