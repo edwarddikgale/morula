@@ -38,7 +38,7 @@ jobs:
               echo "❌ Missing environment variable: $var"
               missing=1
             else
-              echo "✅ $var is set"
+              echo "✅ $var is correctly set"
             fi
           done
 
