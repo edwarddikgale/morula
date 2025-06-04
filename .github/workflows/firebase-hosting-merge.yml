@@ -12,6 +12,7 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     environment: production
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -21,7 +22,7 @@ jobs:
           test -f firebase.json && echo "✅ firebase.json found" || (echo "❌ firebase.json missing!" && exit 1)
           test -f .firebaserc && echo "✅ .firebaserc found" || (echo "❌ .firebaserc missing!" && exit 1)
 
-      - name: Check Firebase environment variables
+      - name: Check required environment variables
         run: |
           required_vars=(
             REACT_APP_FIREBASE_API_KEY
@@ -31,6 +32,9 @@ jobs:
             REACT_APP_FIREBASE_PROJECT_ID
             REACT_APP_FIREBASE_STORAGE_BUCKET
             REACT_APP_MEASUREMENT_ID
+            REACT_APP_API_BASE_URL
+            REACT_APP_OPENAI_API_KEY
+            REACT_APP_OPENAI_MODEL
           )
 
           missing=0
@@ -56,6 +60,9 @@ jobs:
           REACT_APP_FIREBASE_PROJECT_ID: ${{ secrets.REACT_APP_FIREBASE_PROJECT_ID }}
           REACT_APP_FIREBASE_STORAGE_BUCKET: ${{ secrets.REACT_APP_FIREBASE_STORAGE_BUCKET }}
           REACT_APP_MEASUREMENT_ID: ${{ secrets.REACT_APP_MEASUREMENT_ID }}
+          REACT_APP_API_BASE_URL: ${{ secrets.REACT_APP_API_BASE_URL }}
+          REACT_APP_OPENAI_API_KEY: ${{ secrets.REACT_APP_OPENAI_API_KEY }}
+          REACT_APP_OPENAI_MODEL: ${{ secrets.REACT_APP_OPENAI_MODEL }}
 
       - name: Install dependencies
         run: npm install
@@ -63,7 +70,7 @@ jobs:
       - name: Update Browserslist DB
         run: npx update-browserslist-db@latest --no-update-notifier --no-git-handle
 
-      - name: Build project (ignore warnings)
+      - name: Build project (inject env + ignore warnings)
         run: npm run build
         env:
           CI: false
@@ -74,6 +81,9 @@ jobs:
           REACT_APP_FIREBASE_PROJECT_ID: ${{ secrets.REACT_APP_FIREBASE_PROJECT_ID }}
           REACT_APP_FIREBASE_STORAGE_BUCKET: ${{ secrets.REACT_APP_FIREBASE_STORAGE_BUCKET }}
           REACT_APP_MEASUREMENT_ID: ${{ secrets.REACT_APP_MEASUREMENT_ID }}
+          REACT_APP_API_BASE_URL: ${{ secrets.REACT_APP_API_BASE_URL }}
+          REACT_APP_OPENAI_API_KEY: ${{ secrets.REACT_APP_OPENAI_API_KEY }}
+          REACT_APP_OPENAI_MODEL: ${{ secrets.REACT_APP_OPENAI_MODEL }}
 
       - name: Debug - List build directory contents
         run: |
