@@ -51,11 +51,11 @@ import MeetingTranscriber from "./MeetingTranscriber";
 const tagOptions: EventTag[] = eventTags;
 const categories: EventCategory[] = eventCategories;
 enum transcriberVersion {
-  v1 = "MeetingTranscript",
-  v2 = "MeetingTranscriber"
+  browserApi = "MeetingTranscript",
+  ai = "MeetingTranscriber"
 };
 
-const transcrVersion = transcriberVersion.v1;
+const transcrVersion = transcriberVersion.ai;
 
 interface IProps {
   event?: EventFormData;
@@ -935,13 +935,13 @@ const EventForm: React.FC<IProps> = ({id, event}) => {
         isOpen={isTranscriptionOpen}
         children={
         <div>
-            {isTranscriptionOpen && transcrVersion === transcriberVersion.v1 && (
+            {isTranscriptionOpen && transcrVersion !== transcriberVersion.ai && (
                 <MeetingTranscript
                     onSummarize={handleTranscriptSummary}
                     eventId={event?._id!}
                 />
             )}
-            {isTranscriptionOpen && transcrVersion !== transcriberVersion.v1 && (
+            {isTranscriptionOpen && transcrVersion === transcriberVersion.ai && (
                 <MeetingTranscriber
                     onSummarize={handleTranscriptSummary}
                     eventId={event?._id!}

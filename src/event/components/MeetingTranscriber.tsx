@@ -12,6 +12,7 @@ import MicrophonePlugin from 'wavesurfer.js/dist/plugin/wavesurfer.microphone.js
 import lamejs from 'lamejs';
 
 import "./styles/meeting-transcriber.css";
+import AudioFileTranscriber from 'common/components/ai/AudioFileTranscriber';
 
 const DISPLAY_CHAR_LIMIT = 75;
 export const API_URL = process.env.REACT_APP_API_BASE_URL;
@@ -143,6 +144,30 @@ const MeetingTranscriber = ({ eventId, onStop, onSummarize }: MeetingTranscriber
     }
   };
 
+    const saveTranscript = async () => {
+      const record = transcription? 
+      {...transcription, raw: transcribedText}: 
+      {
+        eventId: eventId,
+        timeZone: 'CET',
+        language: 'en',
+        title: `transcripton for event ${eventId}`,
+        raw: transcribedText,
+      }
+      setIsSaving(true);
+      if(!transcription?._id){
+        const response = await transcriptionService.createTranscription(record);
+        setTranscription(response);
+        setIsSaving(false);
+      }
+      else{
+        const response = await transcriptionService.updateTranscription(transcription?._id, record);
+        setTranscription(response);
+        setIsSaving(false);
+      }
+  
+  }
+
   const countdownRenderer = ({ minutes, seconds, completed }: any) => {
     if (completed) return <h4 className="text-danger">Time's up!</h4>;
     return <h4 className="text-danger">{zeroPad(minutes)}:{zeroPad(seconds)}</h4>;
@@ -168,6 +193,13 @@ const MeetingTranscriber = ({ eventId, onStop, onSummarize }: MeetingTranscriber
         )}
       </ul>
 
+      <AudioFileTranscriber
+        onTranscriptionComplete={(text) => {
+          setTranscribedText(text);
+          if (onStop) onStop(text);
+        }}
+      />  
+
       {!isRecording && transcribedText && (
         <Description content={transcribedText} setContent={setTranscribedText} />
       )}
@@ -175,9 +207,16 @@ const MeetingTranscriber = ({ eventId, onStop, onSummarize }: MeetingTranscriber
       <button
         className="btn btn-primary mt-4"
         onClick={fetchSummary}
-        disabled={loadingSummary}
+        disabled={(!transcription) || loadingSummary || isSaving}
       >
         {loadingSummary ? 'Generating Summary...' : 'Summarize'}
+      </button>
+      <button
+        className="btn btn-primary mt-4 py-2 ms-2"
+        onClick={saveTranscript}
+        disabled={(!transcribedText && !transcription) || loadingSummary || isSaving}
+        >
+        {isSaving ? 'Saving Transcript...' : 'Save'}
       </button>
 
       {summary.length > 0 && (
