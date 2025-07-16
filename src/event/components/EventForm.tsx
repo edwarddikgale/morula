@@ -44,9 +44,9 @@ import { TeamMember } from "team/types/TeamMember";
 import { formatEventSummary } from "./utils/formatEventSummary";
 import { ScrumEventSummaryResponse } from "./types";
 import RightOverlay from "common/components/overlay/RightOverlay";
-import MeetingTranscript from "./MeetingTranscript";
+import MeetingTranscript from "./meeting/MeetingTranscript";
 import { transcriptionService } from "event/services/transcriptionService";
-import MeetingTranscriber from "./MeetingTranscriber";
+import MeetingTranscriber from "./meeting/MeetingTranscriber";
 
 const tagOptions: EventTag[] = eventTags;
 const categories: EventCategory[] = eventCategories;

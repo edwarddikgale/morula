@@ -1,4 +1,4 @@
-import MeetingTranscript from 'event/components/MeetingTranscript';
+import MeetingTranscript from 'event/components/meeting/MeetingTranscript';
 import React, { useEffect, useState } from 'react';
 
 export default function MeetingSummaryPage() {

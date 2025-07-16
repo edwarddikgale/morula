@@ -32,6 +32,7 @@ import EventReport from "event/pages/EventReport";
 import TeamPage from "team/pages/TeamPage";
 import MeetingSummary from "event/pages/MeetingSummaryPage";
 import CustomFormRenderer from "survey/pages/Form";
+import RecordPage from "event/pages/Record";
 
 function App() {
   useEffect(() => {}, []);
@@ -47,6 +48,7 @@ function App() {
               <Route path='/settings' element={<SettingsPage />} />
               <Route path='/profile' element={<ProfilePage />} />
               <Route path='/event' element={<EventPage />} />
+              <Route path='/record' element={<RecordPage />} />
               <Route path='/event-report/:id' element={<EventReport />} />
               <Route path='/eventedit/:id' element={<EditEventPage />} />
               <Route path='/eventview/:id' element={<ViewEventPage />} />

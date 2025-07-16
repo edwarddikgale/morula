@@ -1,18 +1,23 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Countdown, { zeroPad } from 'react-countdown';
 import { Transcription } from 'event/types/Transcription';
 import { transcriptionService } from 'event/services/transcriptionService';
-import { ScrumEventSummaryResponse, SummaryPoint } from './types/SummaryPoint';
-import { Impediment } from './types';
-import RecordingControls from './RecordingControls';
-import TranscriptionList from './TranscriptionList';
-import Description from './Description';
+import { ScrumEventSummaryResponse, SummaryPoint } from '../types/SummaryPoint';
+import { Impediment } from '../types';
+import RecordingControls from '../RecordingControls';
+import TranscriptionList from '../TranscriptionList';
+import Description from '../Description';
 import WaveSurfer from 'wavesurfer.js';
 import MicrophonePlugin from 'wavesurfer.js/dist/plugin/wavesurfer.microphone.js';
 import lamejs from 'lamejs';
+import Countdown, { zeroPad } from 'react-countdown';
 
-import "./styles/meeting-transcriber.css";
+import "../styles/meeting-transcriber.css";
 import AudioFileTranscriber from 'common/components/ai/AudioFileTranscriber';
+import RecordingList from './RecordingList';
+import { loadCachedRecordings } from './utils/loadCachedRecordings';
+import { Recording } from './types/Recording';
+import { transcribeBlob } from './utils/transcribeBlob';
+import TranscriptionLoader from './TranscriptionLoader';
 
 const DISPLAY_CHAR_LIMIT = 75;
 export const API_URL = process.env.REACT_APP_API_BASE_URL;
@@ -25,6 +30,7 @@ interface MeetingTranscriberProps {
 
 const MeetingTranscriber = ({ eventId, onStop, onSummarize }: MeetingTranscriberProps) => {
   const [isRecording, setIsRecording] = useState(false);
+  const [recordings, setRecordings] = useState<Recording[]>([]);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [transcribedText, setTranscribedText] = useState('');
   const [transcription, setTranscription] = useState<Transcription | null>(null);
@@ -32,6 +38,7 @@ const MeetingTranscriber = ({ eventId, onStop, onSummarize }: MeetingTranscriber
   const [impediments, setImpediments] = useState<Impediment[]>([]);
   const [loadingSummary, setLoadingSummary] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isTranscribing, setIsTranscribing] = useState(false);
   const [timerStartTime, setTimerStartTime] = useState<number | null>(null);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -42,13 +49,16 @@ const MeetingTranscriber = ({ eventId, onStop, onSummarize }: MeetingTranscriber
   const MAX_RECORDING_TIME_MS = 15 * 60 * 1000;
 
   useEffect(() => {
+    loadCachedRecordings().then(setRecordings).catch(console.warn);
+  }, []);
+
+  useEffect(() => {
     if (isRecording && waveContainerRef.current) {
       waveSurferRef.current = WaveSurfer.create({
         container: waveContainerRef.current,
-        //container: '#waveform',
-        waveColor: '#4db8ff',              // Light blue
-        progressColor: '#0077ff',          // Deeper blue for progress
-        cursorColor: '#ffffff',            // White cursor
+        waveColor: '#4db8ff',
+        progressColor: '#0077ff',
+        cursorColor: '#ffffff',
         cursorWidth: 2,
         height: 100,
         barWidth: 2,
@@ -65,64 +75,51 @@ const MeetingTranscriber = ({ eventId, onStop, onSummarize }: MeetingTranscriber
     }
   }, [isRecording]);
 
+  const handleRecordingComplete = async (blob: Blob) => {
+    setIsTranscribing(true);
+    try {
+      const result = await transcribeBlob(blob);
+      if (result?.text) {
+        setTranscribedText(result.text);
+        onStop?.(result.text);
+      }
+    } catch (err) {
+      console.error('Transcription error:', err);
+    } finally {
+      setIsTranscribing(false);
+    }
+  };
+
   const startRecording = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     const mediaRecorder = new MediaRecorder(stream);
     audioChunksRef.current = [];
-  
+
     mediaRecorder.ondataavailable = (e) => audioChunksRef.current.push(e.data);
-  
-    mediaRecorder.onstop = async () => {
+
+    mediaRecorder.onstop = () => {
       const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-  
-      const formData = new FormData();
-      formData.append('file', audioBlob, 'meeting.webm');
-      formData.append('model', 'whisper-1');
-  
-      try {
-        const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${process.env.REACT_APP_OPENAI_API_KEY || ''}`,
-          },
-          body: formData,
-        });
-  
-        const result = await response.json();
-  
-        if (result?.text) {
-          setTranscribedText(result.text);
-          if (onStop) onStop(result.text);
-        } else {
-          console.error("Whisper transcription failed", result);
-        }
-      } catch (error) {
-        console.error("Error sending audio to Whisper:", error);
-      }
+      handleRecordingComplete(audioBlob);
     };
-  
+
     mediaRecorder.start();
     mediaRecorderRef.current = mediaRecorder;
     setIsRecording(true);
     setTimerStartTime(Date.now() + MAX_RECORDING_TIME_MS);
-  };  
+  };
 
   const stopRecording = () => {
     mediaRecorderRef.current?.stop();
     setIsRecording(false);
   };
 
-  const convertToMp3 = (arrayBuffer: ArrayBuffer): Blob => {
-    const wav = lamejs.WavHeader.readHeader(new DataView(arrayBuffer));
-    const samples = new Int16Array(arrayBuffer, wav.dataOffset, wav.dataLen / 2);
-    const mp3enc = new lamejs.Mp3Encoder(wav.channels, wav.sampleRate, 128);
-    const mp3Data = [mp3enc.encodeBuffer(samples), mp3enc.flush()].flat();
-    return new Blob(mp3Data, { type: 'audio/mp3' });
+  const handleRecordingToggle = () => {
+    isRecording ? stopRecording() : startRecording();
   };
 
-  const handleRecordingToggle = () => {
-    if (isRecording) stopRecording();
-    else startRecording();
+  const handleRecordingSelect = async (recording: Recording) => {
+    console.log(`Selected recording ${recording.title}`);
+    handleRecordingComplete(recording.blob);
   };
 
   const fetchSummary = async () => {
@@ -136,7 +133,7 @@ const MeetingTranscriber = ({ eventId, onStop, onSummarize }: MeetingTranscriber
       const data: ScrumEventSummaryResponse = await response.json();
       setSummary(data.summary);
       setImpediments(data.impediments);
-      if (onSummarize) onSummarize(data);
+      onSummarize?.(data);
     } catch (e) {
       console.error(e);
     } finally {
@@ -144,38 +141,39 @@ const MeetingTranscriber = ({ eventId, onStop, onSummarize }: MeetingTranscriber
     }
   };
 
-    const saveTranscript = async () => {
-      const record = transcription? 
-      {...transcription, raw: transcribedText}: 
+  const saveTranscript = async () => {
+    const record = transcription ?
+      { ...transcription, raw: transcribedText } :
       {
-        eventId: eventId,
+        eventId,
         timeZone: 'CET',
         language: 'en',
         title: `transcripton for event ${eventId}`,
         raw: transcribedText,
-      }
-      setIsSaving(true);
-      if(!transcription?._id){
-        const response = await transcriptionService.createTranscription(record);
-        setTranscription(response);
-        setIsSaving(false);
-      }
-      else{
-        const response = await transcriptionService.updateTranscription(transcription?._id, record);
-        setTranscription(response);
-        setIsSaving(false);
-      }
-  
-  }
+      };
 
-  const countdownRenderer = ({ minutes, seconds, completed }: any) => {
+    setIsSaving(true);
+    try {
+      const response = transcription?._id
+        ? await transcriptionService.updateTranscription(transcription._id, record)
+        : await transcriptionService.createTranscription(record);
+      setTranscription(response);
+    } catch (e) {
+      console.error('Saving error:', e);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const countdownRenderer = ({ minutes, seconds, completed }:any) => {
     if (completed) return <h4 className="text-danger">Time's up!</h4>;
     return <h4 className="text-danger">{zeroPad(minutes)}:{zeroPad(seconds)}</h4>;
   };
 
   return (
-    <div className="container text-center mt-4">
+    <div className="container text-center mt-2">
       <h3>Meeting Transcriber</h3>
+
       <RecordingControls
         isRecording={isRecording}
         handleRecordingToggle={handleRecordingToggle}
@@ -185,6 +183,8 @@ const MeetingTranscriber = ({ eventId, onStop, onSummarize }: MeetingTranscriber
 
       <div ref={waveContainerRef} className="my-3" style={{ height: '100px' }} />
 
+      {isTranscribing && <TranscriptionLoader />}
+
       <ul className="list-unstyled mt-4">
         {transcribedText && (
           <li className="text-muted">
@@ -193,12 +193,19 @@ const MeetingTranscriber = ({ eventId, onStop, onSummarize }: MeetingTranscriber
         )}
       </ul>
 
+      <h3>Select Existing Recording</h3>
+      <RecordingList
+        recordings={recordings}
+        editableTitles={{}}
+        onSelect={handleRecordingSelect}
+      />
+
       <AudioFileTranscriber
         onTranscriptionComplete={(text) => {
           setTranscribedText(text);
-          if (onStop) onStop(text);
+          onStop?.(text);
         }}
-      />  
+      />
 
       {!isRecording && transcribedText && (
         <Description content={transcribedText} setContent={setTranscribedText} />
@@ -207,15 +214,16 @@ const MeetingTranscriber = ({ eventId, onStop, onSummarize }: MeetingTranscriber
       <button
         className="btn btn-primary mt-4"
         onClick={fetchSummary}
-        disabled={(!transcription) || loadingSummary || isSaving}
+        disabled={!transcription || loadingSummary || isSaving}
       >
         {loadingSummary ? 'Generating Summary...' : 'Summarize'}
       </button>
+
       <button
         className="btn btn-primary mt-4 py-2 ms-2"
         onClick={saveTranscript}
         disabled={(!transcribedText && !transcription) || loadingSummary || isSaving}
-        >
+      >
         {isSaving ? 'Saving Transcript...' : 'Save'}
       </button>
 

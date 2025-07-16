@@ -30,10 +30,10 @@ const TranscriptionList: React.FC<TranscriptionListProps> = ({ eventId, onSelect
   }, [eventId]);
 
   if (loading) return <LoaderPrimary />;
-  if (error) return <div className="alert alert-danger">{error}</div>;
+  if (error) return <div className="alert alert-danger p-3">{error}</div>;
 
   return (
-    <div className="container my-4">
+    <div className="container my-2">
       <h3 className="mb-4">{transcriptions?.length || 0} Event Transcriptions</h3>
       {transcriptions.map((t) => (
         <div key={t._id || t.title} className="card mb-3 shadow-sm" onClick={(  ) => onSelect(t)}>

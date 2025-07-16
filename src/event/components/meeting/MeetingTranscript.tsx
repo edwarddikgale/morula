@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import SpeechRecognition, { useSpeechRecognition} from 'react-speech-recognition';
 import Countdown, { zeroPad } from 'react-countdown';
-import RecordingControls from './RecordingControls';
+import RecordingControls from '../RecordingControls';
 
-import './styles/meeting-summary.css';
-import { Impediment } from './types';
-import { ScrumEventSummaryResponse, SummaryPoint } from './types/SummaryPoint';
+import '../styles/meeting-summary.css';
+import { Impediment } from '../types';
+import { ScrumEventSummaryResponse, SummaryPoint } from '../types/SummaryPoint';
 import { Transcription } from 'event/types/Transcription';
 import { transcriptionService } from 'event/services/transcriptionService';
-import Description from './Description';
-import TranscriptionList from './TranscriptionList';
+import Description from '../Description';
+import TranscriptionList from '../TranscriptionList';
 
 export const API_URL = process.env.REACT_APP_API_BASE_URL;
 const DISPLAY_CHAR_LIMIT = 75;

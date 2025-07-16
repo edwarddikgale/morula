@@ -1,0 +1,12 @@
+.recording-item {
+  transition: box-shadow 0.3s ease;
+}
+
+.recording-item:hover {
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.2);
+}
+
+.recording-item.selected {
+  border: 2px solid #007bff;
+  box-shadow: 0 0 24px rgba(0, 123, 255, 0.5);
+}
