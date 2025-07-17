@@ -1,29 +1,12 @@
-import { Recording } from '../types/Recording'; // adjust path as needed
-import { base64ToBlob } from './base64ToBlob'; // assuming you have this helper
+import { loadRecordingsFromDB } from './localDb'; // adjust path if needed
+import { Recording } from '../types/Recording';
 
-export const loadCachedRecordings = (): Promise<Recording[]> => {
-  return new Promise(async (resolve) => {
-    const stored = localStorage.getItem('meeting-recordings');
-
-    if (!stored) return resolve([]);
-
-    try {
-      const parsed = JSON.parse(stored);
-      const loaded: Recording[] = await Promise.all(
-        parsed.map(async (r: any) => {
-          const blob = await base64ToBlob(r.base64);
-          return {
-            ...r,
-            blob,
-            createdAt: new Date(r.createdAt),
-          };
-        })
-      );
-      resolve(loaded);
-    } catch (e) {
-      console.warn('Failed to restore recordings:', e);
-      localStorage.removeItem('meeting-recordings');
-      resolve([]);
-    }
-  });
+export const loadCachedRecordings = async (): Promise<Recording[]> => {
+  try {
+    const recordings = await loadRecordingsFromDB();
+    return recordings;
+  } catch (e) {
+    console.warn('Failed to load recordings from DB:', e);
+    return [];
+  }
 };
