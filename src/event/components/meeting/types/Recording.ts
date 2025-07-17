@@ -3,4 +3,5 @@ export interface Recording {
   title: string;
   blob: Blob;
   createdAt: Date;
+  duration?: number;
 }

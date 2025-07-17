@@ -10,7 +10,6 @@ const DashboardPage = () => {
     <div className='dashboard-container'>
       <Title />
       <Pages />
-      <MeetingRecorder />
     </div>
   );
 };

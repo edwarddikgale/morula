@@ -2,34 +2,15 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Mic, Square, Edit3, Trash } from 'lucide-react';
 import './styles/MeetingRecorder.css';
 import RecordingList from './RecordingList';
-import { loadCachedRecordings } from './utils/loadCachedRecordings';
+import { saveRecordingToDB, loadRecordingsFromDB, deleteRecordingFromDB } from './utils/localDb';
+import { Recording } from './types/Recording';
+import { calculateAudioDuration } from './utils/calculateAudioDuration';
 
-interface Recording {
-  id: string;
-  title: string;
-  blob: Blob;
-  createdAt: Date;
-}
 
 const formatDate = (date: Date) =>
   `meeting-record-${date.toLocaleDateString('en-CA')}-${date
     .toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
     .replace(':', '-')}`;
-
-const blobToBase64 = (blob: Blob): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      if (typeof reader.result === 'string') resolve(reader.result);
-      else reject('Failed to read blob');
-    };
-    reader.readAsDataURL(blob);
-  });
-
-const base64ToBlob = async (base64: string): Promise<Blob> => {
-  const res = await fetch(base64);
-  return await res.blob();
-};
 
 const MeetingRecorder: React.FC = () => {
   const [recordings, setRecordings] = useState<Recording[]>([]);
@@ -40,26 +21,12 @@ const MeetingRecorder: React.FC = () => {
   const streamRef = useRef<MediaStream | null>(null);
 
   useEffect(() => {
-      loadCachedRecordings().then(setRecordings).catch((e) => {
-        console.warn('Failed to load cached recordings:', e);
+    loadRecordingsFromDB()
+      .then(setRecordings)
+      .catch((e) => {
+        console.warn('Failed to load recordings from IndexedDB:', e);
       });
   }, []);
-
-  useEffect(() => {
-    const saveRecordings = async () => {
-      const serializable = await Promise.all(
-        recordings.map(async r => ({
-          id: r.id,
-          title: r.title,
-          createdAt: r.createdAt.toISOString(),
-          base64: await blobToBase64(r.blob),
-        }))
-      );
-      localStorage.setItem('meeting-recordings', JSON.stringify(serializable));
-    };
-
-    if (recordings.length > 0) saveRecordings();
-  }, [recordings]);
 
   const startRecording = async () => {
     try {
@@ -73,12 +40,23 @@ const MeetingRecorder: React.FC = () => {
         if (e.data.size > 0) newChunks.push(e.data);
       };
 
-      recorder.onstop = () => {
+      recorder.onstop = async () => {
         const blob = new Blob(newChunks, { type: 'audio/webm' });
         const createdAt = new Date();
         const id = `${createdAt.getTime()}`;
         const title = formatDate(createdAt);
-        const newRecording: Recording = { id, title, blob, createdAt };
+
+        const duration = await calculateAudioDuration(blob);
+
+        const newRecording: Recording = {
+          id,
+          title,
+          blob,
+          createdAt,
+          duration,
+        };
+
+        await saveRecordingToDB(newRecording);
         setRecordings(prev => [newRecording, ...prev]);
         stream.getTracks().forEach(t => t.stop());
         setChunks([]);
@@ -101,7 +79,14 @@ const MeetingRecorder: React.FC = () => {
 
   const updateTitle = (id: string, newTitle: string) => {
     setRecordings(prev =>
-      prev.map(r => (r.id === id ? { ...r, title: newTitle } : r))
+      prev.map(r => {
+        if (r.id === id) {
+          const updated = { ...r, title: newTitle };
+          saveRecordingToDB(updated);
+          return updated;
+        }
+        return r;
+      })
     );
   };
 
@@ -111,6 +96,7 @@ const MeetingRecorder: React.FC = () => {
 
   const deleteRecording = (id: string) => {
     setRecordings(prev => prev.filter(r => r.id !== id));
+    deleteRecordingFromDB(id);
   };
 
   return (
@@ -155,7 +141,7 @@ const MeetingRecorder: React.FC = () => {
         onUpdateTitle={updateTitle}
         onToggleEdit={toggleEdit}
         onDelete={deleteRecording}
-        onSelect={(rec) => console.log('Recording selected:', rec)} // ⬅️ emits recordingSelected
+        onSelect={(rec) => console.log('Recording selected:', rec)}
       />
     </div>
   );
