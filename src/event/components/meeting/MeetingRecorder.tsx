@@ -5,6 +5,7 @@ import RecordingList from './RecordingList';
 import { saveRecordingToDB, loadRecordingsFromDB, deleteRecordingFromDB } from './utils/localDb';
 import { Recording } from './types/Recording';
 import { calculateAudioDuration } from './utils/calculateAudioDuration';
+import { compressAudio } from './utils/compressAudio';
 
 
 const formatDate = (date: Date) =>
@@ -41,17 +42,18 @@ const MeetingRecorder: React.FC = () => {
       };
 
       recorder.onstop = async () => {
-        const blob = new Blob(newChunks, { type: 'audio/webm' });
+        const originalBlob = new Blob(newChunks, { type: 'audio/webm' });
         const createdAt = new Date();
         const id = `${createdAt.getTime()}`;
         const title = formatDate(createdAt);
 
-        const duration = await calculateAudioDuration(blob);
+        const compressedBlob = await compressAudio(originalBlob);
+        const duration = await calculateAudioDuration(compressedBlob);
 
         const newRecording: Recording = {
           id,
           title,
-          blob,
+          blob: compressedBlob,
           createdAt,
           duration,
         };
@@ -61,6 +63,7 @@ const MeetingRecorder: React.FC = () => {
         stream.getTracks().forEach(t => t.stop());
         setChunks([]);
       };
+
 
       recorder.start();
       setChunks(newChunks);
@@ -97,6 +100,16 @@ const MeetingRecorder: React.FC = () => {
   const deleteRecording = (id: string) => {
     setRecordings(prev => prev.filter(r => r.id !== id));
     deleteRecordingFromDB(id);
+  };
+
+  const replaceRecording = async (updated: Recording) => {
+    // Update IndexedDB
+    await saveRecordingToDB(updated);
+
+    // Update state
+    setRecordings(prev =>
+      prev.map(r => (r.id === updated.id ? updated : r))
+    );
   };
 
   return (
@@ -141,6 +154,7 @@ const MeetingRecorder: React.FC = () => {
         onUpdateTitle={updateTitle}
         onToggleEdit={toggleEdit}
         onDelete={deleteRecording}
+        onReplaceRecording={replaceRecording}
       />
     </div>
   );

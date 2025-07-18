@@ -118,7 +118,6 @@ const MeetingTranscriber = ({ eventId, onStop, onSummarize }: MeetingTranscriber
   };
 
   const handleRecordingSelect = async (recording: Recording) => {
-    console.log(`Selected recording ${recording.title}`);
     handleRecordingComplete(recording.blob);
   };
 

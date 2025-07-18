@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Edit3, Trash, Download } from 'lucide-react';
 import { Recording } from './types/Recording';
 import { createDownloadUrl } from './utils/createDownloadUrl';
+import { compressAudio, shouldOfferCompression } from './utils/compressAudio';
 import './styles/RecordingList.css';
 
 interface RecordingListProps {
@@ -11,6 +12,7 @@ interface RecordingListProps {
   onToggleEdit?: (id: string) => void;
   onDelete?: (id: string) => void;
   onSelect?: (recording: Recording) => void;
+  onReplaceRecording?: (updated: Recording) => void; // optional handler for compressed result
 }
 
 const formatDuration = (duration?: number): string => {
@@ -27,6 +29,8 @@ const formatDateTime = (date: Date): string => {
   return isToday ? `Today @ ${time}` : `${date.toLocaleDateString()} @ ${time}`;
 };
 
+const bytesToMB = (bytes: number): string => (bytes / (1024 * 1024)).toFixed(2);
+
 const RecordingList: React.FC<RecordingListProps> = ({
   recordings,
   editableTitles,
@@ -34,18 +38,44 @@ const RecordingList: React.FC<RecordingListProps> = ({
   onToggleEdit,
   onDelete,
   onSelect,
+  onReplaceRecording,
 }) => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [compressingIds, setCompressingIds] = useState<Set<string>>(new Set());
 
   const handleSelect = (recording: Recording) => {
     setSelectedId(recording.id);
     onSelect?.(recording);
   };
 
+  const handleCompress = async (recording: Recording) => {
+    setCompressingIds(prev => new Set(prev).add(recording.id));
+    try {
+      const compressedBlob = await compressAudio(recording.blob);
+      const updated: Recording = {
+        ...recording,
+        blob: compressedBlob,
+      };
+      onReplaceRecording?.(updated);
+    } catch (err) {
+      alert('Compression failed.');
+      console.error(err);
+    } finally {
+      setCompressingIds(prev => {
+        const updated = new Set(prev);
+        updated.delete(recording.id);
+        return updated;
+      });
+    }
+  };
+
   return (
     <ul className="list-group">
       {recordings.map((r) => {
         const { url, filename } = createDownloadUrl(r.blob, r.title || 'recording');
+        const sizeMB = parseFloat(bytesToMB(r.blob.size));
+        const isCompressing = compressingIds.has(r.id);
+        const showCompressButton = shouldOfferCompression(r.blob, r.duration!);
 
         return (
           <li
@@ -74,6 +104,7 @@ const RecordingList: React.FC<RecordingListProps> = ({
               )}
               <small className="text-muted">{formatDateTime(r.createdAt)}</small>
               <small className="text-muted">Length: {formatDuration(r.duration)}</small>
+              <small className="text-muted">Size: {sizeMB} MB</small>
             </div>
 
             <div className="d-flex align-items-center gap-3">
@@ -90,6 +121,18 @@ const RecordingList: React.FC<RecordingListProps> = ({
               >
                 <Download size={16} />
               </a>
+              {showCompressButton && (
+                <button
+                  className="btn btn-outline-warning btn-sm"
+                  disabled={isCompressing}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleCompress(r);
+                  }}
+                >
+                  {isCompressing ? 'Compressing...' : 'Compress'}
+                </button>
+              )}
               {onDelete && (
                 <button
                   className="btn btn-outline-danger btn-sm"
