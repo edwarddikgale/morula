@@ -141,7 +141,6 @@ const MeetingRecorder: React.FC = () => {
         onUpdateTitle={updateTitle}
         onToggleEdit={toggleEdit}
         onDelete={deleteRecording}
-        onSelect={(rec) => console.log('Recording selected:', rec)}
       />
     </div>
   );
