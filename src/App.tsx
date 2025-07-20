@@ -33,6 +33,7 @@ import TeamPage from "team/pages/TeamPage";
 import MeetingSummary from "event/pages/MeetingSummaryPage";
 import CustomFormRenderer from "survey/pages/Form";
 import RecordPage from "event/pages/Record";
+import GermanWordExplorer from "langaid/GermanWordExplorer";
 
 function App() {
   useEffect(() => {}, []);
@@ -60,6 +61,7 @@ function App() {
               <Route path='/form' element={<CustomFormRenderer />} />
             </Route>
             <Route path='/' element={<HomePage />} />
+             <Route path='/tx' element={<GermanWordExplorer />} />
             <Route path='/evidence' element={<EvidencePage />} />
             <Route path='/login' element={<LoginPage />} />
             <Route path='/logout' element={<LogoutPage />} />
