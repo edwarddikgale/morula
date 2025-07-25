@@ -4,4 +4,5 @@ export interface Recording {
   blob: Blob;
   createdAt: Date;
   duration?: number;
+  selectCount?: number;
 }

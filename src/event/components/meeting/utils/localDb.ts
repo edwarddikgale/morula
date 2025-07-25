@@ -24,7 +24,9 @@ export const saveRecordingToDB = async (recording: Recording) => {
 export const loadRecordingsFromDB = async (): Promise<Recording[]> => {
   const db = await initDB();
   const all = await db.getAll(STORE_NAME);
-  return all.map(r => ({ ...r, createdAt: new Date(r.createdAt) }));
+  return all
+    .map(r => ({ ...r, createdAt: new Date(r.createdAt) }))
+    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());;
 };
 
 export const deleteRecordingFromDB = async (id: string) => {

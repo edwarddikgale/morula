@@ -169,6 +169,12 @@ const MeetingTranscriber = ({ eventId, onStop, onSummarize }: MeetingTranscriber
     return <h4 className="text-danger">{zeroPad(minutes)}:{zeroPad(seconds)}</h4>;
   };
 
+  const handleReplaceRecording = (updated: Recording) => {
+    setRecordings((prev) =>
+      prev.map((r) => (r.id === updated.id ? updated : r))
+    );
+  };
+
   return (
     <div className="container text-center mt-2">
       <h3>Meeting Transcriber</h3>
@@ -197,6 +203,7 @@ const MeetingTranscriber = ({ eventId, onStop, onSummarize }: MeetingTranscriber
         recordings={recordings}
         editableTitles={{}}
         onSelect={handleRecordingSelect}
+        onReplaceRecording={handleReplaceRecording}
       />
 
       <AudioFileTranscriber

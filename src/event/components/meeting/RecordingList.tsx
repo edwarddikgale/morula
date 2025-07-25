@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Edit3, Trash, Download } from 'lucide-react';
+import { Edit3, Trash, Download, CheckCircle } from 'lucide-react';
 import { Recording } from './types/Recording';
 import { createDownloadUrl } from './utils/createDownloadUrl';
 import { compressAudio, shouldOfferCompression } from './utils/compressAudio';
 import './styles/RecordingList.css';
+import { saveRecordingToDB } from './utils/localDb';
 
 interface RecordingListProps {
   recordings: Recording[];
@@ -42,10 +43,17 @@ const RecordingList: React.FC<RecordingListProps> = ({
 }) => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [compressingIds, setCompressingIds] = useState<Set<string>>(new Set());
+  const [recordingList, setRecordingList] = useState<Recording[]>(recordings || []);
 
-  const handleSelect = (recording: Recording) => {
+  const handleSelect = async (recording: Recording) => {
+    const updated: Recording = {
+      ...recording,
+      selectCount: (recording.selectCount || 0) + 1,
+    };
     setSelectedId(recording.id);
-    onSelect?.(recording);
+    await saveRecordingToDB(updated);
+    onReplaceRecording?.(updated);
+    onSelect?.(updated);
   };
 
   const handleCompress = async (recording: Recording) => {
@@ -83,31 +91,36 @@ const RecordingList: React.FC<RecordingListProps> = ({
             className={`recording-item list-group-item d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center ${selectedId === r.id ? 'selected' : ''}`}
           >
             <div className="flex-grow-1 d-flex flex-column gap-1 mb-2 mb-md-0">
-              {editableTitles[r.id] ? (
-                <input
-                  type="text"
-                  value={r.title}
-                  onChange={(e) => onUpdateTitle?.(r.id, e.target.value)}
-                  onBlur={() => onToggleEdit?.(r.id)}
-                  className="form-control form-control-sm w-auto"
-                />
-              ) : (
-                <span
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onToggleEdit?.(r.id);
-                  }}
-                  className="fw-bold text-primary d-flex align-items-center"
-                >
-                  {r.title} <Edit3 size={16} className="ms-2" />
-                </span>
-              )}
-              <small className="text-muted">{formatDateTime(r.createdAt)}</small>
-              <small className="text-muted">Length: {formatDuration(r.duration)}</small>
-              <small className="text-muted">Size: {sizeMB} MB</small>
+              <div className="title-row">
+                {editableTitles[r.id] ? (
+                  <input
+                    type="text"
+                    value={r.title}
+                    onChange={(e) => onUpdateTitle?.(r.id, e.target.value)}
+                    onBlur={() => onToggleEdit?.(r.id)}
+                    className="form-control form-control-sm w-auto"
+                  />
+                ) : (
+                  <span
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onToggleEdit?.(r.id);
+                    }}
+                    className="fw-bold text-primary d-flex align-items-center"
+                  >
+                    {r.title} <Edit3 size={16} className="ms-2" />
+                  </span>
+                )}
+              </div>
+
+              <div className="meta-row">
+                <span>{formatDateTime(r.createdAt)}</span>
+                <span className="ms-2"><span className="fw-bold">Length:</span> {formatDuration(r.duration)}</span>
+                <span className="ms-2"><span className="fw-bold">Size:</span> {sizeMB} MB</span>
+              </div>
             </div>
 
-            <div className="d-flex align-items-center gap-3">
+            <div className="controls-row d-flex align-items-center gap-3 flex-wrap">
               <audio
                 controls
                 src={URL.createObjectURL(r.blob)}
@@ -146,13 +159,14 @@ const RecordingList: React.FC<RecordingListProps> = ({
               )}
               {onSelect && (
                 <button
-                  className="btn btn-outline-primary btn-sm"
+                  className="btn btn-outline-primary btn-sm d-flex align-items-center gap-1"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleSelect(r);
                   }}
                 >
-                  Select
+                  <CheckCircle size={16} />
+                  <span className="small">({r.selectCount || 0})</span>
                 </button>
               )}
             </div>
