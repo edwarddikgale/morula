@@ -1,6 +1,6 @@
 import React from 'react';
 import { TeamMember } from '../types/TeamMember'; // Ensure this path is correct
-import { Button, Spinner } from 'react-bootstrap';
+import { Spinner } from 'react-bootstrap';
 import LimitedCharacters from 'common/components/ui/LimitedCharacters';
 import RoundNumber from 'common/components/ui/RoundNumber';
 import DeleteConfirmation from 'common/components/ui/DeleteConfirmation';
