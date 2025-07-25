@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Edit3, Trash, Download, CheckCircle } from 'lucide-react';
 import { Recording } from './types/Recording';
 import { createDownloadUrl } from './utils/createDownloadUrl';
@@ -44,6 +44,21 @@ const RecordingList: React.FC<RecordingListProps> = ({
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [compressingIds, setCompressingIds] = useState<Set<string>>(new Set());
   const [recordingList, setRecordingList] = useState<Recording[]>(recordings || []);
+  const listRef = useRef<HTMLUListElement>(null);
+
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (listRef.current && !listRef.current.contains(event.target as Node)) {
+        setSelectedId(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleSelect = async (recording: Recording) => {
     const updated: Recording = {
@@ -78,7 +93,7 @@ const RecordingList: React.FC<RecordingListProps> = ({
   };
 
   return (
-    <ul className="list-group">
+    <ul className="list-group" ref={listRef}>
       {recordings.map((r) => {
         const { url, filename } = createDownloadUrl(r.blob, r.title || 'recording');
         const sizeMB = parseFloat(bytesToMB(r.blob.size));
@@ -88,7 +103,7 @@ const RecordingList: React.FC<RecordingListProps> = ({
         return (
           <li
             key={r.id}
-            className={`recording-item list-group-item d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center ${selectedId === r.id ? 'selected' : ''}`}
+            className={`recording-item d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center ${selectedId === r.id ? 'selected' : ''}`}
           >
             <div className="flex-grow-1 d-flex flex-column gap-1 mb-2 mb-md-0">
               <div className="title-row">
@@ -98,7 +113,7 @@ const RecordingList: React.FC<RecordingListProps> = ({
                     value={r.title}
                     onChange={(e) => onUpdateTitle?.(r.id, e.target.value)}
                     onBlur={() => onToggleEdit?.(r.id)}
-                    className="form-control form-control-sm w-auto"
+                    className="form-control form-control-sm w-60"
                   />
                 ) : (
                   <span
