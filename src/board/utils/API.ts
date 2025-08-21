@@ -16,6 +16,21 @@ export const eventTasksAPI = {
     return await response.json();
   },
 
+  async getTasksByEvents(eventIds: string[], userId: string) {
+    const requestUrl = `${API_URL}/events/tasks?userId=${userId}`;
+    const response = await fetch(requestUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ eventIds }),   // send as array
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch tasks for events!");
+    }
+
+    return await response.json();
+  },
+
   async UpdateActionTask(formData: any, taskId: string) {
     const recordName = 'Action Task';
     const response = await fetch(`${API_URL}/ActionTasks/${taskId}`, {

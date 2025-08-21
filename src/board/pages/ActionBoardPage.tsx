@@ -32,7 +32,7 @@ const ActionBoardPage: React.FC = () => {
     
     const handleTasksFetch = async(eventId: string, userId: string) => {
 
-        const response = await eventTasksAPI.getTasksByEvent(eventId, userId as string);
+        const response = await eventTasksAPI.getTasksByEvents([eventId], userId as string);
         if(response){
           setTaskList(response.records);
           const tasksSeedData = convertTaskListToSeedData(response.records);

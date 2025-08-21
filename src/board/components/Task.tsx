@@ -43,7 +43,6 @@ const TaskComponent: React.FC<IProps> = ({ task, index, onShowAction }) => {
                                 <LimitedCharacters text={task.parentTitle} limit={100} />
                             </div>
                             <div className="col-1">
-                                <p className='action-sdg'>SDG-{task.sdg}</p>
                                 {loadingDetails && <LoaderSm />}
                             </div>
                         </div>
