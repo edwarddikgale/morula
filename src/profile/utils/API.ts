@@ -1,56 +1,24 @@
+// src/services/profileAPI.ts
+import { api } from "utils/axiosClient";
 import { UserProfile } from "profile/types/profile";
 
-export const API_URL = process.env.REACT_APP_API_BASE_URL;
-
 export interface CreateProfileResponse extends UserProfile {}
-
 export interface UpdateProfileResponse extends UserProfile {}
+export interface GetUserProfileResponse {userprofile: UserProfile}
 
 export const profileAPI = {
-  async createUserProfile(formData: any): Promise<CreateProfileResponse>  {
-    
-    const response = await fetch(`${API_URL}/userprofiles`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to create user profile!");
-    }
-
-    return response.json();
+  async createUserProfile(formData: Partial<UserProfile>): Promise<CreateProfileResponse> {
+    const res = await api.post<CreateProfileResponse>("/userprofiles", formData);
+    return res.data;
   },
 
-  async updateUserProfile(data: UserProfile, slug: string): Promise<UpdateProfileResponse> {
-    const response = await fetch(`${API_URL}/userprofiles/${slug}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-    });
-
-    // Parse the JSON from the response
-    const result = await response.json();
-
-    // Handle non-2xx responses
-    if (!response.ok) {
-        const errorMsg = result.message || "Failed to update user profile!";
-        throw new Error(errorMsg);
-    }
-
-    return result; // Assuming result is of type UserProfile
+  async updateUserProfile(data: Partial<UserProfile>, slug: string): Promise<UpdateProfileResponse> {
+    const res = await api.patch<UpdateProfileResponse>(`/userprofiles/${slug}`, data);
+    return res.data;
   },
 
-  async getProfileByUser(slug: string) {
-    const response = await fetch(`${API_URL}/userprofiles/${slug}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch user!");
-    }
-
-    return await response.json();
+  async getProfileByUser(slug: string): Promise<GetUserProfileResponse> {
+    const res = await api.get<GetUserProfileResponse>(`/userprofiles/${slug}`);
+    return res.data;
   },
 };
